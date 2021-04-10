@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{hyperref}
+\def\code#1{\texttt{#1}}
+
+\title{Dokumentacja biblioteki do wizualizacji CoNDeT}
+\author{Emil Sroka, Hubert Miziołek, Miłosz Wrzesień}
+\date{2021}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\clearpage
+
+\section{Historia dokumentacji}
+\textbf{NOTE: do usunięcia w ostatecznej wersji}
+
+\subsection{Wersja I.0}
+\begin{itemize}
+    \item Architektura –- Iteracja I
+    \begin{itemize}
+        \item Moduł prezentacji -- ogólne założenia
+        \item Moduł prezentacji -- komponenty
+        \item Wylistowanie pozostałych modułów
+    \end{itemize}
+\end{itemize}
+
+\clearpage
+
+\section{Wstęp}
+\textbf{TODO: w nieokreślonej wersja}
+
+\section{Architektura -- Iteracja I}
+
+\paragraph{Założenia bazowe}
+
+W celu uniknięcia kolizji nazw z innymi bibliotekami zostanie zastosowany wzorzec \code{namespace}. Globalny obiekt \code{CoNDeT} będzie przechowywał poszczególne moduły biblioteki.
+
+\subsection{Moduł wspólny}
+
+Moduł wspólny będzie znajdował się pod kluczem \code{core} w obiekcie biblioteki. Będzie on odpowiedzialny za funkcji oraz typy współdzielone między modułami.
+
+\textbf{NOTE: dokumentacja modułu tworzona na bieżąco wraz z dodawaniem współdzielonych funkcjonalności}
+
+\subsection{Moduł główny}
+
+Moduł spinający pozostałe moduły.
+
+\subsection{Moduł danych}
+
+Moduł odpowiedzialny za obsługę danych. Będzie znajdował się pod kluczem \code{data} w obiekcie biblioteki.
+
+\textbf{TODO: przechowywanie danych i wywoływanie procesu aktualizacji widoku -- w wersji II}
+
+\textbf{TODO: wczytywanie i zapisywanie danych do pliku -- w wersji II lub III}
+
+\textbf{TODO: interface do modyfikacji danych z poza modułu (np. z modułu UI w trybie edycji) -- w wersji III lub IV}
+
+\subsection{Moduł prezentacji}
+
+Moduł prezentacji będzie znajdował się pod kluczem \code{ui} w obiekcie biblioteki.
+
+\subsubsection{Ogólne założenia}
+\paragraph{Miejsce na stronie}
+Interfejs użytkownika będzie generowany wewnątrz pierwszego podanego elementu \code{div} o podanym \code{id}. Jeżeli \code{id} nie zostanie podane, domyślnie będzie poszukiwany \code{div} o \code{id} równym \code{condet-canvas}.
+
+\paragraph{Technologie}
+Wizualizacja będzie bazowała na elementach HTML (tabele) oraz SVG (połączenia między tabelami). Operacje na elementach będą odbywały się pośrednio poprzez \hyperref[sssec:components]{komponenty opisane poniżej}.
+
+\paragraph{Obiekt zarządzający}
+Obiektem zarządzającym interfejsem użytkownika będzie \code{UserInterface}. Będzie on tworzył, aktualizował i usuwał komponenty.
+
+\paragraph{Rozmieszczenie obiektów}
+Obiekty będą rozmieszczone wewnątrz wybranego elementu \code{div}. Rozmiar powinien być ustalony przez osobę korzystającą z biblioteki. \code{UserInterface} nada elementowi style (\code{overflow: hidden;}) ukrywające zawartość wychodzącą poza \code{div} oraz będzie zapisywał offset. Komponenty będą miały przekazywany aktualny offset (jako parametr funkcji wchodzących w skład cyklu życia komponentu). Bazując na tym komponent powinien sam ustalić swoją pozycję. Umożliwi to przesuwanie widoku za pomocą mechanizmu drag \& drop.
+
+\paragraph{Tryby}
+Za pomocą wzorca stan (state design pattern) komponenty oraz obiekt \code{UserInterface} będą mieć różne zachowania zależnie od stanu. Zasada działania została \hyperref[p:eventsHandling]{opisana przy komponentach}. Pozwoli to na implementację dwóch trybów: wyświetlania oraz edycji.
+
+\paragraph{Tryby wyświetlania}
+Tryb wyświetlania pozwoli jedynie na wyświetlanie tabeli i połączeń między nimi.
+
+\paragraph{Tryby edycji}
+\textbf{TODO: w wersji III lub IV}
+
+\subsubsection{Komponenty}
+\label{sssec:components}
+
+\paragraph{Bazowy komponent}
+Bazową klasą po której będą dziedziczyć komponenty jest  \code{BaseComponent}. Wyodrębnia ona części wspólne wszystkich komponentów. Zawiera metody odpowiedzialne za cykl życia komponentu:
+
+\begin{itemize}
+    \item \code{init} -- metod wywoływana przy utworzeniu komponentu
+    \item \code{update} -- metoda wywoływana przy zmianie stanu aplikacji (np. zawartość tabeli została zmieniona)
+    \item \code{destroy} -- metoda wywoływana przy usuwaniu komponentu
+\end{itemize}
+
+\paragraph{Wymiary obiektu} Kolejną grupą metod są funkcja związane z położeniem i rozmiarem komponentu:
+
+\begin{itemize}
+    \item \code{containsPoint} -- metod sprawdza czy podany punkt zawiera się wewnątrz danego komponentu
+    \item \code{getDimensions} -- metoda zwraca wymiary (szerokość i wysokość) komponentu
+    \item \code{getPosistion} -- metoda zwraca pozycję (x i y) komponentu
+\end{itemize}
+
+\paragraph{Obsługa zdarzeń}
+\label{p:eventsHandling}
+Każdy komponent będzie również zawierał właściwość \code{state} (wzorzec stan). Konkretna implementacja stanu będzie odpowiadać stanowi w którym jest moduł prezentacji (np. stan prezentacji, stan edycji). Obiekt \code{State} będzie implementował metody związane z obsługą zdarzeń: \code{onKeyUp}, \code{onKeyDown}, \code{onMouseUp}, \code{onMouseDown}, oraz dwie własne metody wywoływane przy utworzeniu oraz zniszczeniu danej istanci: \code{onInit} oraz \code{onDestroy}. Metody te będą wywoływane przez bazowy komponent podczas wywołania metody \code{setState} służącej do zmiany stanu (wzorzec odwrócenie sterowania -- inversion of control design pattern). Do ustawienia subskrypcji na zdarzenia będzie służyć metoda \code{setupEventListiners} obecna w \code{BaseComponent}.
+
+\paragraph{Zarządzanie dziećmi}
+Każdy komponent będzie mógł być skomponowany z innych komponentów  (np. tabela może wykorzystywać komponent wiersza i nagłówka). Komponent bazowy będzie zawierał uniwersalną część logiki związaną z tym problemem. Właściwość \code{children} będzie tablicą dzieci. Do dodania nowego komponentu będzie służyć metoda \code{appendChild}, natomiast do usunięcia metoda \code{removeChild}.
+
+\section{Format danych}
+
+\textbf{TODO: w wersji II}
+
+\end{document}
