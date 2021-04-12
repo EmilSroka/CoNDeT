@@ -1,0 +1,32 @@
+:root {
+    --border: grey;
+}
+
+.condet-table {
+    color: var(--border);
+    border: 3px solid var(--border);
+    border-spacing: 0px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.condet-table .condet-caption {
+    color: var(--border);
+    margin-bottom: 10px;
+    border: 3px solid var(--border);
+    font-size: 1.2rem;
+}
+
+.condet-table tr:nth-child(even) {
+     color: var(--border);
+     font-weight: bold;
+}
+
+.condet-table th, td {
+    padding: 4px;
+    width: auto;
+}
+
+.condet-table thead {
+    font-size: 1.11rem;
+}
