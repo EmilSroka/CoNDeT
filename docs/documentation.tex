@@ -115,6 +115,25 @@ Każdy komponent będzie również zawierał właściwość \code{state} (wzorze
 Każdy komponent będzie mógł być skomponowany z innych komponentów  (np. tabela może wykorzystywać komponent wiersza i nagłówka). Komponent bazowy będzie zawierał uniwersalną część logiki związaną z tym problemem. Właściwość \code{children} będzie tablicą dzieci. Do dodania nowego komponentu będzie służyć metoda \code{appendChild}, natomiast do usunięcia metoda \code{removeChild}.
 
 \section{Format danych}
+\subsection{Zastosowany Format}
+Do zapisywania i wymiany danych w projekcie użyty zostanie format JSON ( JavaScript Object Notation ). Pozwala on zapis liczb, tekstu ( string ) , list, typów logicznych, obiektów oraz null'a. Odpowiednio zapisane i przygotowane dane w tym formacie uproszczą ich obróbkę przy ich wymianie z aplikacją.
+\subsection{Struktura}
+Wymiana danych będzie następowała poprzez wymianę pliku w formacie JSON. Każdy przesyłany plik zawiera w sobie listę danych, w której znajdują się obiekty reprezentujące pojedynczą tablicę decyzyjną. Każda tablica zawiera w sobie: 
+\begin{enumerate}
+    \item swoją nazwę - \textit{name}
+    \item klasę określającą miejsce w hierarchii - \textit{class}
+    \item obiekt zawierający koordynaty x i y określający położenie w oknie przeglądarki - \textit{coordinates}
+    \item obiekt reprezentujący kolumny zawierający 2 listy z nazwami warunków oraz decyzji - \textit{columns}
+    \item listę wierszy - \textit{rows}  zawierającą:
+    \begin{enumerate}
+        \item id danego wiersza - \textit{row\_id} 
+        \item listę warunków w postaci tablicy dwuelementowej zawierającej id warunku i zawartość komórki - \textit{ conditions }
+        \item listę decyzji w postaci tablicy dwuelementowej zawierającej id warunku i zawartość komórki  - \textit{ decisions }
+        \item obiekt połączenie wskazujący na nazwę tablicy oraz id wiersza - \textit{ connection }
+    \end{enumerate}
+\end{enumerate}
+\paragraph{Oszczędność pamięci} Zapisanie naszych tablic w ten sposób oszczędza ilość danych poprzez zlikwidowanie potrzeby wysyłania pustych pól tekstowych. Jest to możliwe dzięki nadaniu identyfikacji naszym warunkom oraz decyzjom.
+
 
 \textbf{TODO: w wersji II}
 
