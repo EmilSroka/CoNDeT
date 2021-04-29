@@ -70,14 +70,7 @@ window.CoNDeT.ui = {
     },
     createChild: function (componentRef, props, position = 0) {
       var child = componentRef.init(this.common, props);
-      if (this.children != null && position <= this.children.length) {
-        if (position == this.children.length) {
-          this.ref.appendChild(child);
-        } else {
-          this.ref.insertBefore(child, this.children[position]);
-        }
-        this.children.splice(position, 0, child);
-      }
+      this.appendChild(child, position);
     },
     removeChild: function (component) {
       if (this.children != null) {
