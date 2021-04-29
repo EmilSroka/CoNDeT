@@ -5,7 +5,7 @@ window.CoNDeT.ui = {
       this.common = common;
     },
     update: function (common, props) {
-      this.ref.onUpdate(common, props);
+      this.onUpdate(common, props);
       this.common = common;
     },
     destroy: function (common) {
@@ -37,8 +37,7 @@ window.CoNDeT.ui = {
       );
     },
     setState: function (state) {
-      if (this.state == null) return;
-      this.state.onDestroy();
+      if (this.state != null) this.state.onDestroy();
       this.state = state;
       this.state.onInit();
     },
@@ -59,34 +58,31 @@ window.CoNDeT.ui = {
       });
     },
     appendChild: function (child, position = 0) {
-      if (this.children != null && position <= this.children.length) {
-        if (position == this.children.length) {
-          this.ref.appendChild(child);
-        } else {
-          this.ref.insertBefore(child, this.children[position]);
-        }
-        this.children.splice(position, 0, child);
+      if (this.children == null || position > this.children.length) return;
+      if (position == this.children.length) {
+        this.ref.appendChild(child);
+      } else {
+        this.ref.insertBefore(child, this.children[position]);
       }
+      this.children.splice(position, 0, child);
     },
     createChild: function (componentRef, props, position = 0) {
       var child = componentRef.init(this.common, props);
       this.appendChild(child, position);
     },
     removeChild: function (component) {
-      if (this.children != null) {
-        for (let i = 0; i < this.children.length; i++) {
-          if (this.children[i] === component) {
-            this.children.splice(i, 1);
-            this.children[i].destroy(this.common);
-          }
+      if (this.children == null) return;
+      for (let i = 0; i < this.children.length; i++) {
+        if (this.children[i] === component) {
+          this.children[i].destroy(this.common);
+          this.children.splice(i, 1);
         }
       }
     },
     removeChildAtPosition: function (position) {
-      if (position > -1 && position < this.children.length) {
-        this.children.splice(position, 1);
-        this.children[position].destroy(this.common);
-      }
+      if (position <= -1 || position >= this.children.length) return;
+      var childToRemove = this.children[position];
+      this.removeChild(childToRemove);
     },
   },
 };
