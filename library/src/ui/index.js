@@ -85,4 +85,29 @@ window.CoNDeT.ui = {
       this.removeChild(childToRemove);
     },
   },
+
+  DisplayMode: (function () {
+    function constructor() {}
+
+    constructor.prototype.updateXY = function (x, y) {
+      this.setDeltaXY({ x, y });
+    };
+
+    constructor.prototype.onKeyDown = function (event) {};
+    constructor.prototype.onKeyUp = function (event) {};
+    constructor.prototype.onMouseDown = function (event) {
+      this.updateXY(event.offsetLeft, event.offsetTop);
+    };
+    constructor.prototype.onMouseMove = function (event) {
+      this.updateXY(event.offsetLeft, event.offsetTop);
+    };
+    constructor.prototype.onMouseUp = function (event) {
+      this.updateXY(event.offsetLeft, event.offsetTop);
+    };
+
+    constructor.prototype.onInit = function () {};
+    constructor.prototype.onDestroy = function () {};
+
+    return constructor;
+  })(),
 };
