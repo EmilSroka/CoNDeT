@@ -197,4 +197,58 @@ window.CoNDeT.ui = {
       return unused;
     }
   })(),
+  DisplayComponent: (function () {
+    function constructor() {}
+
+    constructor.prototype.setDeltaXY = function ({ x, y }) {
+      common.deltaXY = { x: x, y: y };
+    };
+
+    constructor.prototype.prepareData = function (tablesJSON) {
+      var tablesList = [];
+      for (let i = 0; i < tablesJSON.length; i++) {
+        var { name, classType, coordinates, columns, rows } = tablesJSON[i];
+        var rowsPrepared = [];
+        for (let j = 0; j < columns.conditions.length; j++) {
+          rowsPrepared.push(rows.conditions[i][1] || "");
+        }
+        for (let j = 0; j < columns.decisions.length; j++) {
+          rowsPrepared.push(rows.decisions[i][1] || "");
+        }
+
+        tablesList.push({
+          name: name,
+          class: classType,
+          coordinates: coordinates,
+          conditions: columns.conditions,
+          decisions: columns.decisions,
+          rows: rowsPrepared,
+        });
+      }
+
+      return tablesList;
+    };
+
+    constructor.prototype.onInit = function (common, props) {
+      this.children = [];
+      var tables = this.prepareData(props.state.data);
+      for (let i = 0; i < tables.length; i++) {
+        this.createChild(Table, {
+          name: tables[i].name,
+          conditions: tables[i].conditions,
+          decisions: tables[i].decisions,
+          rows: tables[i].rows,
+        });
+      }
+    };
+
+    constructor.prototype.onUpdate = function (common, props) {};
+    constructor.prototype.onDestroy = function (common) {};
+
+    constructor.prototype.currentXY = function () {
+      return common.deltaXY;
+    };
+
+    return constructor;
+  })(),
 };
