@@ -59,15 +59,16 @@ window.CoNDeT.ui = {
     },
     appendChild: function (child, position = 0) {
       if (this.children == null || position > this.children.length) return;
-      if (position == this.children.length) {
+      if (position === this.children.length) {
         this.ref.appendChild(child);
       } else {
         this.ref.insertBefore(child, this.children[position]);
       }
       this.children.splice(position, 0, child);
     },
-    createChild: function (componentRef, props, position = 0) {
-      var child = componentRef.init(this.common, props);
+    createChild: function (ComponentRef, props, position = 0) {
+      var child = new ComponentRef();
+      componentRef.init(this.common, props);
       this.appendChild(child, position);
     },
     removeChild: function (component) {
@@ -85,7 +86,6 @@ window.CoNDeT.ui = {
       this.removeChild(childToRemove);
     },
   },
-
   DisplayMode: (function () {
     function constructor() {
       this.deltaXY = null;
@@ -126,5 +126,75 @@ window.CoNDeT.ui = {
     constructor.prototype.onDestroy = function () {};
 
     return constructor;
+  })(),
+  Connections: (function(){
+    var constructor = function () {};
+
+    constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+
+    constructor.prototype.onInit = function(common, props) {
+      var element = document.createElement('svg');
+      element.setAttribute('viewBox', '0 0 ' + props.dimentions.x + ' ' + props.dimentions.y);
+      for (var i=0; props.connections; i++) {
+        this.createChild(window.CoNDeT.ui.Connection, {
+          id: props.connections[i][0],
+          start: { x: props.connections[i][1].x + common.deltaXY.x, y: props.connections[i][1].y + common.deltaXY.y },
+          end: { x: props.connections[i][2].x + common.deltaXY.x, y: props.connections[i][2].y + common.deltaXY.y },
+          findingPathAlgorithm: props.findingPathAlgorithm
+        })
+      }
+    }
+
+    constructor.prototype.onUpdate = function(common, props) {
+      var usused = findConnectionsWithoutCorrespondedId(this.children, props.connections);
+      for (var i=0; i<usused; i++) {
+        this.removeChild(usused[i]);
+      }
+
+      for (var i=0; i<props.connections; i++) {
+        var correspondedChild = findConnectionById(this.children, props.connections[i][0]);
+        var connectionProps = {
+          id: props.connections[i][0],
+          start: { x: props.connections[i][1].x + common.deltaXY.x, y: props.connections[i][1].y + common.deltaXY.y },
+          end: { x: props.connections[i][2].x + common.deltaXY.x, y: props.connections[i][2].y + common.deltaXY.y },
+          findingPathAlgorithm: props.findingPathAlgorithm
+        };
+        if (correspondedChild != null) {
+          correspondedChild.update(common, connectionProps);
+        } else {
+          this.createChild(window.CoNDeT.ui.Connection, connectionProps);
+        }
+      }
+    }
+
+    constructor.prototype.onDestroy = function () {
+      this.ref.remove();
+    }
+
+    return constructor;
+
+    function findConnectionById(children, id) {
+      for (var i=0; i<children.length; i++) {
+        if (children[i].id === id) return  children[i];
+      }
+      return null;
+    }
+
+    function findConnectionsWithoutCorrespondedId(children, connections) {
+      var ids = connections.reduce(function (acc, val) {
+        if (findConnectionById(children, val[0]) == null) return acc;
+        acc[val[0]] = true;
+        return acc;
+      }, {})
+
+      var unused = [];
+
+      children.forEach(function (child) {
+        if (ids[child.id]) return;
+        unused.push(child);
+      })
+
+      return unused;
+    }
   })(),
 };
