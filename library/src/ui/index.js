@@ -40,22 +40,25 @@ window.CoNDeT.ui = {
     setState: function (state) {
       if (this.state != null) this.state.onDestroy();
       this.state = state;
-      this.state.onInit();
+      this.state.onInit(this);
     },
     setupEventListeners: function () {
       var self = this;
 
-      this.ref.addEventListener("keyup", function () {
-        self.strategy.onKeyUp();
+      this.ref.addEventListener("keyup", function (event) {
+        self.strategy.onKeyUp(event);
       });
-      this.ref.addEventListener("keydown", function () {
-        self.strategy.onKeyDown();
+      this.ref.addEventListener("keydown", function (event) {
+        self.strategy.onKeyDown(event);
       });
-      this.ref.addEventListener("mouseup", function () {
-        self.strategy.onMouseUp();
+      this.ref.addEventListener("mouseup", function (event) {
+        self.strategy.onMouseUp(event);
       });
-      this.ref.addEventListener("mousedown", function () {
-        self.strategy.onMouseDown();
+      this.ref.addEventListener("mousedown", function (event) {
+        self.strategy.onMouseDown(event);
+      });
+      this.ref.addEventListener("mousemove", function (event) {
+        self.strategy.onMouseMove(event);
       });
     },
     appendChild: function (child, position = 0) {
