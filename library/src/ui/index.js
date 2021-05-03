@@ -89,23 +89,47 @@ window.CoNDeT.ui = {
   DisplayMode: (function () {
     function constructor() {}
 
-    constructor.prototype.updateXY = function (x, y) {
-      this.setDeltaXY({ x, y });
-    };
+    this.deltaXY = null;
+    this.currentDelta = null;
 
     constructor.prototype.onKeyDown = function (event) {};
     constructor.prototype.onKeyUp = function (event) {};
     constructor.prototype.onMouseDown = function (event) {
-      this.updateXY(event.offsetLeft, event.offsetTop);
+      this.deltaXY = this.ref.getCurrentXY();
+      this.currentDelta = { x: event.clientX, y: event.clientY };
     };
     constructor.prototype.onMouseMove = function (event) {
-      this.updateXY(event.offsetLeft, event.offsetTop);
+      if (this.deltaXY == null) return;
+      this.currentDelta = { x: event.clientX, y: event.clientY };
+      this.ref.setDeltaXY({
+        x: this.deltaXY.x + this.currentDelta.x,
+        y: this.deltaXY.y + this.currentDelta.y,
+      });
     };
     constructor.prototype.onMouseUp = function (event) {
-      this.updateXY(event.offsetLeft, event.offsetTop);
+      if (this.deltaXY == null) return;
+      this.currentDelta = { x: event.clientX, y: event.clientY };
+      this.ref.setDeltaXY({
+        x: this.deltaXY.x + this.currentDelta.x,
+        y: this.deltaXY.y + this.currentDelta.y,
+      });
+      this.deltaXY = null;
+      this.currentDelta = null;
+    };
+    constructor.prototype.onMouseLeave = function (event) {
+      if (this.deltaXY == null) return;
+      this.currentDelta = { x: event.clientX, y: event.clientY };
+      this.ref.setDeltaXY({
+        x: this.deltaXY.x + this.currentDelta.x,
+        y: this.deltaXY.y + this.currentDelta.y,
+      });
+      this.deltaXY = null;
+      this.currentDelta = null;
     };
 
-    constructor.prototype.onInit = function () {};
+    constructor.prototype.onInit = function () {
+      this.ref = window.CoNDeT.ui.DisplayComponent;
+    };
     constructor.prototype.onDestroy = function () {};
 
     return constructor;
