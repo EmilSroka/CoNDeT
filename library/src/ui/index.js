@@ -311,30 +311,38 @@ window.CoNDeT.ui = {
     constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
 
     constructor.prototype.onInit = function (common, props) {
-      this.ref = document.createElement("table");
-      this.ref.classList.add("condet-table");
-      common.deltaXY = this.getPosition();
-      this.ref.style.cssText = `position: absolute; left: ${common.deltaXY.x}; top: ${common.deltaXY.y}`;
+      var ref = document.createElement("table");
+      ref.className = "condet-table";
+      var currentPosition = this.getPosition();
+      var newPosition = {
+        x: common.deltaXY.x + currentPosition.x,
+        y: common.deltaXY.y + currentPosition.y,
+      };
+      ref.style.cssText = `position: absolute; left: ${newPosition.x}; top: ${newPosition.y}`;
 
-      this.children = [];
-      this.createChild(Name, { text: props.name });
-      this.createChild(Head, {
+      this.createChild(window.CoNDeT.ui.Name, { text: props.name });
+      this.createChild(window.CoNDeT.ui.Head, {
         conditions: props.conditions,
         decisions: props.decisions,
       });
-      this.createChild(Body, { content: props.rows });
+      this.createChild(window.CoNDeT.ui.Body, { content: props.rows });
+
+      return ref;
     };
     constructor.prototype.onUpdate = function (common, props) {
-      // mozna zalozyc Table bedzie mial zawsze trojke dzieci zawsze w tej samej kolejnosci?
       this.children[0].onUpdate(common, { text: props.name });
       this.children[1].onUpdate(common, {
         conditions: props.conditions,
         decisions: props.decisions,
       });
       this.children[2].onUpdate(common, { content: props.rows });
+
       var currentPosition = this.getPosition();
-      this.ref.style.cssText = `position: absolute; left: ${currentPosition.x}; top: ${currentPosition.y}`;
-      common.deltaXY = currentPosition;
+      var newPosition = {
+        x: common.deltaXY.x + currentPosition.x,
+        y: common.deltaXY.y + currentPosition.y,
+      };
+      this.ref.style.cssText = `position: absolute; left: ${newPosition.x}; top: ${newPosition.y}`;
     };
     constructor.prototype.onDestroy = function (common) {
       this.ref.remove();
@@ -351,9 +359,11 @@ window.CoNDeT.ui = {
     function constructor() {}
 
     constructor.prototype.onInit = function (common, props) {
-      this.ref = document.createElement("caption");
-      this.ref.innerHTML = props.text;
-      this.ref.classList.add("condet-caption");
+      var ref = document.createElement("caption");
+      ref.innerHTML = props.text;
+      ref.className = "condet-caption";
+
+      return ref;
     };
     constructor.prototype.onUpdate = function (common, props) {
       this.ref.innerHTML = props.text;
@@ -371,28 +381,30 @@ window.CoNDeT.ui = {
     constructor.prototype.appendHeaders = function (headerRef, content) {
       for (let i = 0; i < content.conditions.length; i++) {
         let headerCol = document.createElement("th");
-        headerCol.classList.add("condition");
+        headerCol.className = "condition";
         headerCol.innerHTML = content.conditions[i];
         headerRef.appendChild(headerCol);
       }
 
       for (let i = 0; i < content.decisions.length; i++) {
         let headerCol = document.createElement("th");
-        headerCol.classList.add("decision");
+        headerCol.className = "decision";
         headerCol.innerHTML = content.decisions[i];
         headerRef.appendChild(headerCol);
       }
     };
 
     constructor.prototype.onInit = function (common, props) {
-      this.ref = document.createElement("thead");
+      var ref = document.createElement("thead");
       this.headerRow = document.createElement("tr");
-      this.ref.appendChild(this.headerRow);
+      ref.appendChild(this.headerRow);
 
       this.appendHeaders(this.headerRow, {
         conditions: props.conditions,
         decisions: props.decisions,
       });
+
+      return ref;
     };
     constructor.prototype.onUpdate = function (common, props) {
       for (let i = 0; i < this.ref.children.length; i++) {
@@ -414,19 +426,20 @@ window.CoNDeT.ui = {
     function constructor() {}
 
     constructor.prototype.onInit = function (common, props) {
-      this.ref = document.createElement("tbody");
-      this.children = [];
+      var ref = document.createElement("tbody");
 
       for (let i = 0; i < props.content.length; i++) {
-        this.createChild(Row, { constent: props.content[i] });
+        this.createChild(window.CoNDeT.ui.Row, { constent: props.content[i] });
       }
+
+      return ref;
     };
     constructor.prototype.onUpdate = function (common, props) {
       for (let i = 0; i < this.children.length; i++) {
-        this.children[i].onDestroy(common);
+        this.removeChildAtPosition(i);
       }
       for (let i = 0; i < props.content.length; i++) {
-        this.createChild(Row, { constent: props.content[i] });
+        this.createChild(window.CoNDeT.ui.Row, { constent: props.content[i] });
       }
     };
     constructor.prototype.onDestroy = function (common) {
@@ -440,13 +453,15 @@ window.CoNDeT.ui = {
     function constructor() {}
 
     constructor.prototype.onInit = function (common, props) {
-      this.ref = document.createElement("tr");
+      var ref = document.createElement("tr");
 
       for (let i = 0; i < props.content.length; i++) {
         let cell = document.createElement("td");
         cell.innerHTML = props.content[i];
-        this.ref.appendChild(cell);
+        ref.appendChild(cell);
       }
+
+      return ref;
     };
 
     constructor.prototype.onUpdate = function (common, props) {};
@@ -455,9 +470,9 @@ window.CoNDeT.ui = {
     };
 
     constructor.prototype.getConnectionXY = function () {
-      var { rowX, rowY } = this.getPosition();
-      var { width, height } = this.getDimensions();
-      return { x: rowX + width, y: rowY + height / 2 };
+      var position = this.getPosition();
+      var dimensions = this.getDimensions();
+      return { x: position.x + dimensions.x, y: position.y + dimensions.y / 2 };
     };
 
     return constructor;
