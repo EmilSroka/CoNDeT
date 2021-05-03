@@ -87,10 +87,18 @@ window.CoNDeT.ui = {
   },
 
   DisplayMode: (function () {
-    function constructor() {}
+    function constructor() {
+      this.deltaXY = null;
+      this.currentDelta = null;
+    }
 
-    this.deltaXY = null;
-    this.currentDelta = null;
+    constructor.prototype.updateXY = function (event) {
+      if (this.deltaXY == null) return;
+      this.ref.setCurrentXY({
+        x: this.deltaXY.x + this.currentDelta.x - event.clientX,
+        y: this.deltaXY.y + this.currentDelta.y - event.clientY,
+      });
+    };
 
     constructor.prototype.onKeyDown = function (event) {};
     constructor.prototype.onKeyUp = function (event) {};
@@ -99,36 +107,21 @@ window.CoNDeT.ui = {
       this.currentDelta = { x: event.clientX, y: event.clientY };
     };
     constructor.prototype.onMouseMove = function (event) {
-      if (this.deltaXY == null) return;
-      this.currentDelta = { x: event.clientX, y: event.clientY };
-      this.ref.setDeltaXY({
-        x: this.deltaXY.x + this.currentDelta.x,
-        y: this.deltaXY.y + this.currentDelta.y,
-      });
+      this.updateXY(event);
     };
     constructor.prototype.onMouseUp = function (event) {
-      if (this.deltaXY == null) return;
-      this.currentDelta = { x: event.clientX, y: event.clientY };
-      this.ref.setDeltaXY({
-        x: this.deltaXY.x + this.currentDelta.x,
-        y: this.deltaXY.y + this.currentDelta.y,
-      });
+      this.updateXY(event);
       this.deltaXY = null;
       this.currentDelta = null;
     };
     constructor.prototype.onMouseLeave = function (event) {
-      if (this.deltaXY == null) return;
-      this.currentDelta = { x: event.clientX, y: event.clientY };
-      this.ref.setDeltaXY({
-        x: this.deltaXY.x + this.currentDelta.x,
-        y: this.deltaXY.y + this.currentDelta.y,
-      });
+      this.updateXY(event);
       this.deltaXY = null;
       this.currentDelta = null;
     };
 
-    constructor.prototype.onInit = function () {
-      this.ref = window.CoNDeT.ui.DisplayComponent;
+    constructor.prototype.onInit = function (ref) {
+      this.ref = ref;
     };
     constructor.prototype.onDestroy = function () {};
 
