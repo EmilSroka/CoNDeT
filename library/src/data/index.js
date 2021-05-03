@@ -1,23 +1,24 @@
 window.CoNDeT.data = {
   State: (function () {
-    function constructor() {}
+    function constructor() {
+      this.state = [];
+      this.subscribers = [];
+    }
 
-    constructor.prototype.state = [];
-    constructor.prototype.subscribers = [];
-
-    constructor.prototype.methods = {
-      subscribe: function (fun) {
-        this.subscribers.push(fun);
-      },
-      set: function (state) {
-        this.state = state;
-        this.call_subscribers();
-      },
-      call_subscribers: function () {
-        this.subscribers.forEach((element) => {
-          element.call();
-        });
-      },
+    constructor.prototype.subscribe = function (subscriber) {
+      var self = this;
+      this.subscribers.push(subscriber);
+      subscriber(self.state);
+    };
+    constructor.prototype.setState = function (state) {
+      this.state = state;
+      this.callSubscribers();
+    };
+    constructor.prototype.callSubscribers = function () {
+      var self = this;
+      this.subscribers.forEach(function (cb) {
+        cb(self.state);
+      });
     };
     return constructor;
   })(),
