@@ -247,11 +247,13 @@ window.CoNDeT.ui = {
     };
 
     constructor.prototype.onInit = function (common, props) {
-      var ref = props.className;
+      var ref = document.getElementsByClassName(props.className)[0];
       var tables = this.prepareData(props.state.data);
       for (var i = 0; i < tables.length; i++) {
         this.createChild(window.CoNDeT.ui.Table, tables[i]);
       }
+
+      return ref;
     };
 
     constructor.prototype.onUpdate = function (common, props) {
