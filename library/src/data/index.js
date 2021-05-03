@@ -6,9 +6,8 @@ window.CoNDeT.data = {
     }
 
     constructor.prototype.subscribe = function (subscriber) {
-      var self = this;
       this.subscribers.push(subscriber);
-      subscriber(self.state);
+      subscriber(this.state);
     };
     constructor.prototype.setState = function (state) {
       this.state = state;
