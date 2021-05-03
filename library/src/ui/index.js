@@ -435,8 +435,8 @@ window.CoNDeT.ui = {
       return ref;
     };
     constructor.prototype.onUpdate = function (common, props) {
-      for (let i = 0; i < this.children.length; i++) {
-        this.removeChildAtPosition(i);
+      while (0 != this.children.length) {
+        this.removeChildAtPosition(0);
       }
       for (let i = 0; i < props.content.length; i++) {
         this.createChild(window.CoNDeT.ui.Row, { constent: props.content[i] });
