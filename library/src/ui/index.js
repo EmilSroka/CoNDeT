@@ -1,6 +1,7 @@
 window.CoNDeT.ui = {
   BaseComponent: {
     init: function (common, props) {
+      this.children = [];
       this.ref = this.onInit(common, props);
       this.common = common;
     },
@@ -198,30 +199,46 @@ window.CoNDeT.ui = {
     }
   })(),
   DisplayComponent: (function () {
-    function constructor() {}
+    function constructor() {
+      common = {};
+    }
 
-    constructor.prototype.setDeltaXY = function ({ x, y }) {
+    constructor.prototype.setCurrentXY = function ({ x, y }) {
       common.deltaXY = { x: x, y: y };
+    };
+
+    constructor.prototype.getCurrentXY = function () {
+      return common.deltaXY;
     };
 
     constructor.prototype.prepareData = function (tablesJSON) {
       var tablesList = [];
-      for (let i = 0; i < tablesJSON.length; i++) {
-        var { name, classType, coordinates, columns, rows } = tablesJSON[i];
+      for (var i = 0; i < tablesJSON.length; i++) {
+        var tableProps = tablesJSON[i];
         var rowsPrepared = [];
-        for (let j = 0; j < columns.conditions.length; j++) {
-          rowsPrepared.push(rows.conditions[i][1] || "");
+        for (var j = 0, k = 0; j < tableProps.columns.conditions.length; j++) {
+          if (tableProps.rows.conditions[k][1] != null) {
+            rowsPrepared.push(tableProps.rows.conditions[k][1]);
+            k += 1;
+          } else {
+            rowsPrepared.push("");
+          }
         }
-        for (let j = 0; j < columns.decisions.length; j++) {
-          rowsPrepared.push(rows.decisions[i][1] || "");
+        for (var j = 0, k = 0; j < tableProps.columns.decisions.length; j++) {
+          if (tableProps.rows.decisions[k][1] != null) {
+            rowsPrepared.push(tableProps.rows.decisions[k][1]);
+            k += 1;
+          } else {
+            rowsPrepared.push("");
+          }
         }
 
         tablesList.push({
-          name: name,
-          class: classType,
-          coordinates: coordinates,
-          conditions: columns.conditions,
-          decisions: columns.decisions,
+          name: tableProps.name,
+          class: tableProps.classType,
+          coordinates: tableProps.coordinates,
+          conditions: tableProps.columns.conditions,
+          decisions: tableProps.columns.decisions,
           rows: rowsPrepared,
         });
       }
@@ -230,25 +247,57 @@ window.CoNDeT.ui = {
     };
 
     constructor.prototype.onInit = function (common, props) {
-      this.children = [];
+      var ref = props.className;
       var tables = this.prepareData(props.state.data);
-      for (let i = 0; i < tables.length; i++) {
-        this.createChild(Table, {
-          name: tables[i].name,
-          conditions: tables[i].conditions,
-          decisions: tables[i].decisions,
-          rows: tables[i].rows,
-        });
+      for (var i = 0; i < tables.length; i++) {
+        this.createChild(window.CoNDeT.ui.Table, tables[i]);
       }
     };
 
-    constructor.prototype.onUpdate = function (common, props) {};
+    constructor.prototype.onUpdate = function (common, props) {
+      var tables = this.prepareData(props.state.data);
+      var unused = findTablesWithoutCorrespondingName(this.children, tables);
+
+      for (var i = 0; i < array.length; i++) {
+        this.removeChild(unused[i]);
+      }
+
+      for (var i = 0; i < tables.length; i++) {
+        var correspondedChild = findTableByName(this.children, tables[i].name);
+        var tablesProps = tables[i];
+        if (correspondedChild != null) {
+          correspondedChild.update(common, tablesProps);
+        } else {
+          this.createChild(window.CoNDeT.ui.Table, tablesProps);
+        }
+      }
+    };
     constructor.prototype.onDestroy = function (common) {};
 
-    constructor.prototype.currentXY = function () {
-      return common.deltaXY;
-    };
-
     return constructor;
+
+    function findTableByName(children, name) {
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].name === name) return children[i];
+      }
+      return null;
+    }
+
+    function findTablesWithoutCorrespondingName(children, tables) {
+      var names = tables.reduce(function (acc, val) {
+        if (findTableByName(children, val[0].name) == null) return acc;
+        acc[val[0].name] = true;
+        return acc;
+      }, {});
+
+      var unused = [];
+
+      children.forEach(function (child) {
+        if (names[child.name]) return;
+        unused.push(child);
+      });
+
+      return unused;
+    }
   })(),
 };
