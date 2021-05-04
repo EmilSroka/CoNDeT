@@ -140,7 +140,7 @@ window.CoNDeT.ui = {
       var element = document.createElement('svg');
       element.setAttribute('viewBox', '0 0 ' + props.dimentions.x + ' ' + props.dimentions.y);
       for (var i=0; props.connections; i++) {
-        var path = props.path.map(function (point) {
+        var path = props.connections[i].path.map(function (point) {
           return { x: point.x + common.deltaXY.x, y: point.y + common.deltaXY.y }
         });
         this.createChild(window.CoNDeT.ui.Connection, {
@@ -316,18 +316,58 @@ window.CoNDeT.ui = {
       return tablesList;
     };
 
+    constructor.prototype.prepareConnections = function (tablesJSON, pathAlgo) {
+      var connections = [];
+      for (var i = 0; i < tablesJSON.length; i++) {
+        var rows = tablesJSON[i].rows;
+        for (var j = 0; j < rows.length; j++) {
+          for (var k = 0; k < rows[j].connections.length; k++) {
+            var toTableId = getTableIndexByName(tablesJSON[i].rows[j].connections[k])
+            var connection = [
+              toTableId + '-' +  tablesJSON[i].name,
+              this.children[i].getRowXY[j],
+              this.children[getTableIndexByName(toTableId)].getPosition(),
+            ]
+            connections.push(connection);
+          }
+        }
+      }
+
+      connections = connections.map(function (connection) {
+        return window.CoNDeT.core.getLinePoints({
+          startPoint: connection[0],
+          endpoint: connection[1],
+          freePlaceCallback: pathAlgo,
+        })
+      });
+
+      return connections;
+
+      function getTableIndexByName(name) {
+        for (var i = 0; i < tablesJSON.length; i++) {
+          if (tablesJSON[i].name === name) return i;
+        }
+        return null;
+      }
+    }
+
     constructor.prototype.onInit = function (common, props) {
       var ref = document.getElementsByClassName(props.className)[0];
-      var tables = this.prepareData(props.state.data);
+      var tables = this.prepareData(props.data);
       for (var i = 0; i < tables.length; i++) {
         this.createChild(window.CoNDeT.ui.Table, tables[i]);
       }
+      var paths = this.prepareConnections(props.data, props.algo);
+      this.createChild(window.CoNDeT.ui.Connections, {
+        connections: paths,
+        dimentions: this.getDimensions(),
+      })
 
       return ref;
     };
 
     constructor.prototype.onUpdate = function (common, props) {
-      var tables = this.prepareData(props.state.data);
+      var tables = this.prepareData(props.data);
       var unused = findTablesWithoutCorrespondingName(this.children, tables);
 
       for (var i = 0; i < array.length; i++) {
