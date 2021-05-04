@@ -140,12 +140,13 @@ window.CoNDeT.ui = {
       var element = document.createElement('svg');
       element.setAttribute('viewBox', '0 0 ' + props.dimentions.x + ' ' + props.dimentions.y);
       for (var i=0; props.connections; i++) {
+        var path = props.path.map(function (point) {
+          return { x: point.x + common.deltaXY.x, y: point.y + common.deltaXY.y }
+        });
         this.createChild(window.CoNDeT.ui.Connection, {
           id: props.connections[i][0],
-          start: { x: props.connections[i][1].x + common.deltaXY.x, y: props.connections[i][1].y + common.deltaXY.y },
-          end: { x: props.connections[i][2].x + common.deltaXY.x, y: props.connections[i][2].y + common.deltaXY.y },
-          findingPathAlgorithm: props.findingPathAlgorithm
-        })
+          path: path,
+        });
       }
     }
 
@@ -157,11 +158,12 @@ window.CoNDeT.ui = {
 
       for (var i=0; i<props.connections; i++) {
         var correspondedChild = findConnectionById(this.children, props.connections[i][0]);
+        var path = props.path.map(function (point) {
+          return { x: point.x + common.deltaXY.x, y: point.y + common.deltaXY.y }
+        });
         var connectionProps = {
           id: props.connections[i][0],
-          start: { x: props.connections[i][1].x + common.deltaXY.x, y: props.connections[i][1].y + common.deltaXY.y },
-          end: { x: props.connections[i][2].x + common.deltaXY.x, y: props.connections[i][2].y + common.deltaXY.y },
-          findingPathAlgorithm: props.findingPathAlgorithm
+          path: path,
         };
         if (correspondedChild != null) {
           correspondedChild.update(common, connectionProps);
@@ -200,6 +202,71 @@ window.CoNDeT.ui = {
 
       return unused;
     }
+  })(),
+  Connection: (function () {
+    function constructor() {}
+
+    constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+
+    constructor.prototype.onInit = function(common, props) {
+      var element = document.createElement('path');
+      element.setAttribute('d', this.calcPath(props.path));
+      this.appendChild(window.CoNDeT.ui.Arrow, {
+        x: props.path[props.path.length - 1].x,
+        y: props.path[props.path.length - 1].y,
+      })
+      return element;
+    }
+
+    constructor.prototype.onUpdate = function(common, props) {
+      this.ref.setAttribute('d', this.calcPath(props.path));
+      this.children[0].update({
+        x: props.path[props.path.length - 1].x,
+        y: props.path[props.path.length - 1].y,
+      });
+    }
+
+    constructor.prototype.onDestroy = function () {
+      this.ref.remove();
+    }
+
+    constructor.prototype.calcPath = function (path) {
+      var d = 'M ' + path[0].x + ' ' + path[0].y;
+      for (var i=1; i < path.length; i++) {
+        var point = 'L ' + path[i].x + ' ' + path[i].y;
+        d += point;
+      }
+      return d;
+    }
+
+    return constructor;
+  })(),
+  Arrow: (function () {
+    function constructor() {}
+
+    constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+
+    constructor.prototype.onInit = function(common, props) {
+      var element = document.createElement('path');
+      var d = 'M ' + props.x + ' ' + props.y +
+          'L ' + props.x - 5 + ' ' + props.y - 5 +
+          'L ' + props.x - 5 + ' ' + props.y + 5 + ' Z';
+      element.setAttribute('d', d);
+      return element;
+    }
+
+    constructor.prototype.onUpdate = function(common, props) {
+      var d = 'M ' + props.x + ' ' + props.y +
+          'L ' + props.x - 5 + ' ' + props.y - 5 +
+          'L ' + props.x - 5 + ' ' + props.y + 5 + ' Z';
+      this.ref.setAttribute('d', d);
+    }
+
+    constructor.prototype.onDestroy = function () {
+      this.ref.remove();
+    }
+
+    return constructor;
   })(),
   DisplayComponent: (function () {
     function constructor() {
