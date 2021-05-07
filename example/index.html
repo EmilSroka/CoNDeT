@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .con {
+      width: 500px;
+      height: 500px;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <div class="con" style="position: relative"></div>
+
+  <script src="lib.js"></script>
+  <script>
+    const lib = window.CoNDeT({
+      displayClass: 'con'
+    });
+    lib.setState([
+      {
+        name: 'Table name',
+        class: 'Class name',
+        coordinates: { x: 10, y: 10 },
+        columns: {
+          conditions: ['con 1', 'con 2', 'con 3'],
+          decisions: ['dec 1', 'dec 2'],
+        },
+        rows: [
+          {
+            row_id: 'rowid',
+            conditions: [],
+            decisions: [[1, 'aaa']],
+            connections: [],
+          },
+          {
+            row_id: 'rowid2',
+            conditions: [[0, 'bbb']],
+            decisions: [],
+            connections: ['Table name 2', 'Table name 3'],
+          },
+          {
+            row_id: 'rowid3',
+            conditions: [[1, 'bbb']],
+            decisions: [[1, 'd = 3']],
+            connections: [],
+          }
+        ]
+      },
+      {
+        name: 'Table name 2',
+        class: 'Class name 2',
+        coordinates: { x: 10, y: 300 },
+        columns: {
+          conditions: ['con'],
+          decisions: ['aaa', 'bbb', 'ccc'],
+        },
+        rows: [
+          {
+            row_id: 'rowid',
+            conditions: [],
+            decisions: [[0, 'aaa']],
+            connections: [],
+          },
+          {
+            row_id: 'rowid2',
+            conditions: [[0, 'bbb']],
+            decisions: [],
+            connections: [],
+          },
+        ]
+      },
+      {
+        name: 'Table name 3',
+        class: 'Class name 2',
+        coordinates: { x: 300, y: 300 },
+        columns: {
+          conditions: ['con'],
+          decisions: ['aaa', 'bbb', 'ccc'],
+        },
+        rows: [
+          {
+            row_id: 'rowid',
+            conditions: [],
+            decisions: [[0, 'aaa']],
+            connections: [],
+          },
+          {
+            row_id: 'rowid2',
+            conditions: [[0, 'bbb'], [1, 'ccc']],
+            decisions: [],
+            connections: [],
+          },
+        ]
+      }
+    ]);
+  </script>
+</body>
+</html>
