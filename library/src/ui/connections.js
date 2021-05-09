@@ -4,7 +4,7 @@ window.CoNDeT.ui.ConnectionsComponent = (function () {
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
 
   constructor.prototype.onInit = function (common, props) {
-    var element = document.createElementNS("svg");
+    var element = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     element.setAttribute(
       "viewBox",
       "0 0 " + props.dimentions.x + " " + props.dimentions.y

@@ -4,7 +4,10 @@ window.CoNDeT.ui.ArrowComponent = (function () {
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
 
   constructor.prototype.onInit = function (common, props) {
-    var element = document.createElementNS("path");
+    var element = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
     var d =
       "M " +
       props.x +
