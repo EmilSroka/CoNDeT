@@ -4,7 +4,7 @@ window.CoNDeT.ui.ArrowComponent = (function () {
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
 
   constructor.prototype.onInit = function (common, props) {
-    var element = document.createElement("path");
+    var element = document.createElementNS("path");
     var d =
       "M " +
       props.x +

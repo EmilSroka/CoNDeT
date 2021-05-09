@@ -3,8 +3,8 @@ window.CoNDeT.ui.DisplayComponent = (function () {
     common = {};
   }
 
-  constructor.prototype.setCurrentXY = function ({ x, y }) {
-    common.deltaXY = { x: x, y: y };
+  constructor.prototype.setCurrentXY = function (currentXY) {
+    common.deltaXY = { x: currentXY.x, y: currentXY.y };
   };
 
   constructor.prototype.getCurrentXY = function () {
