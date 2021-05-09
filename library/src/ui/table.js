@@ -11,7 +11,12 @@ window.CoNDeT.ui.TableComponent = (function () {
       x: common.deltaXY.x + currentPosition.x,
       y: common.deltaXY.y + currentPosition.y,
     };
-    ref.style.cssText = `position: absolute; left: ${newPosition.x}; top: ${newPosition.y}`;
+    ref.style.cssText =
+      "position: absolute; left: " +
+      newPosition.x +
+      "; top: " +
+      newPosition.y +
+      ";";
 
     this.createChild(window.CoNDeT.ui.NameComponent, { text: props.name });
     this.createChild(window.CoNDeT.ui.HeadComponent, {
@@ -35,7 +40,12 @@ window.CoNDeT.ui.TableComponent = (function () {
       x: common.deltaXY.x + currentPosition.x,
       y: common.deltaXY.y + currentPosition.y,
     };
-    this.ref.style.cssText = `position: absolute; left: ${newPosition.x}; top: ${newPosition.y}`;
+    this.ref.style.cssText =
+      "position: absolute; left: " +
+      newPosition.x +
+      "; top: " +
+      newPosition.y +
+      ";";
   };
   constructor.prototype.onDestroy = function (common) {
     this.ref.remove();

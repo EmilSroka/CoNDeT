@@ -4,7 +4,7 @@ window.CoNDeT.ui.ConnectionComponent = (function () {
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
 
   constructor.prototype.onInit = function (common, props) {
-    var element = document.createElement("path");
+    var element = document.createElementNS("path");
     element.setAttribute("d", this.calcPath(props.path));
     this.appendChild(window.CoNDeT.ui.ArrowComponent, {
       x: props.path[props.path.length - 1].x,
