@@ -5,15 +5,15 @@ import sys
 start_path = "." # current directory
 
 if ( len(sys.argv) == 2):
-    outputfileName = "./dist/" + sys.argv[1] + ".js"
+    outputFileName = "./dist/" + sys.argv[1] + ".js"
 else:
-    outputfileName = "./dist/CoNDeT.js"
+    outputFileName = "./dist/CoNDeT.js"
 
-f = open(outputfileName,"w")
+f = open(outputFileName,"w")
 f.close()
 
 for path,dirs,files in os.walk(start_path):
-    wholeCode = open(outputfileName, 'a')
+    wholeCode = open(outputFileName, 'a')
     for filename in files:
         file = os.path.join(path,filename)
         if ( (re.search(".*\.js",file) != None) ):
