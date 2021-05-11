@@ -2,19 +2,18 @@ import os
 import re
 from pathlib import Path
 import sys
-Path("/wholeCode.js").touch()
 start_path = "." # current directory
 
 if ( len(sys.argv) == 2):
-    nazwa = "./dist/" + sys.argv[1] + ".js"
+    outputfileName = "./dist/" + sys.argv[1] + ".js"
 else:
-    nazwa = "./dist/CoNDeT.js"
+    outputfileName = "./dist/CoNDeT.js"
 
-f = open(nazwa,"w")
+f = open(outputfileName,"w")
 f.close()
 
 for path,dirs,files in os.walk(start_path):
-    wholeCode = open(nazwa, 'a')
+    wholeCode = open(outputfileName, 'a')
     for filename in files:
         file = os.path.join(path,filename)
         if ( (re.search(".*\.js",file) != None) ):
