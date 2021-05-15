@@ -4,32 +4,30 @@ window.CoNDeT.core = {
     for (var i = 0; i < tablesJSON.length; i++) {
       var tableProps = tablesJSON[i];
       var rowsPrepared = [];
-      for (var j = 0, k = 0; j < tableProps.columns.conditions.length; j++) {
-        if (tableProps.rows.conditions[k][1] != null) {
-          rowsPrepared.push(tableProps.rows.conditions[k][1]);
-          k += 1;
-        } else {
-          rowsPrepared.push("");
+      for (var j = 0; j < tableProps.rows.length; j++) {
+        var row = tableProps.rows[j];
+        var content = [];
+        for (var k = 0; k < tableProps.columns.conditions.length + tableProps.columns.decisions.length; k++) {
+          content.push("");
         }
-      }
-      for (var j = 0, k = 0; j < tableProps.columns.decisions.length; j++) {
-        if (tableProps.rows.decisions[k][1] != null) {
-          rowsPrepared.push(tableProps.rows.decisions[k][1]);
-          k += 1;
-        } else {
-          rowsPrepared.push("");
+        for (var k = 0; k < row.conditions.length; k++) {
+          content[row.conditions[k][0]] = tableProps.rows[j].conditions[k][1];
         }
+        for (var k = 0; k < row.decisions.length; k++) {
+          content[row.decisions[k][0] + tableProps.columns.conditions.length] = row.decisions[k][1];
+        }
+        rowsPrepared.push(content);
       }
-
       tablesList.push({
         id: tableProps.id,
         name: tableProps.name,
-        class: tableProps.classType,
+        class: tableProps.class,
         coordinates: tableProps.coordinates,
         conditions: tableProps.columns.conditions,
         decisions: tableProps.columns.decisions,
         rows: rowsPrepared,
       });
+
     }
 
     return tablesList;

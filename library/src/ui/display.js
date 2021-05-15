@@ -4,11 +4,7 @@
  * * state
  */
 window.CoNDeT.ui.DisplayComponent = (function () {
-  function constructor() {
-    common = {
-      deltaXY: { }
-    };
-  }
+  function constructor() { }
 
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
   constructor.prototype.typeId = "DisplayComponent";
@@ -28,11 +24,11 @@ window.CoNDeT.ui.DisplayComponent = (function () {
   }
 
   constructor.prototype.setCurrentXY = function (currentXY) {
-    common.deltaXY = { x: currentXY.x, y: currentXY.y };
+    this.common.deltaXY = { x: currentXY.x, y: currentXY.y };
   };
 
   constructor.prototype.getCurrentXY = function () {
-    return common.deltaXY;
+    return this.common.deltaXY;
   };
 
   return constructor;
@@ -43,6 +39,8 @@ window.CoNDeT.ui.DisplayMode = (function () {
     this.deltaXY = null;
     this.currentDelta = null;
   }
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseStrategy);
 
   constructor.prototype.updateXY = function (event) {
     if (this.deltaXY == null) return;

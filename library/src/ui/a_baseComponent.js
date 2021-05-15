@@ -41,8 +41,8 @@ window.CoNDeT.ui.BaseComponent = {
     this.markCorrespondedChildren(this.children, newChildren);
     this.deleteUnmarked(this.children);
     this.setInSameOrder(newChildren);
-    this.updateChildren(newChildren);
-    this.initNewChildren();
+    this.updateChildrenProps(newChildren);
+    this.initNewChildren(newChildren);
   },
   unmark: function (array) {
     for (var i=0; i<array; i++) {
@@ -70,7 +70,7 @@ window.CoNDeT.ui.BaseComponent = {
     for (var childIdx=0, newChildIdx=0; newChildIdx<newChildren.length; newChildIdx++) {
       var currentNewChild = newChildren[newChildIdx];
 
-      var correspondedIdx = findIndexOfChild(currentNewChild.type, currentNewChild.id);
+      var correspondedIdx = this.findIndexOfChild(currentNewChild.type, currentNewChild.id);
 
       if (correspondedIdx === childIdx) {
         var component = this.children[correspondedIdx];
@@ -87,15 +87,15 @@ window.CoNDeT.ui.BaseComponent = {
       childIdx++;
     }
   },
-  updateChildren: function (newChildren) {
+  updateChildrenProps: function (newChildren) {
     for (var i=0; i<newChildren; i++) {
       var corresponded = this.findChild(newChildren[i].type, newChildren[i].id);
       if (corresponded == null) continue;
       corresponded.update(newChildren[i].props);
     }
   },
-  initNewChildren: function () {
-    for (var i=0; i<newChildren; i++) {
+  initNewChildren: function (newChildren) {
+    for (var i=0; i<newChildren.length; i++) {
       var corresponded = this.findChild(newChildren[i].type, newChildren[i].id);
       if (corresponded != null) continue;
       this.createChild(newChildren[i].type, newChildren[i].props, i);
@@ -111,8 +111,8 @@ window.CoNDeT.ui.BaseComponent = {
   findIndexOfChild: function (type, id) {
     if (this.children == null) return;
 
-    for (let i = 0; i < children.length; i++) {
-      if (children[i].typeId === Component.typeId && children[i].id === id)
+    for (let i = 0; i < this.children.length; i++) {
+      if (this.children[i].typeId === type.typeId && this.children[i].id === id)
         return i;
     }
   },
@@ -168,23 +168,23 @@ window.CoNDeT.ui.BaseComponent = {
     this.ref.addEventListener("mousemove", function (event) {
       self.strategy.onMouseMove(event);
     });
-    this.ref.addEventListener("mouseover", function (event) {
-      self.strategy.onMouseOver(event);
+    this.ref.addEventListener("mouseleave", function (event) {
+      self.strategy.onMouseLeave(event);
     });
   },
   /* child management */
   appendChild: function (child, position = 0) {
     if (this.children == null || position > this.children.length) return;
     if (position === this.children.length) {
-      this.ref.appendChild(child);
+      this.ref.appendChild(child.ref);
     } else {
-      this.ref.insertBefore(child, this.children[position]);
+      this.ref.insertBefore(child.ref, this.children[position]);
     }
     this.children.splice(position, 0, child);
   },
   createChild: function (ComponentRef, props, position = 0) {
     var child = new ComponentRef();
-    ComponentRef.init(this.common, props);
+    child.init(this.common, props);
     this.appendChild(child, position);
   },
   removeChild: function (component) {
