@@ -1,186 +1,204 @@
+/*
+ * props:
+ * * id
+ * * name
+ * * coordinates
+ * * class -> name of CoNDeT class
+ * * conditions -> list of conditions (strings)
+ * * decisions -> list of decisions (strings)
+ * * rows -> content of table (list of list of strings)
+ */
 window.CoNDeT.ui.TableComponent = (function () {
   function constructor() {}
 
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "TableComponent";
 
-  constructor.prototype.onInit = function (common, props) {
-    var ref = document.createElement("table");
-    ref.className = "condet-table";
-    var currentPosition = this.getPosition();
-    var newPosition = {
-      x: common.deltaXY.x + currentPosition.x,
-      y: common.deltaXY.y + currentPosition.y,
-    };
-    ref.style.cssText =
-      "position: absolute; left: " +
-      newPosition.x +
-      "; top: " +
-      newPosition.y +
-      ";";
-
-    this.createChild(window.CoNDeT.ui.NameComponent, { text: props.name });
-    this.createChild(window.CoNDeT.ui.HeadComponent, {
-      conditions: props.conditions,
-      decisions: props.decisions,
-    });
-    this.createChild(window.CoNDeT.ui.BodyComponent, { content: props.rows });
-
-    return ref;
+  constructor.prototype.createRef = function () {
+    return document.createElement("table");
   };
-  constructor.prototype.onUpdate = function (common, props) {
-    this.children[0].onUpdate(common, { text: props.name });
-    this.children[1].onUpdate(common, {
-      conditions: props.conditions,
-      decisions: props.decisions,
-    });
-    this.children[2].onUpdate(common, { content: props.rows });
-
-    var currentPosition = this.getPosition();
-    var newPosition = {
-      x: common.deltaXY.x + currentPosition.x,
-      y: common.deltaXY.y + currentPosition.y,
-    };
-    this.ref.style.cssText =
-      "position: absolute; left: " +
-      newPosition.x +
-      "; top: " +
-      newPosition.y +
-      ";";
+  constructor.prototype.getChildren = function () {
+    return [
+      { type: window.CoNDeT.ui.NameComponent, id: this.props.id + "_caption", props: { text: this.props.name }},
+      { type: window.CoNDeT.ui.HeadComponent, id: this.props.id + "_header",
+        props: { conditions: this.props.conditions, decisions: this.props.decisions }},
+      { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: { content: this.props.rows }},
+    ]
   };
-  constructor.prototype.onDestroy = function (common) {
-    this.ref.remove();
+  constructor.prototype.onInit = function () {
+    this.ref.className = "condet-table";
   };
+  constructor.prototype.onUpdate = function () {
+    this.style.cssText = getCssInlineStyleForPosition(
+        this.common.deltaXY.x + this.props.coordinates.x,
+        this.common.deltaXY.y + this.props.coordinates.y,
+    );
+  }
 
+  // note(es): do we need to refactor this ???
   constructor.prototype.getRowXY = function (rowNumber) {
     return this.children[2].children[rowNumber].getConnectionXY();
   };
 
   return constructor;
+
+  function getCssInlineStyleForPosition(x, y) {
+    return "position: absolute; left: 0; right: 0; transform: translate(" + x + "px," + y + "px);";
+  }
 })();
 
+/*
+ * props:
+ * * text -> caption content
+ */
 window.CoNDeT.ui.NameComponent = (function () {
   function constructor() {}
 
-  constructor.prototype.onInit = function (common, props) {
-    var ref = document.createElement("caption");
-    ref.innerHTML = props.text;
-    ref.className = "condet-caption";
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "NameComponent";
 
-    return ref;
+  constructor.prototype.onInit = function () {
+    return document.createElement("caption");
   };
-  constructor.prototype.onUpdate = function (common, props) {
-    this.ref.innerHTML = props.text;
-  };
-  constructor.prototype.onDestroy = function (common) {
-    this.ref.remove();
+  constructor.prototype.onInit = function () {
+    this.ref.className = "condet-caption";
+  }
+  constructor.prototype.onUpdate = function () {
+    this.ref.innerHTML = this.props.text;
   };
 
   return constructor;
 })();
 
+/*
+ * props:
+ * * conditions -> list of conditions (strings)
+ * * decisions -> list of decisions (strings)
+ */
 window.CoNDeT.ui.HeadComponent = (function () {
   function constructor() {}
 
-  constructor.prototype.appendHeaders = function (headerRef, content) {
-    for (let i = 0; i < content.conditions.length; i++) {
-      let headerCol = document.createElement("th");
-      headerCol.className = "condition";
-      headerCol.innerHTML = content.conditions[i];
-      headerRef.appendChild(headerCol);
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "HeadComponent";
+
+  constructor.prototype.createRef = function () {
+    return document.createElement("thead");
+  }
+  constructor.prototype.getChildren = function () {
+    return [{ type: window.CoNDeT.ui.HeadTrComponent, id: 'tr', props: this.props }];
+  }
+
+  return constructor;
+})();
+
+/*
+ * props:
+ * * conditions -> list of conditions (strings)
+ * * decisions -> list of decisions (strings)
+ */
+window.CoNDeT.ui.HeadTrComponent = (function () {
+  function constructor() {}
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "HeadTrComponent";
+
+  constructor.prototype.createRef = function () {
+    return document.createElement("tr");
+  }
+  constructor.prototype.getChildren = function () {
+    var children = [];
+    for (var i=0; i<this.props.conditions.length; i++) {
+      children.push({ type: window.CoNDeT.ui.CellComponent, id: children.length,
+        props: { value: this.props.conditions[i], className: "condition", type: "th" } })
     }
-
-    for (let i = 0; i < content.decisions.length; i++) {
-      let headerCol = document.createElement("th");
-      headerCol.className = "decision";
-      headerCol.innerHTML = content.decisions[i];
-      headerRef.appendChild(headerCol);
+    for (var i=0; i<this.props.decisions.length; i++) {
+      children.push({ type: window.CoNDeT.ui.CellComponent, id: children.length,
+        props: { value: this.props.decisions[i], className: "decision", type: "th" } })
     }
-  };
-
-  constructor.prototype.onInit = function (common, props) {
-    var ref = document.createElement("thead");
-    this.headerRow = document.createElement("tr");
-    ref.appendChild(this.headerRow);
-
-    this.appendHeaders(this.headerRow, {
-      conditions: props.conditions,
-      decisions: props.decisions,
-    });
-
-    return ref;
-  };
-  constructor.prototype.onUpdate = function (common, props) {
-    for (let i = 0; i < this.ref.children.length; i++) {
-      this.ref.removeChild(this.ref.children[i]);
-    }
-    this.appendHeaders(this.headerRow, {
-      conditions: props.conditions,
-      decisions: props.decisions,
-    });
-  };
-  constructor.prototype.onDestroy = function (common) {
-    this.ref.remove();
+    return children;
   };
 
   return constructor;
 })();
 
+/*
+ * props:
+ * * content -> list (rows) of list (row) that contains table content
+ */
 window.CoNDeT.ui.BodyComponent = (function () {
   function constructor() {}
 
-  constructor.prototype.onInit = function (common, props) {
-    var ref = document.createElement("tbody");
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "BodyComponent";
 
-    for (let i = 0; i < props.content.length; i++) {
-      this.createChild(window.CoNDeT.ui.RowComponent, {
-        constent: props.content[i],
-      });
+  constructor.prototype.createRef = function () {
+    return document.createElement("tbody");
+  }
+  constructor.prototype.getChildren = function () {
+    var children = [];
+    for (var i = 0; i < this.props.content.length; i++) {
+      children.push({ type: window.CoNDeT.ui.RowComponent, id: i, props: { content: this.props.content[i] } });
     }
-
-    return ref;
-  };
-  constructor.prototype.onUpdate = function (common, props) {
-    while (0 != this.children.length) {
-      this.removeChildAtPosition(0);
-    }
-    for (let i = 0; i < props.content.length; i++) {
-      this.createChild(window.CoNDeT.ui.RowComponent, {
-        constent: props.content[i],
-      });
-    }
-  };
-  constructor.prototype.onDestroy = function (common) {
-    this.ref.remove();
-  };
+    return children;
+  }
 
   return constructor;
 })();
 
+/*
+ * props:
+ * * content -> list of values in row
+ */
 window.CoNDeT.ui.RowComponent = (function () {
   function constructor() {}
 
-  constructor.prototype.onInit = function (common, props) {
-    var ref = document.createElement("tr");
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "RowComponent";
 
-    for (let i = 0; i < props.content.length; i++) {
-      let cell = document.createElement("td");
-      cell.innerHTML = props.content[i];
-      ref.appendChild(cell);
+  constructor.prototype.createRef = function () {
+    return document.createElement("tr");
+  }
+  constructor.prototype.getChildren = function () {
+    var children = [];
+    for (var i = 0; i < this.props.content.length; i++) {
+      children.push({ type: window.CoNDeT.ui.CellComponent, id: i,
+        props: { value: this.props.content[i], type: "td" } });
     }
+    return children;
+  }
 
-    return ref;
-  };
-
-  constructor.prototype.onUpdate = function (common, props) {};
-  constructor.prototype.onDestroy = function (common) {
-    this.ref.remove();
-  };
-
+  // note(es): consider refactoring
   constructor.prototype.getConnectionXY = function () {
     var position = this.getPosition();
     var dimensions = this.getDimensions();
     return { x: position.x + dimensions.x, y: position.y + dimensions.y / 2 };
   };
+
+  return constructor;
+})();
+
+/*
+ * props:
+ * * type -> th | td
+ * * [optional] className
+ * * value
+ */
+window.CoNDeT.ui.CellComponent = (function () {
+  function constructor() {}
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "CellComponent";
+
+  constructor.prototype.createRef = function () {
+    return document.createElement(this.props.type);
+  }
+  constructor.prototype.onInit = function () {
+    if (!this.props.className) return;
+    this.ref.className = this.props.className;
+  }
+  constructor.prototype.onUpdate = function () {
+    this.ref.innerHTML = this.props.value;
+  }
 
   return constructor;
 })();
