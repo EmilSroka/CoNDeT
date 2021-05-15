@@ -29,7 +29,7 @@ window.CoNDeT.ui.TableComponent = (function () {
     this.ref.className = "condet-table";
   };
   constructor.prototype.onUpdate = function () {
-    this.style.cssText = getCssInlineStyleForPosition(
+    this.ref.style.cssText = getCssInlineStyleForPosition(
         this.common.deltaXY.x + this.props.coordinates.x,
         this.common.deltaXY.y + this.props.coordinates.y,
     );
@@ -57,7 +57,7 @@ window.CoNDeT.ui.NameComponent = (function () {
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
   constructor.prototype.typeId = "NameComponent";
 
-  constructor.prototype.onInit = function () {
+  constructor.prototype.createRef = function () {
     return document.createElement("caption");
   };
   constructor.prototype.onInit = function () {

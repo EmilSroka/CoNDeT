@@ -6,5 +6,5 @@ window.CoNDeT.ui.BaseStrategy = {
   onMouseUp: function () {},
   onMouseDown: function () {},
   onMouseMove: function () {},
-  onMouseOver: function () {},
+  onMouseLeave: function () {},
 }

@@ -1,17 +1,20 @@
-window.CoNDeT = (function (configs) {
-  var displayClassName = configs.displayClass || 'condet-display';
+window.CoNDeT = function (configs) {
+  var selector = configs.selector || '.condet-display';
 
-  var state = window.CoNDeT.data.State()
-  var display = window.CoNDeT.ui.DisplayComponent();
-  display.init({
-    className: displayClassName,
-    data: state.state,
-  });
+  var state = new window.CoNDeT.data.State()
+  var display = new window.CoNDeT.ui.DisplayComponent();
+  display.init(
+    { deltaXY: { x: 0, y: 0 } },
+    { selector: selector, state: state.state }
+  );
+
+  display.setupEventListeners();
+  display.setStrategy(new window.CoNDeT.ui.DisplayMode());
 
   state.subscribe(function (newState) {
     display.update({
-      className: displayClassName,
-      data: newState,
+      selector: selector,
+      state: newState,
     });
   });
 
@@ -28,4 +31,6 @@ window.CoNDeT = (function (configs) {
       window.CoNDeT.data.FileReaderWriter.saveToFile(state.state);
     }
   }
-})()
+};
+
+window.CoNDeT.ui = {};
