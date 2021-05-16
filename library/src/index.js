@@ -3,10 +3,7 @@ window.CoNDeT = function (configs) {
 
   var state = new window.CoNDeT.data.State()
   var display = new window.CoNDeT.ui.DisplayComponent();
-  display.init(
-    { deltaXY: { x: 0, y: 0 } },
-    { selector: selector, state: state.state }
-  );
+  display.init({ }, selector, { selector: selector, state: state.state });
 
   display.setupEventListeners();
   display.setStrategy(new window.CoNDeT.ui.DisplayMode());

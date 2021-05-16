@@ -1,5 +1,5 @@
 window.CoNDeT.core = {
-  toTableProps: function (tablesJSON) {
+  toTableProps: function (tablesJSON, deltaXY) {
     var tablesList = [];
     for (var i = 0; i < tablesJSON.length; i++) {
       var tableProps = tablesJSON[i];
@@ -22,7 +22,7 @@ window.CoNDeT.core = {
         id: tableProps.id,
         name: tableProps.name,
         class: tableProps.class,
-        coordinates: tableProps.coordinates,
+        coordinates: { x: tableProps.coordinates.x + deltaXY.x, y: tableProps.coordinates.y + deltaXY.y },
         conditions: tableProps.columns.conditions,
         decisions: tableProps.columns.decisions,
         rows: rowsPrepared,
