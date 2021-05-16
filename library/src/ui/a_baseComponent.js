@@ -9,7 +9,9 @@
 * */
 window.CoNDeT.ui.BaseComponent = {
   /* component life cycle */
-  init: function (common, props) {
+  init: function (common, id, props) {
+    this.id = id;
+    this.state = {};
     this.children = [];
     this.setStrategy(window.CoNDeT.ui.BaseStrategy);
     this.common = common;
@@ -34,6 +36,22 @@ window.CoNDeT.ui.BaseComponent = {
     this.onDestroy();
   },
   onDestroy: function () {},
+  /* state management */
+  setState: function (updated) {
+    var newState = {};
+    for (var prop in this.state) {
+      newState[prop] = this.state[prop]
+    }
+    for (var prop in updated) {
+      newState[prop] = updated[prop]
+    }
+    this.state = newState;
+    this.stateChanged();
+  },
+  stateChanged: function () {
+    this.updateChildren(this.getChildren());
+    this.onUpdate();
+  },
   /* children update */
   updateChildren: function(newChildren) {
     this.unmark(this.children);
@@ -77,18 +95,18 @@ window.CoNDeT.ui.BaseComponent = {
         var node = this.ref.removeChild(component.ref);
         this.children.splice(correspondedIdx, 1);
 
-        this.children.splice(childIdx, 0, component);
         if (childIdx === this.children.length) {
           this.ref.appendChild(node);
         } else {
-          this.ref.insertBefore(node, this.children[childIdx]);
+          this.ref.insertBefore(node, this.children[childIdx].ref);
         }
+        this.children.splice(childIdx, 0, component);
       }
       childIdx++;
     }
   },
   updateChildrenProps: function (newChildren) {
-    for (var i=0; i<newChildren; i++) {
+    for (var i=0; i<newChildren.length; i++) {
       var corresponded = this.findChild(newChildren[i].type, newChildren[i].id);
       if (corresponded == null) continue;
       corresponded.update(newChildren[i].props);
@@ -98,7 +116,7 @@ window.CoNDeT.ui.BaseComponent = {
     for (var i=0; i<newChildren.length; i++) {
       var corresponded = this.findChild(newChildren[i].type, newChildren[i].id);
       if (corresponded != null) continue;
-      this.createChild(newChildren[i].type, newChildren[i].props, i);
+      this.createChild(newChildren[i].type, newChildren[i].props, newChildren[i].id, i);
     }
   },
   findChild: function (type, id) {
@@ -112,7 +130,7 @@ window.CoNDeT.ui.BaseComponent = {
     if (this.children == null) return;
 
     for (let i = 0; i < this.children.length; i++) {
-      if (this.children[i].typeId === type.typeId && this.children[i].id === id)
+      if (this.children[i].typeId === type.prototype.typeId && this.children[i].id === id)
         return i;
     }
   },
@@ -178,13 +196,13 @@ window.CoNDeT.ui.BaseComponent = {
     if (position === this.children.length) {
       this.ref.appendChild(child.ref);
     } else {
-      this.ref.insertBefore(child.ref, this.children[position]);
+      this.ref.insertBefore(child.ref, this.children[position].ref);
     }
     this.children.splice(position, 0, child);
   },
-  createChild: function (ComponentRef, props, position = 0) {
+  createChild: function (ComponentRef, props, id, position = 0) {
     var child = new ComponentRef();
-    child.init(this.common, props);
+    child.init(this.common, id, props);
     this.appendChild(child, position);
   },
   removeChild: function (component) {

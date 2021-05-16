@@ -30,8 +30,8 @@ window.CoNDeT.ui.TableComponent = (function () {
   };
   constructor.prototype.onUpdate = function () {
     this.ref.style.cssText = getCssInlineStyleForPosition(
-        this.common.deltaXY.x + this.props.coordinates.x,
-        this.common.deltaXY.y + this.props.coordinates.y,
+        this.props.coordinates.x,
+        this.props.coordinates.y,
     );
   }
 
