@@ -19,14 +19,15 @@ window.CoNDeT.ui.TableComponent = (function () {
   };
   constructor.prototype.getChildren = function () {
     return [
-      { type: window.CoNDeT.ui.NameComponent, id: this.props.id + "_caption", props: { text: this.props.name }},
+      { type: window.CoNDeT.ui.NameComponent, id: this.props.id + "_caption",
+        props: { name: this.props.name, class: this.props.class }},
       { type: window.CoNDeT.ui.HeadComponent, id: this.props.id + "_header",
         props: { conditions: this.props.conditions, decisions: this.props.decisions }},
       { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: { content: this.props.rows }},
     ]
   };
   constructor.prototype.onInit = function () {
-    this.ref.className = "condet-table";
+    this.ref.className = "condet-table condet-class-" + this.props.class;
   };
   constructor.prototype.onUpdate = function () {
     this.ref.style.cssText = getCssInlineStyleForPosition(
@@ -49,7 +50,8 @@ window.CoNDeT.ui.TableComponent = (function () {
 
 /*
  * props:
- * * text -> caption content
+ * * name -> table name
+ * * class -> table CoNDeT class
  */
 window.CoNDeT.ui.NameComponent = (function () {
   function constructor() {}
@@ -64,7 +66,7 @@ window.CoNDeT.ui.NameComponent = (function () {
     this.ref.className = "condet-caption";
   }
   constructor.prototype.onUpdate = function () {
-    this.ref.innerHTML = this.props.text;
+    this.ref.innerHTML = this.props.name + " <small>(" + this.props.class + ")</small>";
   };
 
   return constructor;
