@@ -38,8 +38,15 @@ window.CoNDeT.ui.TableComponent = (function () {
 
   // note(es): do we need to refactor this ???
   constructor.prototype.getRowXY = function (rowNumber) {
-    return this.children[2].children[rowNumber].getConnectionXY();
+    var body = this.findChild(window.CoNDeT.ui.BodyComponent, this.props.id + "_body");
+    var relative = body.children[rowNumber].getConnectionXY();
+    return { x: this.props.coordinates.x + relative.x, y: this.props.coordinates.y + relative.y };
   };
+
+  constructor.prototype.entryPoint = function () {
+    var size = this.getDimensions();
+    return { x: this.props.coordinates.x + size.width / 2 , y: this.props.coordinates.y };
+  }
 
   return constructor;
 
@@ -169,11 +176,10 @@ window.CoNDeT.ui.RowComponent = (function () {
     return children;
   }
 
-  // note(es): consider refactoring
   constructor.prototype.getConnectionXY = function () {
     var position = this.getPosition();
     var dimensions = this.getDimensions();
-    return { x: position.x + dimensions.x, y: position.y + dimensions.y / 2 };
+    return { x: position.x + dimensions.width, y: position.y + dimensions.height / 2 };
   };
 
   return constructor;

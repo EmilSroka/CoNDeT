@@ -1,3 +1,9 @@
+/*
+ * props:
+ * * getConnections -> callback that return list of paths
+ * * width
+ * * height
+ */
 window.CoNDeT.ui.ConnectionsComponent = (function () {
   var constructor = function () {};
 
@@ -9,18 +15,16 @@ window.CoNDeT.ui.ConnectionsComponent = (function () {
   }
   constructor.prototype.getChildren = function () {
     var children = [];
-    for (var i = 0; this.props.connections; i++) {
-      var path = props.connections[i].path.map(function (point) {
-        return { x: point.x + common.deltaXY.x, y: point.y + common.deltaXY.y };
-      });
-      children.push({ type: window.CoNDeT.ui.ConnectionComponent, id: this.props.connections[i].id, props: { path: path } });
+    var connections = this.props.getConnections();
+    for (var i = 0; i<connections.length; i++) {
+      children.push({ type: window.CoNDeT.ui.ConnectionComponent, id: connections[i].id, props: { path: connections[i].path } });
     }
     return children;
   }
   constructor.prototype.onUpdate = function () {
     this.ref.setAttribute(
         "viewBox",
-        "0 0 " + this.props.x + " " + this.props.y
+        "0 0 " + this.props.width + " " + this.props.height
     );
   }
 
@@ -58,7 +62,7 @@ window.CoNDeT.ui.LineComponent = (function () {
     return document.createElementNS("http://www.w3.org/2000/svg", "path");
   }
   constructor.prototype.onUpdate = function () {
-    this.ref.setAttribute("d", calcPath(props.path));
+    this.ref.setAttribute("d", calcPath(this.props.path));
   }
 
   return constructor;

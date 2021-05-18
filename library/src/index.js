@@ -31,3 +31,4 @@ window.CoNDeT = function (configs) {
 };
 
 window.CoNDeT.ui = {};
+window.CoNDeT.core = {};
