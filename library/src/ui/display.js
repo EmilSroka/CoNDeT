@@ -14,16 +14,21 @@ window.CoNDeT.ui.DisplayComponent = (function () {
   }
   constructor.prototype.onInit = function () {
     this.setState({ deltaXY: { x: 0, y: 0 } });
-    this.ref.style.position = 'relative';
-    this.ref.style.overflow = 'hidden';
+    this.ref.style.position = "relative";
+    this.ref.style.overflow = "hidden";
   }
   constructor.prototype.getChildren = function () {
+    var self = this;
     var children = [];
 
     var tablesProps = window.CoNDeT.core.toTableProps(this.props.state, this.state.deltaXY);
     for (var i = 0; i < this.props.state.length; i++) {
       children.push({ type: window.CoNDeT.ui.TableComponent, id: tablesProps[i].id, props: tablesProps[i] });
     }
+    var size = this.getDimensions();
+    children.push({ type: window.CoNDeT.ui.ConnectionsComponent, id: "connections", props: { getConnections: function () {
+      return window.CoNDeT.core.toConnectionsProps(self, self.props.state);
+    }, width: size.width, height: size.height }})
 
     return children;
   }

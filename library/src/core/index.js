@@ -1,127 +1,87 @@
-window.CoNDeT.core = {
-  toTableProps: function (tablesJSON, deltaXY) {
-    var tablesList = [];
-    for (var i = 0; i < tablesJSON.length; i++) {
-      var tableProps = tablesJSON[i];
-      var rowsPrepared = [];
-      for (var j = 0; j < tableProps.rows.length; j++) {
-        var row = tableProps.rows[j];
-        var content = [];
-        for (var k = 0; k < tableProps.columns.conditions.length + tableProps.columns.decisions.length; k++) {
-          content.push("");
-        }
-        for (var k = 0; k < row.conditions.length; k++) {
-          content[row.conditions[k][0]] = tableProps.rows[j].conditions[k][1];
-        }
-        for (var k = 0; k < row.decisions.length; k++) {
-          content[row.decisions[k][0] + tableProps.columns.conditions.length] = row.decisions[k][1];
-        }
-        rowsPrepared.push(content);
+window.CoNDeT.core.toTableProps = function (tablesJSON, deltaXY) {
+  var tablesList = [];
+  for (var i = 0; i < tablesJSON.length; i++) {
+    var tableProps = tablesJSON[i];
+    var rowsPrepared = [];
+    for (var j = 0; j < tableProps.rows.length; j++) {
+      var row = tableProps.rows[j];
+      var content = [];
+      for (var k = 0; k < tableProps.columns.conditions.length + tableProps.columns.decisions.length; k++) {
+        content.push("");
       }
-      tablesList.push({
-        id: tableProps.id,
-        name: tableProps.name,
-        class: tableProps.class,
-        coordinates: { x: tableProps.coordinates.x + deltaXY.x, y: tableProps.coordinates.y + deltaXY.y },
-        conditions: tableProps.columns.conditions,
-        decisions: tableProps.columns.decisions,
-        rows: rowsPrepared,
-      });
-
-    }
-
-    return tablesList;
-  },
-  colorHash: function(inputString) {
-    var sum = 0;
-
-    for (var i in inputString) {
-        sum += inputString.charCodeAt(i);
-    }
-
-    var r = ~~(('0.' + Math.sin(sum + 1).toString().substr(6)) * 210);
-    var g = ~~(('0.' + Math.sin(sum + 2).toString().substr(6)) * 210);
-    var b = ~~(('0.' + Math.sin(sum + 3).toString().substr(6)) * 210);
-
-    var hex = "#";
-
-    hex += ("00" + r.toString(16)).substr(-2, 2).toUpperCase();
-    hex += ("00" + g.toString(16)).substr(-2, 2).toUpperCase();
-    hex += ("00" + b.toString(16)).substr(-2, 2).toUpperCase();
-
-    return hex;
-  },
-  getLinePoints: function(props) {
-    var starPoint = props.startPoint;
-    var endPoint = props.endPoint;
-    var checkIfCanPlacePoint = props.freePlaceCallback;
-
-    var deltaX = Math.abs(startPoint.x - endPoint.x);
-    var deltaY = Math.abs(startPoint.y - endPoint.y);
-    while (deltaX > 10 && deltaY > 10) {
-      var path = constructPathFromLinesOfLength(deltaX, deltaY, starPoint, endPoint, 40);
-
-      if (path != null) {
-        var points = [];
-        while (path.prev != null) {
-          points.unshift({ x: path.x, y: path.y })
-          path = path.prev;
-        }
-        return points;
+      for (var k = 0; k < row.conditions.length; k++) {
+        content[row.conditions[k][0]] = tableProps.rows[j].conditions[k][1];
       }
-
-      deltaX /= 2;
-      deltaY /= 2;
-    }
-
-    return [starPoint, endPoint];
-
-    function constructPathFromLinesOfLength(verticalLength, horizontalLength, startPoint, endPoint, numberOfLinesLimiter) {
-      // BFS algorithm
-      var edges = [[1, 0], [-1, 0], [0, 1], [0, -1]]
-      var queue = [];
-      var layer = 0;
-
-      queue.push(startPoint);
-
-      while(queue.length !== 0 && layer <= numberOfLinesLimiter){
-        layer += 1;
-        var size = queue.length;
-
-        for (var i=0; i<size; i++){
-          var currentPoint = queue.shift();
-
-          if (currentPoint.x === endPoint.x && currentPoint.y === endPoint.y) {
-            return currentPoint;
-          }
-
-          for (var j=0; j<edges.length; j++) {
-            var edge = edges[j];
-            if (checkIfCanPlaceLine(currentPoint, {x: currentPoint.x + horizontalLength * edge[0], y: currentPoint.y + verticalLength * edge[1]})) {
-              queue.push({x: currentPoint.x + horizontalLength * edge[0], y: currentPoint.y + verticalLength * edge[1], prev: currentPoint});
-            }
-          }
-        }
+      for (var k = 0; k < row.decisions.length; k++) {
+        content[row.decisions[k][0] + tableProps.columns.conditions.length] = row.decisions[k][1];
       }
-
-      return null;
+      rowsPrepared.push(content);
     }
+    tablesList.push({
+      id: tableProps.id,
+      name: tableProps.name,
+      class: tableProps.class,
+      coordinates: { x: tableProps.coordinates.x + deltaXY.x, y: tableProps.coordinates.y + deltaXY.y },
+      conditions: tableProps.columns.conditions,
+      decisions: tableProps.columns.decisions,
+      rows: rowsPrepared,
+    });
+  }
 
-    function checkIfCanPlaceLine(startPoint, endPoint) {
-      var deltaX = startPoint.x - endPoint.x;
-      var deltaY = startPoint.y - endPoint.y;
+  return tablesList;
+};
 
-      var numberOfChecks = Math.round(Math.max(Math.abs(deltaX), Math.abs(deltaY)) / 10) || 1;
+window.CoNDeT.core.toConnectionsProps = function (display, tablesJSON) {
+  var connections = [];
+  for (var i=0; i<tablesJSON.length; i++) {
+    var table = tablesJSON[i];
+    for (var j=0; j<table.rows.length; j++) {
+      var row = table.rows[j];
+      for (var k=0; k<row.connections.length; k++) {
+        var fromTableId = table.id;
+        var fromTable = display.findChild(window.CoNDeT.ui.TableComponent, fromTableId);
+        if (fromTable == null) continue;
+        var starPoint = fromTable.getRowXY(j);
 
-      for (var i=0; i<numberOfChecks; i++) {
-        if (!checkIfCanPlacePoint({
-          x: startPoint.x + deltaX/numberOfChecks * i,
-          y: startPoint.y + deltaY/numberOfChecks * i,
-        })) {
-          return false;
-        }
+        var toTableId = row.connections[k];
+        var toTable = display.findChild(window.CoNDeT.ui.TableComponent, toTableId);
+        if (toTable == null) continue;
+        var endPoint = toTable.entryPoint();
+
+        connections.push({ id: table.id + "-" + row.row_id + "_" + toTableId, path: window.CoNDeT.core.getLinePoints(starPoint, endPoint) })
       }
-      return true;
     }
   }
-}
+  return connections;
+};
+
+window.CoNDeT.core.colorHash = function(inputString) {
+  var sum = 0;
+
+  for (var i in inputString) {
+      sum += inputString.charCodeAt(i);
+  }
+
+  var r = ~~(('0.' + Math.sin(sum + 1).toString().substr(6)) * 210);
+  var g = ~~(('0.' + Math.sin(sum + 2).toString().substr(6)) * 210);
+  var b = ~~(('0.' + Math.sin(sum + 3).toString().substr(6)) * 210);
+
+  var hex = "#";
+
+  hex += ("00" + r.toString(16)).substr(-2, 2).toUpperCase();
+  hex += ("00" + g.toString(16)).substr(-2, 2).toUpperCase();
+  hex += ("00" + b.toString(16)).substr(-2, 2).toUpperCase();
+
+  return hex;
+};
+
+window.CoNDeT.core.getLinePoints = function(startPoint, endPoint) {
+  return [
+    { x: startPoint.x, y: startPoint.y },
+    { x: startPoint.x + 20, y: startPoint.y },
+    { x: startPoint.x + 20, y: endPoint.y - 20 },
+    { x: endPoint.x, y: endPoint.y - 20 },
+    { x: endPoint.x, y: endPoint.y }
+  ]
+};
+

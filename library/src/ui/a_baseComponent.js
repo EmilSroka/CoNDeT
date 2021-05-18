@@ -59,8 +59,8 @@ window.CoNDeT.ui.BaseComponent = {
     this.markCorrespondedChildren(this.children, newChildren);
     this.deleteUnmarked(this.children);
     this.setInSameOrder(newChildren);
-    this.updateChildrenProps(newChildren);
     this.initNewChildren(newChildren);
+    this.updateChildrenProps(newChildren);
   },
   unmark: function (array) {
     for (var i=0; i<array; i++) {
