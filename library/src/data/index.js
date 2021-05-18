@@ -68,8 +68,9 @@ window.CoNDeT.data = {
     };
 
     moveTable = function (tableId, newCoordinates) {
-      var newState = copyTables(this.state);
-      this.state[tableId].coordinates = {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+      editTable.coordinates = {
         x: newCoordinates.x,
         y: newCoordinates.y,
       };
@@ -78,36 +79,60 @@ window.CoNDeT.data = {
     };
 
     createTable = function (newData) {
-      // newData = {name, className, coordinates, columns, rows}
-      var newState = copyTables(this.state);
+      var newState = clone(this.state);
       newState.push(newData);
       this.stateManager.setState(newState);
     };
 
-    editContent = function (tableId, cell, header, name, className) {
-      // cell = [{rowId, conditions: [cId, newCon], decisions: [dId, newDec]}, ...]
-      // header = {conditions: [...], decisions: [...]}, name, className
-
-      var newState = copyTables(this.state);
-      var editTable = newState[tableId];
+    editName = function (tableId, name) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
 
       if (name != null) {
         editTable.name = name;
       }
 
+      this.stateManager.setState(newState);
+    };
+
+    editClass = function (tableId, className) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+
       if (className != null) {
         editTable.className = className;
       }
 
-      replaceInArray(editTable.columns.conditions, header.conditions);
-      replaceInArray(editTable.columns.decisions, header.decisions);
+      this.stateManager.setState(newState);
+    };
+
+    editCondition = function (tableId, conditions) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+
+      replaceInArray(editTable.columns.conditions, conditions);
+
+      this.stateManager.setState(newState);
+    };
+
+    editDecision = function (tableId, decisions) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+
+      replaceInArray(editTable.columns.decisions, decisions);
+
+      this.stateManager.setState(newState);
+    };
+
+    editCell = function (tableId, cell) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
 
       if (cell != null) {
-        for (var i = 0, j = 0; i < editTable.rows.length; i++) {
-          if (editTable.rows[i].rowId == header.cell[j].rowId) {
-            editTable.rows[i].conditions = header.cell[j].conditions;
-            editTable.rows[i].decisions = header.cell[j].decisions;
-            j += 1;
+        for (var i = 0; i < editTable.rows.length; i++) {
+          if (editTable.rows[i].rowId == cell.rowId) {
+            editTable.rows[i].conditions = cell.conditions;
+            editTable.rows[i].decisions = cell.decisions;
           }
         }
       }
@@ -116,52 +141,67 @@ window.CoNDeT.data = {
     };
 
     addRow = function (tableId, newRow) {
-      // row = {id, conditions, decisions, connections?}
-      var newState = copyTables(this.state);
-      newState[tableId].rows.push(newRow);
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+      editTable.rows.push(newRow);
 
       this.stateManager.setState(newState);
     };
 
     removeRow = function (tableId, rowId) {
-      // row = {id, conditions, decisions, connections}
-      var newState = copyTables(this.state);
-      if (
-        newState[tableId].rows != null &&
-        rowId <= newState[tableId].rows.length
-      ) {
-        newState[tableId].rows.splice(rowId, 1);
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+
+      if (editTable.rows != null) {
+        for (var i = 0; i < editTable.rows.length; i++) {
+          if (editTable.rows[i].id != rowId) continue;
+          editTable.rows.splice(rowId, 1);
+        }
       }
 
       this.stateManager.setState(newState);
     };
 
-    addColumn = function (tableId, column) {
-      // column = {condition: "..." albo null, decision: "..." albo null}
-      var newState = copyTables(this.state);
-      var editTable = newState[tableId];
+    addConditionColumn = function (tableId, column) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
 
-      if (column.condition != null) {
-        editTable.columns.conditions.push(column.condition);
-      }
-      if (column.decision != null) {
-        editTable.columns.decisions.push(column.decision);
+      if (column != null) {
+        editTable.columns.conditions.push(column);
       }
 
       this.stateManager.setState(newState);
     };
 
-    removeColumn = function (tableId, column) {
-      // column = {condition: idCon, decision: idDec}
-      var newState = copyTables(this.state);
-      var editTable = newState[tableId];
+    addDecisionColumn = function (tableId, column) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+
+      if (column != null) {
+        editTable.columns.decisions.push(column);
+      }
+
+      this.stateManager.setState(newState);
+    };
+
+    removeConditionColumn = function (tableId, column) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
 
       removeColumnWithId(
         editTable.columns.conditions,
         editTable.rows,
         "conditions",
-        column.condition
+        column
       );
+
+      this.stateManager.setState(newState);
+    };
+
+    removeDecisionColumn = function (tableId, column) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+
       removeColumnWithId(
         editTable.columns.decisions,
         editTable.rows,
@@ -172,11 +212,11 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    changeOrder = function (tableId) {};
+    changeOrder = function (tableId) {}; //WIP
 
     addConnection = function (tableId, rowId, secondTableId) {
-      var newState = copyTables(this.state);
-      var editTable = newState[tableId];
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
 
       for (var i = 0; i < editTable.rows.length; i++) {
         if (editTable.rows[i].id == rowId) {
@@ -188,17 +228,14 @@ window.CoNDeT.data = {
     };
 
     removeConnection = function (tableId, rowId, secondTableId) {
-      var newState = copyTables(this.state);
-      var editTable = newState[tableId];
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
 
       for (var i = 0; i < editTable.rows.length; i++) {
+        if (editTable.rows[i].id !== rowId) continue;
         for (var j = 0; j < editTable.rows[i].connections.length; j++) {
-          if (
-            editTable.rows[i].id == rowId &&
-            editTable.rows[i].connections[j] == secondTableId
-          ) {
-            editTable.rows[i].connections.splice(j, 1);
-          }
+          if (editTable.rows[i].connections[j] !== secondTableId) connections;
+          editTable.rows[i].connections.splice(j, 1);
         }
       }
 
@@ -217,17 +254,9 @@ window.CoNDeT.data = {
       if (id != null && id <= columns.length) {
         columns.splice(id, 1);
         for (var i = 0; i < rows.length; i++) {
-          if (type == "conditions") {
-            for (var j = 0; j < rows[i].conditions.length; j++) {
-              if (rows[i].conditions[j][0] == id) {
-                rows[i].conditions.splice(j, 1);
-              }
-            }
-          } else if (type == "decisions") {
-            for (var j = 0; j < rows[i].decisions.length; j++) {
-              if (rows[i].decisions[j][0] == id) {
-                rows[i].decisions.splice(j, 1);
-              }
+          for (var j = 0; j < rows[i][type].length; j++) {
+            if (rows[i][type][j][0] == id) {
+              rows[i][type].splice(j, 1);
             }
           }
         }
@@ -235,42 +264,42 @@ window.CoNDeT.data = {
     };
 
     clone = function (toClone) {
-      if (typeof toClone === "object") {
+      if (Array.isArray(toClone)) {
+        var objectWithArray = clone({ array: toClone });
+        return objectWithArray.array;
+      }
+      if (typeof toClone === "object" && toClone !== null) {
         var copyOfTables = {};
         for (var attr in toClone) {
-          if (toClone.hasOwnProperty(attr)) {
-            if (Array.isArray(toClone[attr])) {
-              copyOfTables[attr] = [];
-              for (var j = 0; j < toClone[attr].length; j++) {
-                copyOfTables[attr][j] = clone(toClone[attr][j]);
-              }
-            } else if (typeof toClone[attr] === "object") {
-              copyOfTables[attr] = {};
-              for (var key in toClone[attr]) {
-                if (toClone[attr].hasOwnProperty(key)) {
-                  copyOfTables[attr][key] = clone(toClone[attr][key]);
-                }
-              }
-            } else {
-              copyOfTables[attr] = toClone[attr];
+          if (!toClone.hasOwnProperty(attr)) continue;
+          if (Array.isArray(toClone[attr])) {
+            copyOfTables[attr] = [];
+            for (var j = 0; j < toClone[attr].length; j++) {
+              copyOfTables[attr][j] = clone(toClone[attr][j]);
             }
+          } else if (typeof toClone[attr] === "object") {
+            copyOfTables[attr] = {};
+            for (var key in toClone[attr]) {
+              if (toClone[attr].hasOwnProperty(key)) {
+                copyOfTables[attr][key] = clone(toClone[attr][key]);
+              }
+            }
+          } else {
+            copyOfTables[attr] = toClone[attr];
           }
         }
       } else {
-        copyOfTables = toClone;
+        var copyOfTables = toClone;
       }
 
       return copyOfTables;
     };
 
-    copyTables = function (tables) {
-      var copyOfTables = [];
-
-      for (var i = 0; i < tables.length; i++) {
-        copyOfTables.push(clone(tables[i]));
+    getTableWithId = function (table, tableId) {
+      for (var i = 0; i < table.length; i++) {
+        if (table[i].id != tableId) continue;
+        return table[i];
       }
-
-      return copyOfTables;
     };
   })(),
 };
