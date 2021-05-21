@@ -13,6 +13,9 @@ window.CoNDeT.ui.ConnectionsComponent = (function () {
   constructor.prototype.createRef = function () {
     return document.createElementNS("http://www.w3.org/2000/svg", "svg");
   }
+  constructor.prototype.onInit = function () {
+    this.createMarks(this.ref);
+  }
   constructor.prototype.getChildren = function () {
     var children = [];
     var connections = this.props.getConnections();
@@ -27,6 +30,28 @@ window.CoNDeT.ui.ConnectionsComponent = (function () {
         "0 0 " + this.props.width + " " + this.props.height
     );
   }
+
+  constructor.prototype.createMarks = function (svg) {
+    svg.appendChild(this.createMark("arrow", "black"));
+    svg.appendChild(this.createMark("hover-arrow", "red"));
+  };
+  constructor.prototype.createMark = function (id, color) {
+    let arrow = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+    arrow.setAttribute('id', id);
+    arrow.setAttribute('viewBox', '0 0 4.5 4.5');
+    arrow.setAttribute('refX', 1);
+    arrow.setAttribute('refY', 2.25);
+    arrow.setAttribute('markerWidth', 4.5);
+    arrow.setAttribute('markerHeight', 4.5);
+    arrow.setAttribute('orient', 'auto');
+
+    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M 0 0 L 5.5 2.25 L 0 4.5 z');
+    path.setAttribute('fill', color);
+    arrow.appendChild(path);
+
+    return arrow;
+  };
 
   return constructor;
 })();
@@ -61,6 +86,10 @@ window.CoNDeT.ui.LineComponent = (function () {
   constructor.prototype.createRef = function () {
     return document.createElementNS("http://www.w3.org/2000/svg", "path");
   }
+  constructor.prototype.onInit = function () {
+    // this.ref.setAttribute('marker-end', 'url(#arrow)');
+    // this.ref.setAttribute('fill', 'none');
+  }
   constructor.prototype.onUpdate = function () {
     this.ref.setAttribute("d", calcPath(this.props.path));
   }
@@ -93,6 +122,6 @@ window.CoNDeT.ui.ArrowComponent = (function () {
   return constructor;
 
   function calcPath (x, y) {
-    return "M " + x + " " + y + "L " + x - 5 + " " + y - 5 + "L " + x - 5 + " " + y + 5 + " Z";
+    return "M " + x + " " + y + "L " + (x - 5) + " " + (y - 5) + "L " + (x + 5) + " " + (y - 5) + " Z";
   }
 })();

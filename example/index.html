@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .con {
+      width: 700px;
+      height: 500px;
+      border: 1px solid black;
+      user-select: none;
+    }
+    .con2 {
+      width: 500px;
+      height: 500px;
+      border: 1px solid black;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+<div class="con"></div>
+<div class="con2"></div>
+
+<script src="CoNDeT.js"></script>
+<script>
+  const instance1 = window.CoNDeT({
+    selector: '.con'
+  });
+  instance1.setState([
+    {
+      id: '1',
+      name: 'Table name',
+      class: 'major',
+      coordinates: { x: 10, y: 10 },
+      columns: {
+        conditions: ['con 1', 'con 2', 'con 3'],
+        decisions: ['dec 1', 'dec 2'],
+      },
+      rows: [
+        {
+          row_id: 'rowid',
+          conditions: [],
+          decisions: [[1, 'aaa']],
+          connections: [],
+        },
+        {
+          row_id: 'rowid2',
+          conditions: [[0, 'bbb']],
+          decisions: [],
+          connections: ['2', '3'],
+        },
+        {
+          row_id: 'rowid3',
+          conditions: [[1, 'bbb']],
+          decisions: [[1, 'd = 3']],
+          connections: [],
+        }
+      ]
+    },
+    {
+      id: '2',
+      name: 'Table name 2',
+      class: 'major',
+      coordinates: { x: 10, y: 300 },
+      columns: {
+        conditions: ['con'],
+        decisions: ['aaa', 'bbb', 'ccc'],
+      },
+      rows: [
+        {
+          row_id: 'rowid',
+          conditions: [],
+          decisions: [[0, 'aaa']],
+          connections: [],
+        },
+        {
+          row_id: 'rowid2',
+          conditions: [[0, 'bbb']],
+          decisions: [],
+          connections: [],
+        },
+      ]
+    },
+    {
+      id: '3',
+      name: 'Table name 3',
+      class: 'minor',
+      coordinates: { x: 300, y: 300 },
+      columns: {
+        conditions: ['con'],
+        decisions: ['aaa', 'bbb', 'ccc'],
+      },
+      rows: [
+        {
+          row_id: 'rowid',
+          conditions: [],
+          decisions: [[0, 'aaa']],
+          connections: [],
+        },
+        {
+          row_id: 'rowid2',
+          conditions: [[0, 'bbb'], [1, 'ccc']],
+          decisions: [],
+          connections: [],
+        },
+      ]
+    }
+  ]);
+  const instance2 = window.CoNDeT({
+    selector: '.con2'
+  });
+  instance2.setState([
+    {
+      id: '1',
+      name: 'Table name',
+      class: 'major',
+      coordinates: { x: 10, y: 10 },
+      columns: {
+        conditions: ['con 1', 'con 2', 'con 3'],
+        decisions: ['dec 1', 'dec 2'],
+      },
+      rows: [
+        {
+          row_id: 'rowid',
+          conditions: [],
+          decisions: [[1, 'aaa']],
+          connections: [],
+        },
+        {
+          row_id: 'rowid2',
+          conditions: [[0, 'bbb']],
+          decisions: [],
+          connections: [],
+        },
+        {
+          row_id: 'rowid3',
+          conditions: [[1, 'bbb']],
+          decisions: [[1, 'd = 3']],
+          connections: [],
+        }
+      ]
+    },
+  ])
+</script>
+</body>
+</html>

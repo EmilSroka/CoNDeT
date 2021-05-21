@@ -56,7 +56,7 @@ window.CoNDeT.ui.BaseComponent = {
   updateChildren: function(newChildren) {
     this.unmark(this.children);
     this.unmark(newChildren);
-    this.markCorrespondedChildren(this.children, newChildren);
+    this.markCorrespondedChildren(newChildren, this.children);
     this.deleteUnmarked(this.children);
     this.setInSameOrder(newChildren);
     this.initNewChildren(newChildren);
@@ -67,19 +67,17 @@ window.CoNDeT.ui.BaseComponent = {
       array[i].marked = false;
     }
   },
-  markCorrespondedChildren: function (array1, array2) {
-    for (var i=0; i<array1; i++) {
-      var current = array1[i];
-      for (var j=0; i<array2; j++) {
-        var child = this.findChild(current.type, current.id);
-        if (child == null) continue;
-        child.marked = true;
-        current.marked = true;
-      }
+  markCorrespondedChildren: function (array) {
+    for (var i=0; i<array.length; i++) {
+      var current = array[i];
+      var child = this.findChild(current.type, current.id);
+      if (child == null) continue;
+      child.marked = true;
+      current.marked = true;
     }
   },
   deleteUnmarked: function (array) {
-    for (var i=0; i<array; i++) {
+    for (var i=0; i<array.length; i++) {
       if (!array[i].marekedToUpdate)
         this.removeChild(array[i]);
     }
@@ -137,8 +135,8 @@ window.CoNDeT.ui.BaseComponent = {
   destroyChildren: function () {
     if (this.children == null) return;
 
-    for (let i = 0; i < children.length; i++) {
-      children[i].destroy(common);
+    for (let i = 0; i < this.children.length; i++) {
+      this.children[i].destroy();
     }
   },
   /* dimensions */

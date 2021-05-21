@@ -45,6 +45,9 @@ window.CoNDeT.ui.TableComponent = (function () {
 
   constructor.prototype.entryPoint = function () {
     var size = this.getDimensions();
+    var padding = Number(window.getComputedStyle(this.ref).padding.slice(0, -2));
+    var border = Number(window.getComputedStyle(this.ref).borderWidth.slice(0, -2));
+    // - padding - border
     return { x: this.props.coordinates.x + size.width / 2 , y: this.props.coordinates.y };
   }
 
