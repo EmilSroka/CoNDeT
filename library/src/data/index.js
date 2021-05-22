@@ -59,7 +59,7 @@ window.CoNDeT.data = {
   },
 
   StateModifier: (function () {
-    constructor = function (state) {
+    var constructor = function (state) {
       this.stateManager = state;
       var self = this;
       state.subscribe(function (newState) {
@@ -67,7 +67,7 @@ window.CoNDeT.data = {
       });
     };
 
-    moveTable = function (tableId, newCoordinates) {
+    constructor.prototype.moveTable = function (tableId, newCoordinates) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.coordinates = {
@@ -78,41 +78,41 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    createTable = function (newData) {
+    constructor.prototype.createTable = function (newData) {
       var newState = clone(this.state);
       newState.push(newData);
       this.stateManager.setState(newState);
     };
 
-    editName = function (tableId, name) {
+    constructor.prototype.editName = function (tableId, name) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.name = name;
       this.stateManager.setState(newState);
     };
 
-    editClass = function (tableId, className) {
+    constructor.prototype.editClass = function (tableId, className) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.className = className;
       this.stateManager.setState(newState);
     };
 
-    editCondition = function (tableId, conditions) {
+    constructor.prototype.editCondition = function (tableId, conditions) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       replaceInArray(editTable.columns.conditions, conditions);
       this.stateManager.setState(newState);
     };
 
-    editDecision = function (tableId, decisions) {
+    constructor.prototype.editDecision = function (tableId, decisions) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       replaceInArray(editTable.columns.decisions, decisions);
       this.stateManager.setState(newState);
     };
 
-    editCell = function (tableId, rowId, type, index, value) {
+    constructor.prototype.editCell = function (tableId, rowId, type, index, value) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -125,7 +125,7 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    addRow = function (tableId, newRow) {
+    constructor.prototype.addRow = function (tableId, newRow) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.rows.push(newRow);
@@ -133,7 +133,7 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    removeRow = function (tableId, rowId) {
+    constructor.prototype.removeRow = function (tableId, rowId) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -143,21 +143,21 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    addConditionColumn = function (tableId, column) {
+    constructor.prototype.addConditionColumn = function (tableId, column) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.columns.conditions.push(column);
       this.stateManager.setState(newState);
     };
 
-    addDecisionColumn = function (tableId, column) {
+    constructor.prototype.addDecisionColumn = function (tableId, column) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.columns.decisions.push(column);
       this.stateManager.setState(newState);
     };
 
-    removeConditionColumn = function (tableId, column) {
+    constructor.prototype.removeConditionColumn = function (tableId, column) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
 
@@ -171,7 +171,7 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    removeDecisionColumn = function (tableId, column) {
+    constructor.prototype.removeDecisionColumn = function (tableId, column) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
 
@@ -185,7 +185,7 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    changeRowsOrder = function (tableId, rowId, index) {
+    constructor.prototype.changeRowsOrder = function (tableId, rowId, index) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -197,7 +197,7 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    changeOrder = function (tableId, type, colId, index) {
+    constructor.prototype.changeOrder = function (tableId, type, colId, index) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
 
@@ -229,7 +229,7 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    addConnection = function (tableId, rowId, secondTableId) {
+    constructor.prototype.addConnection = function (tableId, rowId, secondTableId) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -240,7 +240,7 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    removeConnection = function (tableId, rowId, secondTableId) {
+    constructor.prototype.removeConnection = function (tableId, rowId, secondTableId) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -253,13 +253,13 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    replaceInArray = function (toReplace, newValues) {
+    function replaceInArray(toReplace, newValues) {
       for (var i = 0; i < newValues.length; i++) {
         toReplace[i] = newValues[i];
       }
     };
 
-    removeColumnWithId = function (columns, rows, type, id) {
+    function removeColumnWithId(columns, rows, type, id) {
       if (id != null && id <= columns.length) {
         columns.splice(id, 1);
         for (var i = 0; i < rows.length; i++) {
@@ -272,7 +272,7 @@ window.CoNDeT.data = {
       }
     };
 
-    clone = function (toClone) {
+    function clone(toClone) {
       if (Array.isArray(toClone)) {
         var objectWithArray = clone({ array: toClone });
         return objectWithArray.array;
@@ -304,11 +304,13 @@ window.CoNDeT.data = {
       return copyOfTables;
     };
 
-    getTableWithId = function (table, tableId) {
+    function getTableWithId(table, tableId) {
       for (var i = 0; i < table.length; i++) {
         if (table[i].id != tableId) continue;
         return table[i];
       }
     };
+
+    return constructor;
   })(),
 };
