@@ -87,56 +87,41 @@ window.CoNDeT.data = {
     editName = function (tableId, name) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
-      if (name != null) {
-        editTable.name = name;
-      }
-
+      editTable.name = name;
       this.stateManager.setState(newState);
     };
 
     editClass = function (tableId, className) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
-      if (className != null) {
-        editTable.className = className;
-      }
-
+      editTable.className = className;
       this.stateManager.setState(newState);
     };
 
     editCondition = function (tableId, conditions) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
       replaceInArray(editTable.columns.conditions, conditions);
-
       this.stateManager.setState(newState);
     };
 
     editDecision = function (tableId, decisions) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
       replaceInArray(editTable.columns.decisions, decisions);
-
       this.stateManager.setState(newState);
     };
 
-    editCell = function (tableId, cell) {
+    editCell = function (tableId, rowId, type, index, value) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
-      if (cell != null) {
-        for (var i = 0; i < editTable.rows.length; i++) {
-          if (editTable.rows[i].rowId == cell.rowId) {
-            editTable.rows[i].conditions = cell.conditions;
-            editTable.rows[i].decisions = cell.decisions;
-          }
+      for (var i = 0; i < editTable.rows.length; i++) {
+        if (editTable.rows[i].rowId != rowId) continue;
+        for (var j = 0; j < editTable.rows[i][type].length; j++) {
+          if (editTable.rows[i][type][j] != index) continue;
+          editTable.rows[i][type][j] = value;
         }
       }
-
       this.stateManager.setState(newState);
     };
 
@@ -151,36 +136,24 @@ window.CoNDeT.data = {
     removeRow = function (tableId, rowId) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
-      if (editTable.rows != null) {
-        for (var i = 0; i < editTable.rows.length; i++) {
-          if (editTable.rows[i].id != rowId) continue;
-          editTable.rows.splice(rowId, 1);
-        }
+      for (var i = 0; i < editTable.rows.length; i++) {
+        if (editTable.rows[i].id != rowId) continue;
+        editTable.rows.splice(rowId, 1);
       }
-
       this.stateManager.setState(newState);
     };
 
     addConditionColumn = function (tableId, column) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
-      if (column != null) {
-        editTable.columns.conditions.push(column);
-      }
-
+      editTable.columns.conditions.push(column);
       this.stateManager.setState(newState);
     };
 
     addDecisionColumn = function (tableId, column) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
-      if (column != null) {
-        editTable.columns.decisions.push(column);
-      }
-
+      editTable.columns.decisions.push(column);
       this.stateManager.setState(newState);
     };
 
@@ -212,41 +185,77 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    changeOrder = function (tableId) {}; //WIP
+    changeRowsOrder = function (tableId, rowId, index) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+      for (var i = 0; i < editTable.rows.length; i++) {
+        if (editTable.rows[i] != rowId) continue;
+        var row = editTable.rows[i];
+        editTable.rows.splice(i, 1);
+        editTable.rows.splice(index, 0, row);
+      }
+      this.stateManager.setState(newState);
+    };
+
+    changeOrder = function (tableId, type, colId, index) {
+      var newState = clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+
+      for (var i = 0; i < editTable.columns[type].length; i++) {
+        if (editTable.columns[type][i] != colId) continue;
+        var col = editTable.column[type][i];
+        editTable.column[type].splice(i, 1);
+        editTable.column[type].splice(index, 0, col);
+      }
+
+      for (var i = 0; i < editTable.rows.length; i++) {
+        for (var j = 0; j < editTable.rows[i][type].length; j++) {
+          if (editTable.rows[i][type][j][0] == colId) {
+            editTable.rows[i][type][j][0] = index;
+            continue;
+          }
+          if (colId > index) {
+            if (editTable.rows[i][type][j][0] > index) {
+              editTable.rows[i][type][j][0] += 1;
+            }
+          } else {
+            if (editTable.rows[i][type][j][0] < index) {
+              editTable.rows[i][type][j][0] -= 1;
+            }
+          }
+        }
+      }
+
+      this.stateManager.setState(newState);
+    };
 
     addConnection = function (tableId, rowId, secondTableId) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
       for (var i = 0; i < editTable.rows.length; i++) {
         if (editTable.rows[i].id == rowId) {
           editTable.rows[i].connections.push(secondTableId);
         }
       }
-
       this.stateManager.setState(newState);
     };
 
     removeConnection = function (tableId, rowId, secondTableId) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-
       for (var i = 0; i < editTable.rows.length; i++) {
         if (editTable.rows[i].id !== rowId) continue;
         for (var j = 0; j < editTable.rows[i].connections.length; j++) {
-          if (editTable.rows[i].connections[j] !== secondTableId) connections;
+          if (editTable.rows[i].connections[j] !== secondTableId) continue;
           editTable.rows[i].connections.splice(j, 1);
         }
       }
-
       this.stateManager.setState(newState);
     };
 
     replaceInArray = function (toReplace, newValues) {
-      if (newValues != []) {
-        for (var i = 0; i < newValues.length; i++) {
-          toReplace[i] = newValues[i];
-        }
+      for (var i = 0; i < newValues.length; i++) {
+        toReplace[i] = newValues[i];
       }
     };
 
