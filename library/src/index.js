@@ -5,19 +5,7 @@ window.CoNDeT = function (configs) {
   var state = new window.CoNDeT.data.State()
   var display = new window.CoNDeT.ui.DisplayComponent();
   var common = {
-    stateModifier: {
-      // todo(es): replace mock with stateModifier
-      moveTable: (() => {
-        let stateObj = [];
-
-        state.subscribe(newState => stateObj = newState);
-
-        return (tableName, coordinates) => {
-          const x = stateObj.shift();
-          state.setState([{ ...x, coordinates }], ...stateObj)
-        }
-      })(),
-    },
+    stateModifier: new window.CoNDeT.data.StateModifier(state),
     mode: getMode(modeName)
   }
 
