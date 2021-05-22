@@ -13,13 +13,14 @@ window.CoNDeT.ui.BaseComponent = {
     this.id = id;
     this.state = {};
     this.children = [];
-    this.setStrategy(window.CoNDeT.ui.BaseStrategy);
     this.common = common;
     this.props = props;
     this.ref = this.createRef();
     this.onInit();
+    this.setStrategy(common.mode.getEntryStrategy(this));
     this.updateChildren(this.getChildren());
     this.onUpdate();
+    this.setupEventListeners();
   },
   createRef: function () { throw new Error("Component must implement createRef method"); },
   getChildren: function () { return []; },
@@ -189,6 +190,9 @@ window.CoNDeT.ui.BaseComponent = {
     this.ref.addEventListener("mouseleave", function (event) {
       self.strategy.onMouseLeave(event);
     });
+    this.ref.addEventListener("mouseenter", function (event) {
+      self.strategy.onMouseEnter(event);
+    })
   },
   /* child management */
   appendChild: function (child, position = 0) {
