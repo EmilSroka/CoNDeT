@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .con {
+      width: 500px;
+      height: 500px;
+      border: 1px solid black;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+<div class="con" style="position: relative"></div>
+
+<script src="CoNDeT.js"></script>
+<script>
+  const lib = window.CoNDeT({
+    selector: '.con',
+    entryMode: 'edit'
+  });
+  lib.setState([
+    {
+      id: 'id',
+      name: 'Table name',
+      class: 'major',
+      coordinates: { x: 10, y: 10 },
+      columns: {
+        conditions: ['con 1', 'con 2', 'con 3'],
+        decisions: ['dec 1', 'dec 2'],
+      },
+      rows: [
+        {
+          row_id: 'rowid',
+          conditions: [],
+          decisions: [[1, 'aaa']],
+          connections: [],
+        },
+        {
+          row_id: 'rowid2',
+          conditions: [[0, 'bbb']],
+          decisions: [],
+          connections: [],
+        },
+        {
+          row_id: 'rowid3',
+          conditions: [[1, 'bbb']],
+          decisions: [[1, 'd = 3']],
+          connections: [],
+        }
+      ]
+    },
+    {
+      id: 'id2',
+      name: 'minor',
+      class: 'minor',
+      coordinates: { x: 300, y: 310 },
+      columns: {
+        conditions: ['con 1', 'con 2', 'con 3'],
+        decisions: ['dec 1', 'dec 2'],
+      },
+      rows: [
+        {
+          row_id: 'rowid',
+          conditions: [],
+          decisions: [[1, 'aaa']],
+          connections: [],
+        },
+        {
+          row_id: 'rowid2',
+          conditions: [[0, 'bbb']],
+          decisions: [],
+          connections: [],
+        },
+        {
+          row_id: 'rowid3',
+          conditions: [[1, 'bbb']],
+          decisions: [[1, 'd = 3']],
+          connections: [],
+        }
+      ]
+    },
+  ]);
+</script>
+</body>
+</html>
