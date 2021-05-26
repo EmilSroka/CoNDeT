@@ -1,12 +1,12 @@
 /*
-* BaseComponent API
-* createRef -> method that should return new dom element that corresponds to this component
-* [optional] getChildren -> method that returns array of objects that represents children: {type, id, props}
-*   order of elements in returned array will be reflected in dom
-* [optional] onInit -> method for additional functionality during initialization
-* [optional] onUpdate -> method for additional functionality during update
-* [optional] onDestroy -> method for additional functionality during destroy
-* */
+ * BaseComponent API
+ * createRef -> method that should return new dom element that corresponds to this component
+ * [optional] getChildren -> method that returns array of objects that represents children: {type, id, props}
+ *   order of elements in returned array will be reflected in dom
+ * [optional] onInit -> method for additional functionality during initialization
+ * [optional] onUpdate -> method for additional functionality during update
+ * [optional] onDestroy -> method for additional functionality during destroy
+ * */
 window.CoNDeT.ui.BaseComponent = {
   /* component life cycle */
   init: function (common, id, props) {
@@ -22,8 +22,12 @@ window.CoNDeT.ui.BaseComponent = {
     this.onUpdate();
     this.setupEventListeners();
   },
-  createRef: function () { throw new Error("Component must implement createRef method"); },
-  getChildren: function () { return []; },
+  createRef: function () {
+    throw new Error("Component must implement createRef method");
+  },
+  getChildren: function () {
+    return [];
+  },
   onInit: function () {},
   update: function (props) {
     this.props = props;
@@ -41,10 +45,10 @@ window.CoNDeT.ui.BaseComponent = {
   setState: function (updated) {
     var newState = {};
     for (var prop in this.state) {
-      newState[prop] = this.state[prop]
+      newState[prop] = this.state[prop];
     }
     for (var prop in updated) {
-      newState[prop] = updated[prop]
+      newState[prop] = updated[prop];
     }
     this.state = newState;
     this.stateChanged();
@@ -54,7 +58,7 @@ window.CoNDeT.ui.BaseComponent = {
     this.onUpdate();
   },
   /* children update */
-  updateChildren: function(newChildren) {
+  updateChildren: function (newChildren) {
     this.unmark(this.children);
     this.unmark(newChildren);
     this.markCorrespondedChildren(this.children, newChildren);
@@ -64,14 +68,14 @@ window.CoNDeT.ui.BaseComponent = {
     this.updateChildrenProps(newChildren);
   },
   unmark: function (array) {
-    for (var i=0; i<array; i++) {
+    for (var i = 0; i < array; i++) {
       array[i].marked = false;
     }
   },
   markCorrespondedChildren: function (array1, array2) {
-    for (var i=0; i<array1; i++) {
+    for (var i = 0; i < array1; i++) {
       var current = array1[i];
-      for (var j=0; i<array2; j++) {
+      for (var j = 0; i < array2; j++) {
         var child = this.findChild(current.type, current.id);
         if (child == null) continue;
         child.marked = true;
@@ -80,16 +84,22 @@ window.CoNDeT.ui.BaseComponent = {
     }
   },
   deleteUnmarked: function (array) {
-    for (var i=0; i<array; i++) {
-      if (!array[i].marekedToUpdate)
-        this.removeChild(array[i]);
+    for (var i = 0; i < array; i++) {
+      if (!array[i].marked) this.removeChild(array[i]);
     }
   },
   setInSameOrder: function (newChildren) {
-    for (var childIdx=0, newChildIdx=0; newChildIdx<newChildren.length; newChildIdx++) {
+    for (
+      var childIdx = 0, newChildIdx = 0;
+      newChildIdx < newChildren.length;
+      newChildIdx++
+    ) {
       var currentNewChild = newChildren[newChildIdx];
 
-      var correspondedIdx = this.findIndexOfChild(currentNewChild.type, currentNewChild.id);
+      var correspondedIdx = this.findIndexOfChild(
+        currentNewChild.type,
+        currentNewChild.id
+      );
 
       if (correspondedIdx === childIdx) {
         var component = this.children[correspondedIdx];
@@ -107,17 +117,22 @@ window.CoNDeT.ui.BaseComponent = {
     }
   },
   updateChildrenProps: function (newChildren) {
-    for (var i=0; i<newChildren.length; i++) {
+    for (var i = 0; i < newChildren.length; i++) {
       var corresponded = this.findChild(newChildren[i].type, newChildren[i].id);
       if (corresponded == null) continue;
       corresponded.update(newChildren[i].props);
     }
   },
   initNewChildren: function (newChildren) {
-    for (var i=0; i<newChildren.length; i++) {
+    for (var i = 0; i < newChildren.length; i++) {
       var corresponded = this.findChild(newChildren[i].type, newChildren[i].id);
       if (corresponded != null) continue;
-      this.createChild(newChildren[i].type, newChildren[i].props, newChildren[i].id, i);
+      this.createChild(
+        newChildren[i].type,
+        newChildren[i].props,
+        newChildren[i].id,
+        i
+      );
     }
   },
   findChild: function (type, id) {
@@ -131,7 +146,10 @@ window.CoNDeT.ui.BaseComponent = {
     if (this.children == null) return;
 
     for (let i = 0; i < this.children.length; i++) {
-      if (this.children[i].typeId === type.prototype.typeId && this.children[i].id === id)
+      if (
+        this.children[i].typeId === type.prototype.typeId &&
+        this.children[i].id === id
+      )
         return i;
     }
   },
@@ -192,7 +210,7 @@ window.CoNDeT.ui.BaseComponent = {
     });
     this.ref.addEventListener("mouseenter", function (event) {
       self.strategy.onMouseEnter(event);
-    })
+    });
   },
   /* child management */
   appendChild: function (child, position = 0) {

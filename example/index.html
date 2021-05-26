@@ -17,14 +17,20 @@
   </style>
 </head>
 <body>
+  <button onclick="getState()">Print State</button>
 <div class="con" style="position: relative"></div>
 
-<script src="CoNDeT.js"></script>
+<script src="../library/dist/CoNDeT.js"></script>
 <script>
   const lib = window.CoNDeT({
     selector: '.con',
     entryMode: 'edit'
   });
+
+  function getState() {
+    console.log(lib.getState());
+  }
+
   lib.setState([
     {
       id: 'id',

@@ -3,7 +3,7 @@
 }
 
 html {
-  background: #ECF0F3;
+  background: #ecf0f3;
 }
 
 .condet-table input {
@@ -12,35 +12,36 @@ html {
   box-sizing: border-box;
   border: 2px solid var(--border);
   border-radius: 5px;
-  background-color: #ECF0F3;
+  background-color: #ecf0f3;
   color: var(--border);
 }
 
 .condet-table input:focus {
-  background-color: #D1D9E6;
+  background-color: #d1d9e6;
   transition: 0.5s;
 }
 
-.condet-table, .condet-caption {
+.condet-table,
+.condet-caption {
   text-align: center;
-  background: #ECF0F3;
-  font-family: 'ubuntu';
+  background: #ecf0f3;
+  font-family: "ubuntu";
   font-weight: 400;
   padding: 6px;
   color: var(--border);
   border-radius: 12px;
-  box-shadow: 18px 18px 14px #D1D9E6 inset, -18px -18px 14px #FFF inset;
+  box-shadow: 18px 18px 14px #d1d9e6 inset, -18px -18px 14px #fff inset;
   border-spacing: 0px;
   border: 3px solid var(--border);
   margin-bottom: 10px;
 }
 
 .condet-caption {
-  background-color: #ECF0F3;
+  background-color: #ecf0f3;
   color: var(--border);
   font-size: 1.2rem;
   border-radius: 12px;
-  box-shadow: 8px 8px 8px #D1D9E6 inset, -8px -8px 8px #FFF inset;
+  box-shadow: 8px 8px 8px #d1d9e6 inset, -8px -8px 8px #fff inset;
   margin-bottom: 10px;
 }
 
@@ -48,7 +49,8 @@ html {
   font-size: 1.11rem;
 }
 
-.condet-table th, td {
+.condet-table th,
+td {
   padding: 4px;
   width: auto;
 }
@@ -59,13 +61,19 @@ html {
 }
 
 .condet-class-major.condet-table,
-.condet-class-major .condet-caption{
-  border-color: #B80F0A;
+.condet-class-major .condet-caption {
+  border-color: #b80f0a;
 }
 
 .condet-class-minor.condet-table,
-.condet-class-minor .condet-caption{
-  border-color: #0063B2;
+.condet-class-minor .condet-caption {
+  border-color: #0063b2;
+}
+
+.corner-element {
+  float: left;
+  margin-top: -80px;
+  color: #b80f0a;
 }
 
 path {
@@ -77,12 +85,12 @@ path {
 
 path:hover {
   stroke-width: 3;
-  stroke: #B80F0A;
+  stroke: #b80f0a;
 }
 
 path:hover + path {
-  stroke: #B80F0A;
-  fill: #B80F0A;
+  stroke: #b80f0a;
+  fill: #b80f0a;
 }
 
 path + path {

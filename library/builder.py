@@ -14,6 +14,7 @@ f.close()
 
 for path,dirs,files in os.walk(start_path):
     wholeCode = open(outputFileName, 'a')
+    files.sort()
     for filename in files:
         file = os.path.join(path,filename)
         if ( (re.search(".*\.js",file) != None) ):

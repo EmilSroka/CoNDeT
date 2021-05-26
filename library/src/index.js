@@ -2,12 +2,12 @@ window.CoNDeT = function (configs) {
   var selector = configs.selector || ".condet-display";
   var modeName = configs.entryMode || "display";
 
-  var state = new window.CoNDeT.data.State()
+  var state = new window.CoNDeT.data.State();
   var display = new window.CoNDeT.ui.DisplayComponent();
   var common = {
     stateModifier: new window.CoNDeT.data.StateModifier(state),
-    mode: getMode(modeName)
-  }
+    mode: getMode(modeName),
+  };
 
   display.init(common, selector, { selector: selector, state: state.state });
 
@@ -25,7 +25,7 @@ window.CoNDeT = function (configs) {
     readFromFile: function () {
       window.CoNDeT.data.FileReaderWriter.readFromFile(function (newState) {
         state.setState(newState);
-      })
+      });
     },
     saveToFile: function () {
       window.CoNDeT.data.FileReaderWriter.saveToFile(state.state);
@@ -33,8 +33,11 @@ window.CoNDeT = function (configs) {
     changeMode: function (modeName) {
       common.mode = getMode(modeName);
       common.mode.setToAllComponents(display);
-    }
-  }
+    },
+    getState: function () {
+      return state;
+    },
+  };
 
   function getMode(modeName) {
     if (modeName === "edit") {

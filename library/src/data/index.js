@@ -84,6 +84,16 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
+    constructor.prototype.removeTable = function (tableId) {
+      var newState = clone(this.state);
+      for (var i = 0; i < newState.length; i++) {
+        if (tableId == newState[i].id) {
+          newState.splice(i, 1);
+        }
+      }
+      this.stateManager.setState(newState);
+    };
+
     constructor.prototype.editName = function (tableId, name) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
@@ -112,7 +122,13 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    constructor.prototype.editCell = function (tableId, rowId, type, index, value) {
+    constructor.prototype.editCell = function (
+      tableId,
+      rowId,
+      type,
+      index,
+      value
+    ) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -229,7 +245,11 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    constructor.prototype.addConnection = function (tableId, rowId, secondTableId) {
+    constructor.prototype.addConnection = function (
+      tableId,
+      rowId,
+      secondTableId
+    ) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -240,7 +260,11 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    constructor.prototype.removeConnection = function (tableId, rowId, secondTableId) {
+    constructor.prototype.removeConnection = function (
+      tableId,
+      rowId,
+      secondTableId
+    ) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -257,7 +281,7 @@ window.CoNDeT.data = {
       for (var i = 0; i < newValues.length; i++) {
         toReplace[i] = newValues[i];
       }
-    };
+    }
 
     function removeColumnWithId(columns, rows, type, id) {
       if (id != null && id <= columns.length) {
@@ -270,7 +294,7 @@ window.CoNDeT.data = {
           }
         }
       }
-    };
+    }
 
     function clone(toClone) {
       if (Array.isArray(toClone)) {
@@ -302,14 +326,14 @@ window.CoNDeT.data = {
       }
 
       return copyOfTables;
-    };
+    }
 
     function getTableWithId(table, tableId) {
       for (var i = 0; i < table.length; i++) {
         if (table[i].id != tableId) continue;
         return table[i];
       }
-    };
+    }
 
     return constructor;
   })(),
