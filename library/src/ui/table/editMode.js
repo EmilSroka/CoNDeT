@@ -24,9 +24,7 @@ window.CoNDeT.ui.TableComponentEditMode = (function () {
   };
   constructor.prototype.onMouseUp = function (event) {
     this.updateXY(event);
-    this.currentDelta = null;
-    this.startPosition = null;
-    this.table.ref.style.cursor = "grab";
+    this.resetState();
   };
   constructor.prototype.onMouseLeave = function (event) {
     this.updateXY(event);

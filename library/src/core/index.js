@@ -85,3 +85,28 @@ window.CoNDeT.core.getLinePoints = function(startPoint, endPoint) {
   ]
 };
 
+window.CoNDeT.core.equals = function(value1, value2) {
+  if (typeof value1 !== "object" || typeof value2 !== "object") return value1 === value2;
+
+  var checkedKeys = [];
+
+  for (var key in value1) {
+    var logicalSumOfOwnProps = Number(value1.hasOwnProperty(key)) + Number(value2.hasOwnProperty(key))
+    if (logicalSumOfOwnProps === 0) continue;
+    if (logicalSumOfOwnProps === 1) return false;
+    if (!window.CoNDeT.core.equals(value1[key], value2[key])) return false;
+
+    checkedKeys.push(key);
+  }
+
+  for (var key in value2) {
+    if (checkedKeys.indexOf(key) != -1) continue;
+    var logicalSumOfOwnProps = Number(value1.hasOwnProperty(key)) + Number(value2.hasOwnProperty(key))
+    if (logicalSumOfOwnProps === 0) continue;
+    if (logicalSumOfOwnProps === 1) return false;
+    if (!window.CoNDeT.core.equals(value1[key], value2[key])) return false;
+  }
+
+  return true;
+};
+

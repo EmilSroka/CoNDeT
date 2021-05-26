@@ -26,6 +26,8 @@ window.CoNDeT.ui.BaseComponent = {
   getChildren: function () { return []; },
   onInit: function () {},
   update: function (props) {
+    if (window.CoNDeT.core.equals(this.props, props)) return;
+
     this.props = props;
     this.updateChildren(this.getChildren());
     this.onUpdate();
@@ -57,8 +59,8 @@ window.CoNDeT.ui.BaseComponent = {
   updateChildren: function(newChildren) {
     this.unmark(this.children);
     this.unmark(newChildren);
-    this.markCorrespondedChildren(this.children, newChildren);
-    this.deleteUnmarked(this.children);
+    this.markCorrespondedChildren(newChildren);
+    this.deleteUnmarkedChildren();
     this.setInSameOrder(newChildren);
     this.initNewChildren(newChildren);
     this.updateChildrenProps(newChildren);
@@ -68,21 +70,20 @@ window.CoNDeT.ui.BaseComponent = {
       array[i].marked = false;
     }
   },
-  markCorrespondedChildren: function (array1, array2) {
-    for (var i=0; i<array1; i++) {
-      var current = array1[i];
-      for (var j=0; i<array2; j++) {
-        var child = this.findChild(current.type, current.id);
-        if (child == null) continue;
-        child.marked = true;
-        current.marked = true;
-      }
+  markCorrespondedChildren: function (array) {
+    for (var i=0; i<array.length; i++) {
+      var current = array[i];
+      var child = this.findChild(current.type, current.id);
+      if (child == null) continue;
+      child.marked = true;
+      current.marked = true;
     }
   },
-  deleteUnmarked: function (array) {
-    for (var i=0; i<array; i++) {
-      if (!array[i].marekedToUpdate)
-        this.removeChild(array[i]);
+  deleteUnmarkedChildren: function () {
+    for (var i=0; i<this.children.length; i++) {
+      if (!this.children[i].marked) {
+        this.removeChild(this.children[i]);
+      }
     }
   },
   setInSameOrder: function (newChildren) {
@@ -130,7 +131,7 @@ window.CoNDeT.ui.BaseComponent = {
   findIndexOfChild: function (type, id) {
     if (this.children == null) return;
 
-    for (let i = 0; i < this.children.length; i++) {
+    for (var i = 0; i < this.children.length; i++) {
       if (this.children[i].typeId === type.prototype.typeId && this.children[i].id === id)
         return i;
     }
@@ -138,8 +139,8 @@ window.CoNDeT.ui.BaseComponent = {
   destroyChildren: function () {
     if (this.children == null) return;
 
-    for (let i = 0; i < children.length; i++) {
-      children[i].destroy(common);
+    for (var i = 0; i < this.children.length; i++) {
+      this.children[i].destroy(this.common);
     }
   },
   /* dimensions */
