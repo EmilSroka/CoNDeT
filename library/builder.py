@@ -1,25 +1,21 @@
+from pathlib import Path
 import os
 import re
-from pathlib import Path
 import sys
-start_path = "." # current directory
 
-if ( len(sys.argv) == 2):
-    outputFileName = "./dist/" + sys.argv[1] + ".js"
-else:
-    outputFileName = "./dist/CoNDeT.js"
+current_path = '.'
+default_output_file_name = 'CoNDeT'
+output_file_path = f'./dist/{sys.argv[1] if len(sys.argv) == 2 else default_output_file_name}.js'
 
-f = open(outputFileName,"w")
-f.close()
+output = open(output_file_path, 'w+')
 
-for path,dirs,files in os.walk(start_path):
-    wholeCode = open(outputFileName, 'a')
-    for filename in files:
-        file = os.path.join(path,filename)
-        if ( (re.search(".*\.js",file) != None) ):
-            f = open(file)
-            content = f.readlines()
+for path, _, files in os.walk(current_path):
+    files.sort()
+    for file_name in files:
+        file_path = os.path.join(path, file_name)
+        if re.search(".*\.js", file_path) != None:
+            input = open(file_path)
+            content = input.readlines()
             for line in content:
-                wholeCode.write(line)
-            f.close()
-
+                output.write(line)
+            input.close()
