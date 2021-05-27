@@ -66,7 +66,7 @@ window.CoNDeT.ui.BaseComponent = {
     this.updateChildrenProps(newChildren);
   },
   unmark: function (array) {
-    for (var i=0; i<array; i++) {
+    for (var i=0; i<array.length; i++) {
       array[i].marked = false;
     }
   },
