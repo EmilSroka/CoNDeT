@@ -84,6 +84,16 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
+    constructor.prototype.removeTable = function (tableId) {
+      var newState = clone(this.state);
+      for (var i = 0; i < newState.length; i++) {
+        if (tableId == newState[i].id) {
+          newState.splice(i, 1);
+        }
+      }
+      this.stateManager.setState(newState);
+    };
+
     constructor.prototype.editId = function (tableId, id) {
       this.editProp(tableId, "id", id);
     };
@@ -237,7 +247,7 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.addConnection = function (tableId, rowId, secondTableId) {
-      var newState = window.CoNDeT.core.clone(this.state);
+      var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
         if (editTable.rows[i].id === rowId) {
@@ -271,14 +281,14 @@ window.CoNDeT.data = {
           }
         }
       }
-    };
+    }
 
     function getTableWithId(table, tableId) {
       for (var i = 0; i < table.length; i++) {
         if (table[i].id != tableId) continue;
         return table[i];
       }
-    };
+    }
 
     return constructor;
   })(),
