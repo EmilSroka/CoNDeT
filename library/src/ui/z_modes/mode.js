@@ -1,9 +1,9 @@
 window.CoNDeT.ui.BaseMode = {
   setToAllComponents: function (componentInstance) {
-    var Strategy = getEntryStrategy(componentInstance);
-    componentInstance.setStrategy(new Strategy());
+    var strategy = this.getEntryStrategy(componentInstance);
+    componentInstance.setStrategy(strategy);
 
-    for (var i=0; i<componentInstance.children; i++) {
+    for (var i=0; i<componentInstance.children.length; i++) {
       this.setToAllComponents(componentInstance.children[i]);
     }
   },
