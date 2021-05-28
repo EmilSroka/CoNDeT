@@ -3,7 +3,7 @@ window.CoNDeT.ui.BaseMode = {
     var strategy = this.getEntryStrategy(componentInstance);
     componentInstance.setStrategy(strategy);
 
-    for (var i=0; i<componentInstance.children.length; i++) {
+    for (var i=0; i<componentInstance.children; i++) {
       this.setToAllComponents(componentInstance.children[i]);
     }
   },

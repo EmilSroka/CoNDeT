@@ -1,5 +1,29 @@
 /*
  * props:
+ * * name -> table name
+ * * class -> table CoNDeT class
+ */
+window.CoNDeT.ui.NameComponent = (function () {
+  function constructor() {}
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "NameComponent";
+
+  constructor.prototype.createRef = function () {
+    return document.createElement("caption");
+  };
+  constructor.prototype.onInit = function () {
+    this.ref.className = "condet-caption";
+  }
+  constructor.prototype.onUpdate = function () {
+    this.ref.innerHTML = this.props.name + " <small>(" + this.props.class + ")</small>";
+  };
+
+  return constructor;
+})();
+
+/*
+ * props:
  * * conditions -> list of conditions (strings)
  * * decisions -> list of decisions (strings)
  */
@@ -81,8 +105,8 @@ window.CoNDeT.ui.BodyComponent = (function () {
   }
   constructor.prototype.getChildren = function () {
     var children = [];
-    for (var i = 0; i < this.props.rows.length; i++) {
-      children.push({ type: window.CoNDeT.ui.RowComponent, id: i, props: { content: this.props.rows[i].content, id: this.props.rows[i].id, editCell: this.props.editCell } });
+    for (var i = 0; i < this.props.content.length; i++) {
+      children.push({ type: window.CoNDeT.ui.RowComponent, id: i, props: { content: this.props.content[i] } });
     }
     return children;
   }
@@ -131,3 +155,51 @@ window.CoNDeT.ui.RowComponent = (function () {
   return constructor;
 })();
 
+/*
+ * props:
+ * * type -> th | td
+ * * [optional] className
+ * * value
+ */
+window.CoNDeT.ui.CellComponent = (function () {
+  function constructor() {}
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "CellComponent";
+
+  constructor.prototype.createRef = function () {
+    return document.createElement(this.props.type);
+  }
+  constructor.prototype.onInit = function () {
+    if (!this.props.className) return;
+    this.ref.className = this.props.className;
+  }
+  constructor.prototype.onUpdate = function () {
+    this.ref.innerHTML = this.props.value;
+  }
+
+  return constructor;
+})();
+
+window.CoNDeT.ui.DeleteTableBtnComponent = (function () {
+  function constructor() {}
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
+  constructor.prototype.typeId = "DeleteTableBtnComponent";
+
+  constructor.prototype.createRef = function () {
+    return document.createElement("span");
+  };
+
+  constructor.prototype.onInit = function () {
+    this.ref.className = "corner-element";
+    this.ref.innerHTML = "❌";
+    var self = this;
+
+    this.ref.addEventListener("mousedown", function () {
+      self.common.stateModifier.removeTable(self.props.id);
+    });
+  };
+
+  return constructor;
+})();

@@ -46,16 +46,16 @@ window.CoNDeT.ui.BaseComponent = {
   setState: function (updated) {
     var newState = {};
     for (var prop in this.state) {
-      newState[prop] = this.state[prop]
+      newState[prop] = this.state[prop];
     }
     for (var prop in updated) {
-      newState[prop] = updated[prop]
+      newState[prop] = updated[prop];
     }
     this.state = newState;
     this.render();
   },
   /* children update */
-  updateChildren: function(newChildren) {
+  updateChildren: function (newChildren) {
     this.unmark(this.children);
     this.unmark(newChildren);
     this.markCorrespondedChildren(newChildren);
@@ -198,7 +198,7 @@ window.CoNDeT.ui.BaseComponent = {
     });
     this.ref.addEventListener("dblclick", function (event) {
       self.strategy.onDbClick(event);
-    })
+    });
   },
   /* child management */
   appendChild: function (child, position = 0) {
