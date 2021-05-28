@@ -1,18 +1,23 @@
 window.CoNDeT.ui.DisplayDisplayMode = (function () {
-  function constructor() { }
+  function constructor() {}
 
   constructor.prototype = Object.create(window.CoNDeT.ui.StrategyCommon);
 
   constructor.prototype.updateXY = function (event) {
     if (this.currentDelta == null) return;
-    this.display.setState({ deltaXY: {
+    this.display.setState({
+      deltaXY: {
         x: this.startPosition.x + event.clientX - this.currentDelta.x,
         y: this.startPosition.y + event.clientY - this.currentDelta.y,
-      }});
+      },
+    });
   };
   constructor.prototype.onMouseDown = function (event) {
     this.currentDelta = { x: event.clientX, y: event.clientY };
-    this.startPosition = { x: this.display.state.deltaXY.x, y: this.display.state.deltaXY.y }
+    this.startPosition = {
+      x: this.display.state.deltaXY.x,
+      y: this.display.state.deltaXY.y,
+    };
     this.display.ref.style.cursor = "grabbing";
   };
   constructor.prototype.onMouseMove = function (event) {
@@ -41,7 +46,7 @@ window.CoNDeT.ui.DisplayDisplayMode = (function () {
     this.currentDelta = null;
     this.startPosition = null;
     this.display.ref.style.cursor = "grab";
-  }
+  };
 
   return constructor;
 })();
