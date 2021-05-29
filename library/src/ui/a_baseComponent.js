@@ -23,14 +23,13 @@ window.CoNDeT.ui.BaseComponent = {
     this.setupEventListeners();
   },
   createRef: function () { throw new Error("Component must implement createRef method"); },
-  getChildren: function () { return []; },
+  getChildren: function () { return this.strategy.getChildren(); },
   onInit: function () {},
   update: function (props) {
     if (window.CoNDeT.core.equals(this.props, props)) return;
 
     this.props = props;
-    this.updateChildren(this.getChildren());
-    this.onUpdate();
+    this.render();
   },
   onUpdate: function () {},
   destroy: function () {
@@ -39,6 +38,10 @@ window.CoNDeT.ui.BaseComponent = {
     this.onDestroy();
   },
   onDestroy: function () {},
+  render: function () {
+    this.updateChildren(this.getChildren());
+    this.onUpdate();
+  },
   /* state management */
   setState: function (updated) {
     var newState = {};
@@ -49,11 +52,7 @@ window.CoNDeT.ui.BaseComponent = {
       newState[prop] = updated[prop]
     }
     this.state = newState;
-    this.stateChanged();
-  },
-  stateChanged: function () {
-    this.updateChildren(this.getChildren());
-    this.onUpdate();
+    this.render();
   },
   /* children update */
   updateChildren: function(newChildren) {
@@ -80,9 +79,11 @@ window.CoNDeT.ui.BaseComponent = {
     }
   },
   deleteUnmarkedChildren: function () {
-    for (var i=0; i<this.children.length; i++) {
-      if (!this.children[i].marked) {
-        this.removeChild(this.children[i]);
+    var childrenCopy = window.CoNDeT.core.copy(this.children);
+
+    for (var i=0; i<childrenCopy.length; i++) {
+      if (!childrenCopy[i].marked) {
+        this.removeChild(childrenCopy[i]);
       }
     }
   },
@@ -169,6 +170,7 @@ window.CoNDeT.ui.BaseComponent = {
     if (this.strategy != null) this.strategy.onDestroy();
     this.strategy = strategy;
     this.strategy.onInit(this);
+    this.render();
   },
   setupEventListeners: function () {
     var self = this;
@@ -193,6 +195,9 @@ window.CoNDeT.ui.BaseComponent = {
     });
     this.ref.addEventListener("mouseenter", function (event) {
       self.strategy.onMouseEnter(event);
+    });
+    this.ref.addEventListener("dblclick", function (event) {
+      self.strategy.onDbClick(event);
     })
   },
   /* child management */

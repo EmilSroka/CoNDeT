@@ -68,7 +68,7 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.moveTable = function (tableId, newCoordinates) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.coordinates = {
         x: newCoordinates.x,
@@ -79,54 +79,61 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.createTable = function (newData) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       newState.push(newData);
       this.stateManager.setState(newState);
     };
 
+    constructor.prototype.editId = function (tableId, id) {
+      this.editProp(tableId, "id", id);
+    };
+
     constructor.prototype.editName = function (tableId, name) {
-      var newState = clone(this.state);
-      var editTable = getTableWithId(newState, tableId);
-      editTable.name = name;
-      this.stateManager.setState(newState);
+      this.editProp(tableId, "name", name);
     };
 
     constructor.prototype.editClass = function (tableId, className) {
-      var newState = clone(this.state);
-      var editTable = getTableWithId(newState, tableId);
-      editTable.className = className;
-      this.stateManager.setState(newState);
+      this.editProp(tableId, "class", className);
     };
 
-    constructor.prototype.editCondition = function (tableId, conditions) {
-      var newState = clone(this.state);
+    constructor.prototype.editProp = function (tableId, prop, value) {
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
-      replaceInArray(editTable.columns.conditions, conditions);
+      editTable[prop] = value;
       this.stateManager.setState(newState);
+    }
+
+    constructor.prototype.editCondition = function (tableId, idx, value) {
+      this.editHeader(tableId, "conditions", idx, value)
     };
 
-    constructor.prototype.editDecision = function (tableId, decisions) {
-      var newState = clone(this.state);
-      var editTable = getTableWithId(newState, tableId);
-      replaceInArray(editTable.columns.decisions, decisions);
-      this.stateManager.setState(newState);
+    constructor.prototype.editDecision = function (tableId, idx, value) {
+      this.editHeader(tableId, "decisions", idx, value)
     };
+
+    constructor.prototype.editHeader = function(tableId, type, idx, value) {
+      var newState = window.CoNDeT.core.clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+      editTable.columns[type][idx] = value;
+      this.stateManager.setState(newState);
+    }
 
     constructor.prototype.editCell = function (tableId, rowId, type, index, value) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i].rowId != rowId) continue;
+        if (editTable.rows[i].row_id !== rowId) continue;
         for (var j = 0; j < editTable.rows[i][type].length; j++) {
-          if (editTable.rows[i][type][j] != index) continue;
-          editTable.rows[i][type][j] = value;
+          if (editTable.rows[i][type][j][0] !== index) continue;
+          editTable.rows[i][type].splice(j, 1);
         }
+        editTable.rows[i][type].push([index, value])
       }
       this.stateManager.setState(newState);
     };
 
     constructor.prototype.addRow = function (tableId, newRow) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.rows.push(newRow);
 
@@ -134,31 +141,31 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.removeRow = function (tableId, rowId) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i].id != rowId) continue;
+        if (editTable.rows[i].id !== rowId) continue;
         editTable.rows.splice(rowId, 1);
       }
       this.stateManager.setState(newState);
     };
 
     constructor.prototype.addConditionColumn = function (tableId, column) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.columns.conditions.push(column);
       this.stateManager.setState(newState);
     };
 
     constructor.prototype.addDecisionColumn = function (tableId, column) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.columns.decisions.push(column);
       this.stateManager.setState(newState);
     };
 
     constructor.prototype.removeConditionColumn = function (tableId, column) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
 
       removeColumnWithId(
@@ -172,7 +179,7 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.removeDecisionColumn = function (tableId, column) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
 
       removeColumnWithId(
@@ -186,10 +193,10 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.changeRowsOrder = function (tableId, rowId, index) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i] != rowId) continue;
+        if (editTable.rows[i] !== rowId) continue;
         var row = editTable.rows[i];
         editTable.rows.splice(i, 1);
         editTable.rows.splice(index, 0, row);
@@ -198,11 +205,11 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.changeOrder = function (tableId, type, colId, index) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
 
       for (var i = 0; i < editTable.columns[type].length; i++) {
-        if (editTable.columns[type][i] != colId) continue;
+        if (editTable.columns[type][i] !== colId) continue;
         var col = editTable.column[type][i];
         editTable.column[type].splice(i, 1);
         editTable.column[type].splice(index, 0, col);
@@ -210,7 +217,7 @@ window.CoNDeT.data = {
 
       for (var i = 0; i < editTable.rows.length; i++) {
         for (var j = 0; j < editTable.rows[i][type].length; j++) {
-          if (editTable.rows[i][type][j][0] == colId) {
+          if (editTable.rows[i][type][j][0] === colId) {
             editTable.rows[i][type][j][0] = index;
             continue;
           }
@@ -230,10 +237,10 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.addConnection = function (tableId, rowId, secondTableId) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i].id == rowId) {
+        if (editTable.rows[i].id === rowId) {
           editTable.rows[i].connections.push(secondTableId);
         }
       }
@@ -241,7 +248,7 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.removeConnection = function (tableId, rowId, secondTableId) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
         if (editTable.rows[i].id !== rowId) continue;
@@ -251,12 +258,6 @@ window.CoNDeT.data = {
         }
       }
       this.stateManager.setState(newState);
-    };
-
-    function replaceInArray(toReplace, newValues) {
-      for (var i = 0; i < newValues.length; i++) {
-        toReplace[i] = newValues[i];
-      }
     };
 
     function removeColumnWithId(columns, rows, type, id) {
@@ -270,38 +271,6 @@ window.CoNDeT.data = {
           }
         }
       }
-    };
-
-    function clone(toClone) {
-      if (Array.isArray(toClone)) {
-        var objectWithArray = clone({ array: toClone });
-        return objectWithArray.array;
-      }
-      if (typeof toClone === "object" && toClone !== null) {
-        var copyOfTables = {};
-        for (var attr in toClone) {
-          if (!toClone.hasOwnProperty(attr)) continue;
-          if (Array.isArray(toClone[attr])) {
-            copyOfTables[attr] = [];
-            for (var j = 0; j < toClone[attr].length; j++) {
-              copyOfTables[attr][j] = clone(toClone[attr][j]);
-            }
-          } else if (typeof toClone[attr] === "object") {
-            copyOfTables[attr] = {};
-            for (var key in toClone[attr]) {
-              if (toClone[attr].hasOwnProperty(key)) {
-                copyOfTables[attr][key] = clone(toClone[attr][key]);
-              }
-            }
-          } else {
-            copyOfTables[attr] = toClone[attr];
-          }
-        }
-      } else {
-        var copyOfTables = toClone;
-      }
-
-      return copyOfTables;
     };
 
     function getTableWithId(table, tableId) {

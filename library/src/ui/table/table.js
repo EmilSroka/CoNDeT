@@ -6,7 +6,7 @@
  * * class -> name of CoNDeT class
  * * conditions -> list of conditions (strings)
  * * decisions -> list of decisions (strings)
- * * rows -> content of table (list of list of strings)
+ * * rows -> content of table
  */
 window.CoNDeT.ui.TableComponent = (function () {
   function constructor() {}
@@ -18,22 +18,43 @@ window.CoNDeT.ui.TableComponent = (function () {
     return document.createElement("table");
   };
   constructor.prototype.getChildren = function() {
+    var self = this;
+    var editCell = function (rowId, type, index, value) {
+      self.common.stateModifier.editCell(self.props.id, rowId, type, index, value);
+    }
+    var editCondition = function (index, value) {
+      self.common.stateModifier.editCondition(self.props.id, index, value);
+    }
+    var editDecision = function (index, value) {
+      self.common.stateModifier.editDecision(self.props.id, index, value);
+    }
+    var editName = function (value) {
+      self.common.stateModifier.editName(self.props.id, value);
+    }
+    var editId = function (value) {
+      self.common.stateModifier.editId(self.props.id, value);
+    }
+    var editClass = function (value) {
+      self.common.stateModifier.editClass(self.props.id, value);
+    }
+
     return [
-      { type: window.CoNDeT.ui.NameComponent, id: this.props.id + "_caption",
-        props: { name: this.props.name, class: this.props.class }},
+      { type: window.CoNDeT.ui.CaptionComponent, id: this.props.id + "_caption",
+        props: { name: this.props.name, class: this.props.class, id: this.props.id,
+          changeName: editName, changeClass: editClass, changeId: editId}},
       { type: window.CoNDeT.ui.HeadComponent, id: this.props.id + "_header",
-        props: { conditions: this.props.conditions, decisions: this.props.decisions }},
-      { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: { content: this.props.rows }},
+        props: { conditions: this.props.conditions, decisions: this.props.decisions, editCondition: editCondition, editDecision: editDecision }},
+      { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: { rows: this.props.rows, editCell: editCell }},
     ]
   }
   constructor.prototype.onInit = function () {
     this.ref.className = "condet-table condet-class-" + this.props.class;
   };
   constructor.prototype.onUpdate = function () {
-    this.ref.style.cssText = getCssInlineStyleForPosition(
-        this.props.coordinates.x,
-        this.props.coordinates.y,
-    );
+    this.ref.style.position = "absolute";
+    this.ref.style.left = "0";
+    this.ref.style.right = "0";
+    this.ref.style.transform = "translate(" + this.props.coordinates.x + "px," + this.props.coordinates.y + "px)"
   }
 
   // note(es): do we need to refactor this ???
@@ -49,8 +70,4 @@ window.CoNDeT.ui.TableComponent = (function () {
   }
 
   return constructor;
-
-  function getCssInlineStyleForPosition(x, y) {
-    return "position: absolute; left: 0; right: 0; transform: translate(" + x + "px," + y + "px);";
-  }
 })();
