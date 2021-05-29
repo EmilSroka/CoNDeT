@@ -1,6 +1,8 @@
 window.CoNDeT.ui.StrategyCommon = {
   onDestroy: function () {},
   onInit: function (component) { this.component = component },
+  getChildren: function () { return []; },
+  onDbClick: function () {},
   onKeyUp: function () {},
   onKeyDown: function () {},
   onMouseUp: function () {},

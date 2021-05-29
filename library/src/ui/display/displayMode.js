@@ -22,7 +22,7 @@ window.CoNDeT.ui.DisplayDisplayMode = (function () {
     this.updateXY(event);
     this.currentDelta = null;
     this.startPosition = null;
-    this.display.ref.style.cursor = 'grab';
+    this.display.ref.style.cursor = "grab";
   };
   constructor.prototype.onMouseLeave = function (event) {
     this.updateXY(event);
@@ -33,6 +33,9 @@ window.CoNDeT.ui.DisplayDisplayMode = (function () {
     this.display = display;
     this.resetState();
   };
+  constructor.prototype.onDestroy = function () {
+    this.display.ref.style.cursor = "auto";
+  }
 
   constructor.prototype.resetState = function () {
     this.currentDelta = null;

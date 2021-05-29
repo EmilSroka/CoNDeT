@@ -6,16 +6,19 @@ window.CoNDeT.core.toTableProps = function (tablesJSON, deltaXY) {
     for (var j = 0; j < tableProps.rows.length; j++) {
       var row = tableProps.rows[j];
       var content = [];
-      for (var k = 0; k < tableProps.columns.conditions.length + tableProps.columns.decisions.length; k++) {
-        content.push("");
+      for (var k = 0; k < tableProps.columns.conditions.length; k++) {
+        content.push(["", "conditions", k]);
+      }
+      for (var k = 0; k < tableProps.columns.decisions.length; k++) {
+        content.push(["", "decisions", k]);
       }
       for (var k = 0; k < row.conditions.length; k++) {
-        content[row.conditions[k][0]] = tableProps.rows[j].conditions[k][1];
+        content[row.conditions[k][0]][0] = tableProps.rows[j].conditions[k][1];
       }
       for (var k = 0; k < row.decisions.length; k++) {
-        content[row.decisions[k][0] + tableProps.columns.conditions.length] = row.decisions[k][1];
+        content[row.decisions[k][0] + tableProps.columns.conditions.length][0] = row.decisions[k][1];
       }
-      rowsPrepared.push(content);
+      rowsPrepared.push({ content: content, id: row.row_id});
     }
     tablesList.push({
       id: tableProps.id,
@@ -110,3 +113,22 @@ window.CoNDeT.core.equals = function(value1, value2) {
   return true;
 };
 
+window.CoNDeT.core.clone = function (toClone) {
+  if (typeof toClone !== "object" || toClone === null) return toClone;
+  var result = (Array.isArray(toClone)) ? [] : {};
+  for (var attr in toClone) {
+    if (!toClone.hasOwnProperty(attr)) continue;
+    result[attr] = window.CoNDeT.core.clone(toClone[attr]);
+  }
+  return result;
+};
+
+window.CoNDeT.core.copy = function (toClone) {
+  if (typeof toClone !== "object" || toClone === null) return toClone;
+  var result = (Array.isArray(toClone)) ? [] : {};
+  for (var attr in toClone) {
+    if (!toClone.hasOwnProperty(attr)) continue;
+    result[attr] = toClone[attr];
+  }
+  return result;
+};

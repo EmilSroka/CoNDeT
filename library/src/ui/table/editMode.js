@@ -5,8 +5,8 @@ window.CoNDeT.ui.TableComponentEditMode = (function () {
 
   constructor.prototype.updateXY = function (event) {
     if (this.startPosition == null) return;
-    this.table.common.stateModifier.moveTable(
-      this.table.id,
+    this.component.common.stateModifier.moveTable(
+      this.component.id,
       {
         x: this.startPosition.x + event.clientX - this.currentDelta.x,
         y: this.startPosition.y + event.clientY - this.currentDelta.y
@@ -16,8 +16,8 @@ window.CoNDeT.ui.TableComponentEditMode = (function () {
 
   constructor.prototype.onMouseDown = function (event) {
     this.currentDelta = { x: event.clientX, y: event.clientY };
-    this.startPosition = { x: this.table.props.coordinates.x, y: this.table.props.coordinates.y }
-    this.table.ref.style.cursor = "grabbing";
+    this.startPosition = { x: this.component.props.coordinates.x, y: this.component.props.coordinates.y }
+    this.component.ref.style.cursor = "grabbing";
   };
   constructor.prototype.onMouseMove = function (event) {
     this.updateXY(event);
@@ -29,21 +29,24 @@ window.CoNDeT.ui.TableComponentEditMode = (function () {
   constructor.prototype.onMouseLeave = function (event) {
     this.updateXY(event);
     this.resetState();
-    this.table.ref.className = "condet-table condet-class-" + this.table.props.class;
+    this.component.ref.className = "condet-table condet-class-" + this.component.props.class;
   };
   constructor.prototype.onMouseEnter = function () {
-    this.table.ref.className = "condet-table condet-class-" + this.table.props.class + " condet-table-movable";
+    this.component.ref.className = "condet-table condet-class-" + this.component.props.class + " condet-table-movable";
   }
 
   constructor.prototype.onInit = function (table) {
-    this.table = table;
+    this.component = table;
     this.resetState();
+  };
+  constructor.prototype.onDestroy = function () {
+    this.component.ref.style.cursor = "auto";
   };
 
   constructor.prototype.resetState = function () {
     this.currentDelta = null;
     this.startPosition = null;
-    this.table.ref.style.cursor = "grab";
+    this.component.ref.style.cursor = "grab";
   }
 
   return constructor;
