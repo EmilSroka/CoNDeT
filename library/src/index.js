@@ -7,7 +7,6 @@ window.CoNDeT = function (configs) {
   var common = {
     stateModifier: new window.CoNDeT.data.StateModifier(state),
     mode: getMode(modeName),
-    addTable: addTable,
   };
 
   display.init(common, selector, { selector: selector, state: state.state });
@@ -35,7 +34,7 @@ window.CoNDeT = function (configs) {
       common.mode = getMode(modeName);
       common.mode.setToAllComponents(display);
     },
-    addTable: addTable,
+    addTable: window.CoNDeT.core.addTable(common),
   };
 
   function getMode(modeName) {
@@ -48,38 +47,6 @@ window.CoNDeT = function (configs) {
     }
 
     return new window.CoNDeT.ui.Mode({});
-  }
-
-  function addTable() {
-    if (common.mode === window.CoNDeT.ui.DisplayMode) return;
-
-    var tableObj = {};
-    var rowTab = [];
-    var id = prompt("Enter Table ID:");
-    var name = prompt("Enter Table Name:");
-    var classType = prompt("Enter Table Class:");
-
-    for (var i = 0; i < 3; i++) {
-      rowTab.push({
-        conditions: [],
-        decisions: [],
-        connections: [],
-        row_id: id + "_row_" + i,
-      });
-    }
-
-    tableObj.id = id;
-    tableObj.name = name;
-    tableObj.class = classType;
-    tableObj.coordinates = {};
-    tableObj.coordinates.x = 0;
-    tableObj.coordinates.y = 0;
-    tableObj.columns = {};
-    tableObj.columns.conditions = ["defaultCon", ""];
-    tableObj.columns.decisions = ["defaultDet", ""];
-    tableObj.rows = rowTab;
-
-    common.stateModifier.createTable(tableObj);
   }
 };
 

@@ -132,3 +132,39 @@ window.CoNDeT.core.copy = function (toClone) {
   }
   return result;
 };
+
+window.CoNDeT.core.addTable = function (common) {
+  var retAddTable = function () {
+    if (common.mode === window.CoNDeT.ui.DisplayMode) return;
+
+    var tableObj = {};
+    var rowTab = [];
+    var id = prompt("Enter Table ID:");
+    var name = prompt("Enter Table Name:");
+    var classType = prompt("Enter Table Class:");
+
+    for (var i = 0; i < 3; i++) {
+      rowTab.push({
+        conditions: [],
+        decisions: [],
+        connections: [],
+        row_id: id + "_row_" + i,
+      });
+    }
+
+    tableObj.id = id;
+    tableObj.name = name;
+    tableObj.class = classType;
+    tableObj.coordinates = {};
+    tableObj.coordinates.x = 0;
+    tableObj.coordinates.y = 0;
+    tableObj.columns = {};
+    tableObj.columns.conditions = ["defaultCon", ""];
+    tableObj.columns.decisions = ["defaultDet", ""];
+    tableObj.rows = rowTab;
+
+    common.stateModifier.createTable(tableObj);
+  };
+
+  return retAddTable;
+};

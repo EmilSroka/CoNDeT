@@ -192,7 +192,7 @@ window.CoNDeT.ui.DeleteTableBtnComponent = (function () {
   };
 
   constructor.prototype.onInit = function () {
-    this.ref.className = "corner-element";
+    this.ref.className = "delete-table-btn";
     this.ref.innerHTML = "❌";
     var self = this;
 
