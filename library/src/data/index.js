@@ -85,7 +85,7 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.removeTable = function (tableId) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       for (var i = 0; i < newState.length; i++) {
         if (tableId === newState[i].id) {
           newState.splice(i, 1);

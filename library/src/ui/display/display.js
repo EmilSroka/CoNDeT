@@ -23,6 +23,9 @@ window.CoNDeT.ui.DisplayComponent = (function () {
 
     var tablesProps = window.CoNDeT.core.toTableProps(this.props.state, this.state.deltaXY);
     for (var i = 0; i < this.props.state.length; i++) {
+      tablesProps[i].moveTable = function (id, x, y) {
+        self.common.stateModifier.moveTable(id, { x: x - self.state.deltaXY.x, y: y - self.state.deltaXY.y})
+      }
       children.push({ type: window.CoNDeT.ui.TableComponent, id: tablesProps[i].id, props: tablesProps[i] });
     }
     var size = this.getDimensions();

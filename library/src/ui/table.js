@@ -105,8 +105,8 @@ window.CoNDeT.ui.BodyComponent = (function () {
   }
   constructor.prototype.getChildren = function () {
     var children = [];
-    for (var i = 0; i < this.props.content.length; i++) {
-      children.push({ type: window.CoNDeT.ui.RowComponent, id: i, props: { content: this.props.content[i] } });
+    for (var i = 0; i < this.props.rows.length; i++) {
+      children.push({ type: window.CoNDeT.ui.RowComponent, id: i, props: { content: this.props.rows[i].content, id: this.props.rows[i].id , editCell: this.props.editCell }});
     }
     return children;
   }
@@ -177,29 +177,6 @@ window.CoNDeT.ui.CellComponent = (function () {
   constructor.prototype.onUpdate = function () {
     this.ref.innerHTML = this.props.value;
   }
-
-  return constructor;
-})();
-
-window.CoNDeT.ui.DeleteTableBtnComponent = (function () {
-  function constructor() {}
-
-  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
-  constructor.prototype.typeId = "DeleteTableBtnComponent";
-
-  constructor.prototype.createRef = function () {
-    return document.createElement("span");
-  };
-
-  constructor.prototype.onInit = function () {
-    this.ref.className = "delete-table-btn";
-    this.ref.innerHTML = "❌";
-    var self = this;
-
-    this.ref.addEventListener("mousedown", function () {
-      self.common.stateModifier.removeTable(self.props.id);
-    });
-  };
 
   return constructor;
 })();

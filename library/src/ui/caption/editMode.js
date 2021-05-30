@@ -9,6 +9,7 @@ window.CoNDeT.ui.CaptionEditMode = (function () {
 
   constructor.prototype.getChildren = function () {
     return [
+      { type: window.CoNDeT.ui.DeleteTableBtnComponent, id: "delete-table", props: { id: this.component.props.id }},
       { type: window.CoNDeT.ui.TextComponent, id: "name-edit", props: { isSmall: false, value: this.component.props.name }},
       { type: window.CoNDeT.ui.TextComponent, id: "class-edit", props: { isSmall: true, value: " (class: " + this.component.props.class }},
       { type: window.CoNDeT.ui.TextComponent, id: "id-edit", props: { isSmall: true, value: ", id: " + this.component.props.id + ")" }}
