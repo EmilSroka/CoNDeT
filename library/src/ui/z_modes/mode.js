@@ -3,7 +3,7 @@ window.CoNDeT.ui.BaseMode = {
     var strategy = this.getEntryStrategy(componentInstance);
     componentInstance.setStrategy(strategy);
 
-    for (var i=0; i<componentInstance.children; i++) {
+    for (var i=0; i<componentInstance.children.length; i++) {
       this.setToAllComponents(componentInstance.children[i]);
     }
   },
@@ -39,6 +39,7 @@ window.CoNDeT.ui.componentToEditModeEntryStrategy = {
   TextComponent: window.CoNDeT.ui.TextEditMode,
   InputComponent: window.CoNDeT.ui.InputEditMode,
   CaptionComponent: window.CoNDeT.ui.CaptionEditMode,
+  DeleteTableBtnComponent: window.CoNDeT.ui.DeleteTableBtnEditMode,
 }
 
 window.CoNDeT.ui.DisplayMode = new window.CoNDeT.ui.Mode(window.CoNDeT.ui.componentToDisplayModeEntryStrategy);

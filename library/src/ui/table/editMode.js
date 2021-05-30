@@ -5,13 +5,11 @@ window.CoNDeT.ui.TableComponentEditMode = (function () {
 
   constructor.prototype.updateXY = function (event) {
     if (this.startPosition == null) return;
-    this.component.common.stateModifier.moveTable(
+    this.component.props.moveTable(
       this.component.id,
-      {
-        x: this.startPosition.x + event.clientX - this.currentDelta.x,
-        y: this.startPosition.y + event.clientY - this.currentDelta.y
-      }
-    )
+      this.startPosition.x + event.clientX - this.currentDelta.x,
+      this.startPosition.y + event.clientY - this.currentDelta.y
+    );
   };
 
   constructor.prototype.onMouseDown = function (event) {

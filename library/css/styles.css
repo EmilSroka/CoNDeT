@@ -8,7 +8,7 @@ html {
 
 .condet-table input {
   min-width: 4rem;
-  width: 100%;
+  width: 48px;
   box-sizing: border-box;
   border: 2px solid var(--border);
   border-radius: 5px;
@@ -61,6 +61,19 @@ td {
 }
 
 .delete-table-btn {
-  float: left;
-  margin-top: -80px;
+  position: absolute;
+  left: -13px;
+  top: -13px;
+}
+
+/* classes */
+
+.condet-class-major.condet-table,
+.condet-class-major .condet-caption {
+  border-color: #b80f0a;
+}
+
+.condet-class-minor.condet-table,
+.condet-class-minor .condet-caption {
+  border-color: #0063b2;
 }
