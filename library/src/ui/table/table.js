@@ -43,7 +43,7 @@ window.CoNDeT.ui.TableComponent = (function () {
         props: { name: this.props.name, class: this.props.class, id: this.props.id,
           changeName: editName, changeClass: editClass, changeId: editId}},
       { type: window.CoNDeT.ui.HeadComponent, id: this.props.id + "_header",
-        props: { conditions: this.props.conditions, decisions: this.props.decisions, editCondition: editCondition, editDecision: editDecision }},
+        props: { id: this.props.id, conditions: this.props.conditions, decisions: this.props.decisions, editCondition: editCondition, editDecision: editDecision }},
       { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: { rows: this.props.rows, editCell: editCell }},
     ]
   }

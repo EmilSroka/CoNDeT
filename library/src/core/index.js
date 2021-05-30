@@ -16,15 +16,19 @@ window.CoNDeT.core.toTableProps = function (tablesJSON, deltaXY) {
         content[row.conditions[k][0]][0] = tableProps.rows[j].conditions[k][1];
       }
       for (var k = 0; k < row.decisions.length; k++) {
-        content[row.decisions[k][0] + tableProps.columns.conditions.length][0] = row.decisions[k][1];
+        content[row.decisions[k][0] + tableProps.columns.conditions.length][0] =
+          row.decisions[k][1];
       }
-      rowsPrepared.push({ content: content, id: row.row_id});
+      rowsPrepared.push({ content: content, id: row.row_id });
     }
     tablesList.push({
       id: tableProps.id,
       name: tableProps.name,
       class: tableProps.class,
-      coordinates: { x: tableProps.coordinates.x + deltaXY.x, y: tableProps.coordinates.y + deltaXY.y },
+      coordinates: {
+        x: tableProps.coordinates.x + deltaXY.x,
+        y: tableProps.coordinates.y + deltaXY.y,
+      },
       conditions: tableProps.columns.conditions,
       decisions: tableProps.columns.decisions,
       rows: rowsPrepared,
@@ -36,38 +40,65 @@ window.CoNDeT.core.toTableProps = function (tablesJSON, deltaXY) {
 
 window.CoNDeT.core.toConnectionsProps = function (display, tablesJSON) {
   var connections = [];
-  for (var i=0; i<tablesJSON.length; i++) {
+  for (var i = 0; i < tablesJSON.length; i++) {
     var table = tablesJSON[i];
-    for (var j=0; j<table.rows.length; j++) {
+    for (var j = 0; j < table.rows.length; j++) {
       var row = table.rows[j];
-      for (var k=0; k<row.connections.length; k++) {
+      for (var k = 0; k < row.connections.length; k++) {
         var fromTableId = table.id;
-        var fromTable = display.findChild(window.CoNDeT.ui.TableComponent, fromTableId);
+        var fromTable = display.findChild(
+          window.CoNDeT.ui.TableComponent,
+          fromTableId
+        );
         if (fromTable == null) continue;
         var starPoint = fromTable.getRowXY(j);
 
         var toTableId = row.connections[k];
-        var toTable = display.findChild(window.CoNDeT.ui.TableComponent, toTableId);
+        var toTable = display.findChild(
+          window.CoNDeT.ui.TableComponent,
+          toTableId
+        );
         if (toTable == null) continue;
         var endPoint = toTable.entryPoint();
 
-        connections.push({ id: table.id + "-" + row.row_id + "_" + toTableId, path: window.CoNDeT.core.getLinePoints(starPoint, endPoint) })
+        connections.push({
+          id: table.id + "-" + row.row_id + "_" + toTableId,
+          path: window.CoNDeT.core.getLinePoints(starPoint, endPoint),
+        });
       }
     }
   }
   return connections;
 };
 
-window.CoNDeT.core.colorHash = function(inputString) {
+window.CoNDeT.core.colorHash = function (inputString) {
   var sum = 0;
 
   for (var i in inputString) {
-      sum += inputString.charCodeAt(i);
+    sum += inputString.charCodeAt(i);
   }
 
-  var r = ~~(('0.' + Math.sin(sum + 1).toString().substr(6)) * 210);
-  var g = ~~(('0.' + Math.sin(sum + 2).toString().substr(6)) * 210);
-  var b = ~~(('0.' + Math.sin(sum + 3).toString().substr(6)) * 210);
+  var r = ~~(
+    ("0." +
+      Math.sin(sum + 1)
+        .toString()
+        .substr(6)) *
+    210
+  );
+  var g = ~~(
+    ("0." +
+      Math.sin(sum + 2)
+        .toString()
+        .substr(6)) *
+    210
+  );
+  var b = ~~(
+    ("0." +
+      Math.sin(sum + 3)
+        .toString()
+        .substr(6)) *
+    210
+  );
 
   var hex = "#";
 
@@ -78,23 +109,25 @@ window.CoNDeT.core.colorHash = function(inputString) {
   return hex;
 };
 
-window.CoNDeT.core.getLinePoints = function(startPoint, endPoint) {
+window.CoNDeT.core.getLinePoints = function (startPoint, endPoint) {
   return [
     { x: startPoint.x, y: startPoint.y },
     { x: startPoint.x + 20, y: startPoint.y },
     { x: startPoint.x + 20, y: endPoint.y - 20 },
     { x: endPoint.x, y: endPoint.y - 20 },
-    { x: endPoint.x, y: endPoint.y }
-  ]
+    { x: endPoint.x, y: endPoint.y },
+  ];
 };
 
-window.CoNDeT.core.equals = function(value1, value2) {
-  if (typeof value1 !== "object" || typeof value2 !== "object") return value1 === value2;
+window.CoNDeT.core.equals = function (value1, value2) {
+  if (typeof value1 !== "object" || typeof value2 !== "object")
+    return value1 === value2;
 
   var checkedKeys = [];
 
   for (var key in value1) {
-    var logicalSumOfOwnProps = Number(value1.hasOwnProperty(key)) + Number(value2.hasOwnProperty(key))
+    var logicalSumOfOwnProps =
+      Number(value1.hasOwnProperty(key)) + Number(value2.hasOwnProperty(key));
     if (logicalSumOfOwnProps === 0) continue;
     if (logicalSumOfOwnProps === 1) return false;
     if (!window.CoNDeT.core.equals(value1[key], value2[key])) return false;
@@ -104,7 +137,8 @@ window.CoNDeT.core.equals = function(value1, value2) {
 
   for (var key in value2) {
     if (checkedKeys.indexOf(key) != -1) continue;
-    var logicalSumOfOwnProps = Number(value1.hasOwnProperty(key)) + Number(value2.hasOwnProperty(key))
+    var logicalSumOfOwnProps =
+      Number(value1.hasOwnProperty(key)) + Number(value2.hasOwnProperty(key));
     if (logicalSumOfOwnProps === 0) continue;
     if (logicalSumOfOwnProps === 1) return false;
     if (!window.CoNDeT.core.equals(value1[key], value2[key])) return false;
@@ -115,7 +149,7 @@ window.CoNDeT.core.equals = function(value1, value2) {
 
 window.CoNDeT.core.clone = function (toClone) {
   if (typeof toClone !== "object" || toClone === null) return toClone;
-  var result = (Array.isArray(toClone)) ? [] : {};
+  var result = Array.isArray(toClone) ? [] : {};
   for (var attr in toClone) {
     if (!toClone.hasOwnProperty(attr)) continue;
     result[attr] = window.CoNDeT.core.clone(toClone[attr]);
@@ -125,7 +159,7 @@ window.CoNDeT.core.clone = function (toClone) {
 
 window.CoNDeT.core.copy = function (toClone) {
   if (typeof toClone !== "object" || toClone === null) return toClone;
-  var result = (Array.isArray(toClone)) ? [] : {};
+  var result = Array.isArray(toClone) ? [] : {};
   for (var attr in toClone) {
     if (!toClone.hasOwnProperty(attr)) continue;
     result[attr] = toClone[attr];
@@ -167,4 +201,26 @@ window.CoNDeT.core.addTable = function (common) {
   };
 
   return retAddTable;
+};
+
+window.CoNDeT.core.addColumn = function (self) {
+  var type = prompt("Add 'con' or 'det'?");
+  if (type == "con") {
+    var value = prompt("Add condition column:");
+    self.common.stateModifier.addConditionColumn(self.props.id, value);
+  } else if (type == "det") {
+    var value = prompt("Add decision column:");
+    self.common.stateModifier.addDecisionColumn(self.props.id, value);
+  }
+};
+
+window.CoNDeT.core.deleteColumn = function (self) {
+  var type = prompt("Delete 'con' or 'det'?");
+  if (type == "con") {
+    var value = prompt("Enter condition column id:");
+    self.common.stateModifier.removeConditionColumn(self.props.id, value);
+  } else if (type == "det") {
+    var value = prompt("Enter decision column id:");
+    self.common.stateModifier.removeDecisionColumn(self.props.id, value);
+  }
 };

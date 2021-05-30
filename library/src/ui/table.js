@@ -14,31 +14,11 @@ window.CoNDeT.ui.NameComponent = (function () {
   };
   constructor.prototype.onInit = function () {
     this.ref.className = "condet-caption";
-  }
-  constructor.prototype.onUpdate = function () {
-    this.ref.innerHTML = this.props.name + " <small>(" + this.props.class + ")</small>";
   };
-
-  return constructor;
-})();
-
-/*
- * props:
- * * conditions -> list of conditions (strings)
- * * decisions -> list of decisions (strings)
- */
-window.CoNDeT.ui.HeadComponent = (function () {
-  function constructor() {}
-
-  constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
-  constructor.prototype.typeId = "HeadComponent";
-
-  constructor.prototype.createRef = function () {
-    return document.createElement("thead");
-  }
-  constructor.prototype.getChildren = function () {
-    return [{ type: window.CoNDeT.ui.HeadTrComponent, id: 'tr', props: this.props }];
-  }
+  constructor.prototype.onUpdate = function () {
+    this.ref.innerHTML =
+      this.props.name + " <small>(" + this.props.class + ")</small>";
+  };
 
   return constructor;
 })();
@@ -56,30 +36,46 @@ window.CoNDeT.ui.HeadTrComponent = (function () {
 
   constructor.prototype.createRef = function () {
     return document.createElement("tr");
-  }
+  };
   constructor.prototype.getChildren = function () {
     var self = this;
     var children = [];
 
-    for (var i=0; i<this.props.conditions.length; i++) {
+    for (var i = 0; i < this.props.conditions.length; i++) {
       var editCondition = (function () {
         var j = i;
         return function (value) {
           self.props.editCondition(j, value);
-        }
+        };
       })();
-      children.push({ type: window.CoNDeT.ui.CellComponent, id: children.length,
-        props: { value: this.props.conditions[i], className: "condition", type: "th", changeValue: editCondition } })
+      children.push({
+        type: window.CoNDeT.ui.CellComponent,
+        id: children.length,
+        props: {
+          value: this.props.conditions[i],
+          className: "condition",
+          type: "th",
+          changeValue: editCondition,
+        },
+      });
     }
-    for (var i=0; i<this.props.decisions.length; i++) {
+    for (var i = 0; i < this.props.decisions.length; i++) {
       var editDecision = (function () {
         var j = i;
         return function (value) {
           self.props.editDecision(j, value);
-        }
+        };
       })();
-      children.push({ type: window.CoNDeT.ui.CellComponent, id: children.length,
-        props: { value: this.props.decisions[i], className: "decision", type: "th", changeValue: editDecision } })
+      children.push({
+        type: window.CoNDeT.ui.CellComponent,
+        id: children.length,
+        props: {
+          value: this.props.decisions[i],
+          className: "decision",
+          type: "th",
+          changeValue: editDecision,
+        },
+      });
     }
     return children;
   };
@@ -102,14 +98,22 @@ window.CoNDeT.ui.BodyComponent = (function () {
 
   constructor.prototype.createRef = function () {
     return document.createElement("tbody");
-  }
+  };
   constructor.prototype.getChildren = function () {
     var children = [];
     for (var i = 0; i < this.props.rows.length; i++) {
-      children.push({ type: window.CoNDeT.ui.RowComponent, id: i, props: { content: this.props.rows[i].content, id: this.props.rows[i].id , editCell: this.props.editCell }});
+      children.push({
+        type: window.CoNDeT.ui.RowComponent,
+        id: i,
+        props: {
+          content: this.props.rows[i].content,
+          id: this.props.rows[i].id,
+          editCell: this.props.editCell,
+        },
+      });
     }
     return children;
-  }
+  };
 
   return constructor;
 })();
@@ -127,7 +131,7 @@ window.CoNDeT.ui.RowComponent = (function () {
 
   constructor.prototype.createRef = function () {
     return document.createElement("tr");
-  }
+  };
   constructor.prototype.getChildren = function () {
     var self = this;
 
@@ -136,20 +140,35 @@ window.CoNDeT.ui.RowComponent = (function () {
       var changeValue = (function () {
         var j = i;
         return function (value) {
-          self.props.editCell(self.props.id, self.props.content[j][1], self.props.content[j][2], value)
-        }
+          self.props.editCell(
+            self.props.id,
+            self.props.content[j][1],
+            self.props.content[j][2],
+            value
+          );
+        };
       })();
 
-      children.push({ type: window.CoNDeT.ui.CellComponent, id: i,
-        props: { value: this.props.content[i][0], type: "td", changeValue: changeValue } });
+      children.push({
+        type: window.CoNDeT.ui.CellComponent,
+        id: i,
+        props: {
+          value: this.props.content[i][0],
+          type: "td",
+          changeValue: changeValue,
+        },
+      });
     }
     return children;
-  }
+  };
 
   constructor.prototype.getConnectionXY = function () {
     var position = this.getPosition();
     var dimensions = this.getDimensions();
-    return { x: position.x + dimensions.width, y: position.y + dimensions.height / 2 };
+    return {
+      x: position.x + dimensions.width,
+      y: position.y + dimensions.height / 2,
+    };
   };
 
   return constructor;
@@ -169,14 +188,14 @@ window.CoNDeT.ui.CellComponent = (function () {
 
   constructor.prototype.createRef = function () {
     return document.createElement(this.props.type);
-  }
+  };
   constructor.prototype.onInit = function () {
     if (!this.props.className) return;
     this.ref.className = this.props.className;
-  }
+  };
   constructor.prototype.onUpdate = function () {
     this.ref.innerHTML = this.props.value;
-  }
+  };
 
   return constructor;
 })();
