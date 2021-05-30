@@ -3,15 +3,17 @@ window.CoNDeT.ui.BaseMode = {
     var strategy = this.getEntryStrategy(componentInstance);
     componentInstance.setStrategy(strategy);
 
-    for (var i=0; i<componentInstance.children.length; i++) {
+    for (var i = 0; i < componentInstance.children.length; i++) {
       this.setToAllComponents(componentInstance.children[i]);
     }
   },
   getEntryStrategy: function (componentInstance) {
-    var Mode = this.mapper[Object.getPrototypeOf(componentInstance).typeId] || window.CoNDeT.ui.BaseStrategy;
+    var Mode =
+      this.mapper[Object.getPrototypeOf(componentInstance).typeId] ||
+      window.CoNDeT.ui.BaseStrategy;
     return new Mode();
-  }
-}
+  },
+};
 
 window.CoNDeT.ui.Mode = (function () {
   function constructor(mapper) {
@@ -30,7 +32,10 @@ window.CoNDeT.ui.componentToDisplayModeEntryStrategy = {
   TextComponent: window.CoNDeT.ui.TextDisplayMode,
   InputComponent: window.CoNDeT.ui.InputDisplayMode,
   CaptionComponent: window.CoNDeT.ui.CaptionDisplayMode,
-}
+  HeadComponent: window.CoNDeT.ui.HeadDisplayMode,
+  DeleteColumnComponent: window.CoNDeT.ui.DeleteColBtnDisplayMode,
+  AddColumnComponent: window.CoNDeT.ui.AddColBtnDisplayMode,
+};
 
 window.CoNDeT.ui.componentToEditModeEntryStrategy = {
   DisplayComponent: window.CoNDeT.ui.DisplayEditMode,
@@ -40,8 +45,15 @@ window.CoNDeT.ui.componentToEditModeEntryStrategy = {
   InputComponent: window.CoNDeT.ui.InputEditMode,
   CaptionComponent: window.CoNDeT.ui.CaptionEditMode,
   DeleteTableBtnComponent: window.CoNDeT.ui.DeleteTableBtnEditMode,
-}
+  HeadComponent: window.CoNDeT.ui.HeadEditMode,
+  DeleteColumnComponent: window.CoNDeT.ui.DeleteColBtnEditMode,
+  AddColumnComponent: window.CoNDeT.ui.AddColBtnEditMode,
+};
 
-window.CoNDeT.ui.DisplayMode = new window.CoNDeT.ui.Mode(window.CoNDeT.ui.componentToDisplayModeEntryStrategy);
+window.CoNDeT.ui.DisplayMode = new window.CoNDeT.ui.Mode(
+  window.CoNDeT.ui.componentToDisplayModeEntryStrategy
+);
 
-window.CoNDeT.ui.EditMode = new window.CoNDeT.ui.Mode(window.CoNDeT.ui.componentToEditModeEntryStrategy);
+window.CoNDeT.ui.EditMode = new window.CoNDeT.ui.Mode(
+  window.CoNDeT.ui.componentToEditModeEntryStrategy
+);

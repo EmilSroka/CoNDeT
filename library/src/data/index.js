@@ -111,24 +111,30 @@ window.CoNDeT.data = {
       var editTable = getTableWithId(newState, tableId);
       editTable[prop] = value;
       this.stateManager.setState(newState);
-    }
+    };
 
     constructor.prototype.editCondition = function (tableId, idx, value) {
-      this.editHeader(tableId, "conditions", idx, value)
+      this.editHeader(tableId, "conditions", idx, value);
     };
 
     constructor.prototype.editDecision = function (tableId, idx, value) {
-      this.editHeader(tableId, "decisions", idx, value)
+      this.editHeader(tableId, "decisions", idx, value);
     };
 
-    constructor.prototype.editHeader = function(tableId, type, idx, value) {
+    constructor.prototype.editHeader = function (tableId, type, idx, value) {
       var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       editTable.columns[type][idx] = value;
       this.stateManager.setState(newState);
-    }
+    };
 
-    constructor.prototype.editCell = function (tableId, rowId, type, index, value) {
+    constructor.prototype.editCell = function (
+      tableId,
+      rowId,
+      type,
+      index,
+      value
+    ) {
       var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -137,7 +143,7 @@ window.CoNDeT.data = {
           if (editTable.rows[i][type][j][0] !== index) continue;
           editTable.rows[i][type].splice(j, 1);
         }
-        editTable.rows[i][type].push([index, value])
+        editTable.rows[i][type].push([index, value]);
       }
       this.stateManager.setState(newState);
     };
@@ -196,7 +202,7 @@ window.CoNDeT.data = {
         editTable.columns.decisions,
         editTable.rows,
         "decisions",
-        column.decision
+        column
       );
 
       this.stateManager.setState(newState);
@@ -246,7 +252,11 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    constructor.prototype.addConnection = function (tableId, rowId, secondTableId) {
+    constructor.prototype.addConnection = function (
+      tableId,
+      rowId,
+      secondTableId
+    ) {
       var newState = clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -257,7 +267,11 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    constructor.prototype.removeConnection = function (tableId, rowId, secondTableId) {
+    constructor.prototype.removeConnection = function (
+      tableId,
+      rowId,
+      secondTableId
+    ) {
       var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
@@ -275,7 +289,9 @@ window.CoNDeT.data = {
         columns.splice(id, 1);
         for (var i = 0; i < rows.length; i++) {
           for (var j = 0; j < rows[i][type].length; j++) {
-            if (rows[i][type][j][0] == id) {
+            if (rows[i][type][j][0] > id) {
+              rows[i][type][j][0] -= 1;
+            } else if (rows[i][type][j][0] == id) {
               rows[i][type].splice(j, 1);
             }
           }
