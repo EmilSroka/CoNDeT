@@ -5,7 +5,6 @@ window.CoNDeT.ui.AddColBtnEditMode = (function () {
 
   constructor.prototype.onMouseDown = function (event) {
     event.stopPropagation();
-    console.log(this.component);
     window.CoNDeT.core.addColumn(this.component);
   };
 
