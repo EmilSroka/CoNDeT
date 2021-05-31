@@ -10,6 +10,10 @@ window.CoNDeT.ui.DeleteColumnComponent = (function () {
 
   constructor.prototype.onInit = function () {
     this.ref.className = "del-col-element";
+    this.ref.setAttribute("role", "button");
+    this.ref.setAttribute("aria-label", "Delete column");
+    this.ref.setAttribute("tabindex", 0);
+
     this.ref.innerHTML = "❌";
   };
 

@@ -10,6 +10,10 @@ window.CoNDeT.ui.AddColumnComponent = (function () {
 
   constructor.prototype.onInit = function () {
     this.ref.className = "add-col-element";
+    this.ref.setAttribute("role", "button");
+    this.ref.setAttribute("aria-label", "Add column");
+    this.ref.setAttribute("tabindex", 0);
+
     this.ref.innerHTML = "❎";
   };
 
