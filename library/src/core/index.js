@@ -64,6 +64,14 @@ window.CoNDeT.core.toConnectionsProps = function (display, tablesJSON) {
         connections.push({
           id: table.id + "-" + row.row_id + "_" + toTableId,
           path: window.CoNDeT.core.getLinePoints(starPoint, endPoint),
+          delete: (function () {
+            var id1 = fromTableId;
+            var r = row;
+            var id2 = toTableId;
+            return function () {
+              display.common.stateModifier.removeConnection(id1, r.row_id, id2);
+            }
+          })()
         });
       }
     }

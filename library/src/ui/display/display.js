@@ -29,9 +29,8 @@ window.CoNDeT.ui.DisplayComponent = (function () {
       children.push({ type: window.CoNDeT.ui.TableComponent, id: tablesProps[i].id, props: tablesProps[i] });
     }
     var size = this.getDimensions();
-    children.push({ type: window.CoNDeT.ui.ConnectionsComponent, id: "connections", props: { getConnections: function () {
-      return window.CoNDeT.core.toConnectionsProps(self, self.props.state);
-    }, width: size.width, height: size.height }})
+    children.push({ type: window.CoNDeT.ui.ConnectionsComponent, id: "connections",
+      props: { getConnections: function () { return window.CoNDeT.core.toConnectionsProps(self, self.props.state) }, width: size.width, height: size.height }});
 
     return children;
   }

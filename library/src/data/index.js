@@ -95,7 +95,25 @@ window.CoNDeT.data = {
     };
 
     constructor.prototype.editId = function (tableId, id) {
-      this.editProp(tableId, "id", id);
+      var newState = window.CoNDeT.core.clone(this.state);
+      var editTable = getTableWithId(newState, tableId);
+      var previousId = editTable.id;
+
+      editTable.id = id;
+
+      for (var i = 0; i<newState.length; i++) {
+        var table = newState[i];
+        for (var j = 0; j<table.rows.length; j++) {
+          var row = table.rows[j];
+          for (var k = 0; k<row.connections.length; k++) {
+            if (row.connections[k] === previousId) {
+              row.connections[k] = id;
+            }
+          }
+        }
+      }
+
+      this.stateManager.setState(newState);
     };
 
     constructor.prototype.editName = function (tableId, name) {
@@ -275,7 +293,7 @@ window.CoNDeT.data = {
       var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i].id !== rowId) continue;
+        if (editTable.rows[i].row_id !== rowId) continue;
         for (var j = 0; j < editTable.rows[i].connections.length; j++) {
           if (editTable.rows[i].connections[j] !== secondTableId) continue;
           editTable.rows[i].connections.splice(j, 1);
