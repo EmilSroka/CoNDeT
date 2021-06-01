@@ -80,14 +80,36 @@ td {
   margin-left: -50px;
 }
 
+path {
+  stroke-linejoin: round;
+  stroke-width: 2;
+  stroke: black;
+  fill: none;
+}
+
+path:hover {
+  stroke-width: 3;
+  stroke: #B80F0A;
+}
+
+path:hover + path {
+  stroke: #B80F0A;
+  fill: #B80F0A;
+}
+
+path + path {
+  stroke: black;
+  fill: black;
+}
+
 /* classes */
 
 .condet-class-major.condet-table,
-.condet-class-major .condet-caption {
-  border-color: #b80f0a;
+.condet-class-major .condet-caption{
+  border-color: #B80F0A;
 }
 
 .condet-class-minor.condet-table,
-.condet-class-minor .condet-caption {
-  border-color: #0063b2;
+.condet-class-minor .condet-caption{
+  border-color: #0063B2;
 }

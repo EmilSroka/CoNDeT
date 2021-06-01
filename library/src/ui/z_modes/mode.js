@@ -35,6 +35,7 @@ window.CoNDeT.ui.componentToDisplayModeEntryStrategy = {
   HeadComponent: window.CoNDeT.ui.HeadDisplayMode,
   DeleteColumnComponent: window.CoNDeT.ui.DeleteColBtnDisplayMode,
   AddColumnComponent: window.CoNDeT.ui.AddColBtnDisplayMode,
+  ConnectionComponent: window.CoNDeT.ui.ConnectionDisplayMode,
 };
 
 window.CoNDeT.ui.componentToEditModeEntryStrategy = {
@@ -48,6 +49,7 @@ window.CoNDeT.ui.componentToEditModeEntryStrategy = {
   HeadComponent: window.CoNDeT.ui.HeadEditMode,
   DeleteColumnComponent: window.CoNDeT.ui.DeleteColBtnEditMode,
   AddColumnComponent: window.CoNDeT.ui.AddColBtnEditMode,
+  ConnectionComponent: window.CoNDeT.ui.ConnectionEditMode,
 };
 
 window.CoNDeT.ui.DisplayMode = new window.CoNDeT.ui.Mode(
