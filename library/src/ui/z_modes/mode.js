@@ -33,9 +33,11 @@ window.CoNDeT.ui.componentToDisplayModeEntryStrategy = {
   InputComponent: window.CoNDeT.ui.InputDisplayMode,
   CaptionComponent: window.CoNDeT.ui.CaptionDisplayMode,
   HeadComponent: window.CoNDeT.ui.HeadDisplayMode,
-  DeleteColumnComponent: window.CoNDeT.ui.DeleteColBtnDisplayMode,
-  AddColumnComponent: window.CoNDeT.ui.AddColBtnDisplayMode,
   ConnectionComponent: window.CoNDeT.ui.ConnectionDisplayMode,
+  RowComponent: window.CoNDeT.ui.RowDisplayMode,
+  HeadTrComponent: window.CoNDeT.ui.HeadTrDisplayMode,
+  IconBtnComponent: window.CoNDeT.ui.IconBtnDisplayMode,
+  THComponent: window.CoNDeT.ui.THDisplayMode,
 };
 
 window.CoNDeT.ui.componentToEditModeEntryStrategy = {
@@ -45,11 +47,12 @@ window.CoNDeT.ui.componentToEditModeEntryStrategy = {
   TextComponent: window.CoNDeT.ui.TextEditMode,
   InputComponent: window.CoNDeT.ui.InputEditMode,
   CaptionComponent: window.CoNDeT.ui.CaptionEditMode,
-  DeleteTableBtnComponent: window.CoNDeT.ui.DeleteTableBtnEditMode,
   HeadComponent: window.CoNDeT.ui.HeadEditMode,
-  DeleteColumnComponent: window.CoNDeT.ui.DeleteColBtnEditMode,
-  AddColumnComponent: window.CoNDeT.ui.AddColBtnEditMode,
   ConnectionComponent: window.CoNDeT.ui.ConnectionEditMode,
+  RowComponent: window.CoNDeT.ui.RowEditMode,
+  HeadTrComponent: window.CoNDeT.ui.HeadTrEditMode,
+  IconBtnComponent: window.CoNDeT.ui.IconBtnEditMode,
+  THComponent: window.CoNDeT.ui.THEditMode,
 };
 
 window.CoNDeT.ui.DisplayMode = new window.CoNDeT.ui.Mode(

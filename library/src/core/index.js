@@ -7,10 +7,10 @@ window.CoNDeT.core.toTableProps = function (tablesJSON, deltaXY) {
       var row = tableProps.rows[j];
       var content = [];
       for (var k = 0; k < tableProps.columns.conditions.length; k++) {
-        content.push(["", "conditions", k]);
+        content.push(["", "conditions", k, tableProps.columns.conditions[k]]);
       }
       for (var k = 0; k < tableProps.columns.decisions.length; k++) {
-        content.push(["", "decisions", k]);
+        content.push(["", "decisions", k, tableProps.columns.decisions[k]]);
       }
       for (var k = 0; k < row.conditions.length; k++) {
         content[row.conditions[k][0]][0] = tableProps.rows[j].conditions[k][1];
@@ -230,5 +230,12 @@ window.CoNDeT.core.deleteColumn = function (self) {
   } else if (type == "det") {
     var value = prompt("Enter decision column id:");
     self.common.stateModifier.removeDecisionColumn(self.props.id, value);
+  }
+};
+
+window.CoNDeT.core.getIcons = function (custom) {
+  return {
+    delete: custom.delete || "❌",
+    add: custom.add || "➕",
   }
 };

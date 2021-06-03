@@ -4,18 +4,18 @@
  * * [optional] className
  * * value
  * * changeValue
+ * * disabled -> flag
  */
-window.CoNDeT.ui.CellComponent = (function () {
+window.CoNDeT.ui.THComponent = (function () {
   function constructor() {}
 
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
-  constructor.prototype.typeId = "CellComponent";
+  constructor.prototype.typeId = "THComponent";
 
   constructor.prototype.createRef = function () {
-    return document.createElement(this.props.type);
+    return document.createElement("th");
   }
   constructor.prototype.onInit = function () {
-    if (!this.props.className) return;
     this.ref.className = this.props.className;
   }
 

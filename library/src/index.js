@@ -1,12 +1,14 @@
 window.CoNDeT = function (configs) {
   var selector = configs.selector || ".condet-display";
   var modeName = configs.entryMode || "display";
+  var icons = configs.icons || {};
 
   var state = new window.CoNDeT.data.State();
   var display = new window.CoNDeT.ui.DisplayComponent();
   var common = {
     stateModifier: new window.CoNDeT.data.StateModifier(state),
     mode: getMode(modeName),
+    icons: window.CoNDeT.core.getIcons(icons),
   };
 
   display.init(common, selector, { selector: selector, state: state.state });

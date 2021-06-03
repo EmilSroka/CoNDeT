@@ -2,15 +2,16 @@
  * props:
  * * conditions -> list of conditions (strings)
  * * decisions -> list of decisions (strings)
+ * * tableId
  */
-window.CoNDeT.ui.HeadComponent = (function () {
+window.CoNDeT.ui.HeadTrComponent = (function () {
   function constructor() {}
 
   constructor.prototype = Object.create(window.CoNDeT.ui.BaseComponent);
-  constructor.prototype.typeId = "HeadComponent";
+  constructor.prototype.typeId = "HeadTrComponent";
 
   constructor.prototype.createRef = function () {
-    return document.createElement("thead");
+    return document.createElement("tr");
   };
 
   return constructor;
