@@ -18,8 +18,7 @@ window.CoNDeT.ui.BaseComponent = {
     this.ref = this.createRef();
     this.onInit();
     this.setStrategy(common.mode.getEntryStrategy(this));
-    this.updateChildren(this.getChildren());
-    this.onUpdate();
+    this.render();
     this.setupEventListeners();
   },
   createRef: function () { throw new Error("Component must implement createRef method"); },

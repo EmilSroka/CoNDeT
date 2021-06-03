@@ -8,8 +8,16 @@ window.CoNDeT.ui.CaptionEditMode = (function () {
   }
 
   constructor.prototype.getChildren = function () {
+    var self = this;
+
+    var deleteTable = function () {
+      self.component.common.stateModifier.removeTable(self.component.props.id);
+    }
+
     return [
-      { type: window.CoNDeT.ui.DeleteTableBtnComponent, id: "delete-table", props: { id: this.component.props.id }},
+      { type: window.CoNDeT.ui.IconBtnComponent, id: "delete-table", props: {
+        action: deleteTable, icon: this.component.common.icons.delete, className: "delete-table-btn", label: "Delete table"
+      }},
       { type: window.CoNDeT.ui.TextComponent, id: "name-edit", props: { isSmall: false, value: this.component.props.name }},
       { type: window.CoNDeT.ui.TextComponent, id: "class-edit", props: { isSmall: true, value: " (class: " + this.component.props.class }},
       { type: window.CoNDeT.ui.TextComponent, id: "id-edit", props: { isSmall: true, value: ", id: " + this.component.props.id + ")" }}
