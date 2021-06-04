@@ -7,6 +7,12 @@ window.CoNDeT.ui.HeadTrEditMode = (function () {
     var self = this;
     var children = [];
 
+    children.push({
+      type: window.CoNDeT.ui.TextComponent,
+      id: "empty",
+      props: { isSmall: false, value: "" },
+    });
+
     for (var i = 0; i < this.component.props.conditions.length; i++) {
       var editCondition = (function () {
         var j = i;
@@ -82,4 +88,3 @@ window.CoNDeT.ui.HeadTrEditMode = (function () {
 
   return constructor;
 })();
-
