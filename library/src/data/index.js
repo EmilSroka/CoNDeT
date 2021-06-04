@@ -178,8 +178,8 @@ window.CoNDeT.data = {
       var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i].id !== rowId) continue;
-        editTable.rows.splice(rowId, 1);
+        if (editTable.rows[i].row_id !== rowId) continue;
+        editTable.rows.splice(i, 1);
       }
       this.stateManager.setState(newState);
     };

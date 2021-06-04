@@ -47,7 +47,7 @@ window.CoNDeT.ui.TableComponent = (function () {
         editCondition: editCondition, editDecision: editDecision
       }},
       { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: {
-        rows: this.props.rows, editCell: editCell, numberOfConditions: this.props.conditions.length
+        tableID: this.props.id, rows: this.props.rows, editCell: editCell, numberOfConditions: this.props.conditions.length
       }},
     ]
   }
