@@ -37,6 +37,12 @@ window.CoNDeT.ui.TableComponent = (function () {
     var editClass = function (value) {
       self.common.stateModifier.editClass(self.props.id, value);
     }
+    var addRow = function () {
+      self.common.stateModifier.addEmptyRow(self.props.id);
+    }
+    var deleteRow = function (rowId) {
+      self.common.stateModifier.removeRow(self.props.id, rowId);
+    }
 
     return [
       { type: window.CoNDeT.ui.CaptionComponent, id: this.props.id + "_caption",
@@ -47,7 +53,8 @@ window.CoNDeT.ui.TableComponent = (function () {
         editCondition: editCondition, editDecision: editDecision
       }},
       { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: {
-        tableID: this.props.id, rows: this.props.rows, editCell: editCell, numberOfConditions: this.props.conditions.length
+          rows: this.props.rows, numberOfConditions: this.props.conditions.length,
+          editCell: editCell, addRow: addRow, deleteRow: deleteRow,
       }},
     ]
   }

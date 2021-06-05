@@ -38,6 +38,7 @@ window.CoNDeT.ui.componentToDisplayModeEntryStrategy = {
   HeadTrComponent: window.CoNDeT.ui.HeadTrDisplayMode,
   IconBtnComponent: window.CoNDeT.ui.IconBtnDisplayMode,
   THComponent: window.CoNDeT.ui.THDisplayMode,
+  BodyComponent: window.CoNDeT.ui.BodyComponentDisplayMode,
 };
 
 window.CoNDeT.ui.componentToEditModeEntryStrategy = {
@@ -53,6 +54,7 @@ window.CoNDeT.ui.componentToEditModeEntryStrategy = {
   HeadTrComponent: window.CoNDeT.ui.HeadTrEditMode,
   IconBtnComponent: window.CoNDeT.ui.IconBtnEditMode,
   THComponent: window.CoNDeT.ui.THEditMode,
+  BodyComponent: window.CoNDeT.ui.BodyComponentEditMode,
 };
 
 window.CoNDeT.ui.DisplayMode = new window.CoNDeT.ui.Mode(
