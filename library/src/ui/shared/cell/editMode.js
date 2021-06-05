@@ -3,7 +3,8 @@ window.CoNDeT.ui.CellEditMode = (function () {
 
   constructor.prototype = Object.create(window.CoNDeT.ui.StrategyCommon);
 
-  constructor.prototype.onDbClick = function () {
+  constructor.prototype.onDbClick = function (event) {
+    event.stopPropagation();
     if (this.component.props.disabled) return;
     this.component.setStrategy(new window.CoNDeT.ui.CellEditState())
   }

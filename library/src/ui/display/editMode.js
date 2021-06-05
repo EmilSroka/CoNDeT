@@ -3,6 +3,13 @@ window.CoNDeT.ui.DisplayEditMode = (function () {
 
   constructor.prototype = Object.create(window.CoNDeT.ui.StrategyCommon);
 
+  constructor.prototype.onDbClick = function (event) {
+    this.component.common.addTable({
+      x: event.clientX + this.component.state.deltaXY.x,
+      y: event.clientY + this.component.state.deltaXY.y,
+    });
+  }
+
   constructor.prototype.getChildren = function () {
     var self = this;
     var children = [];
