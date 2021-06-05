@@ -5,8 +5,8 @@ window.CoNDeT.ui.DisplayEditMode = (function () {
 
   constructor.prototype.onDbClick = function (event) {
     this.component.common.addTable({
-      x: event.clientX + this.component.state.deltaXY.x,
-      y: event.clientY + this.component.state.deltaXY.y,
+      x: event.offsetX + this.component.state.deltaXY.x,
+      y: event.offsetY + this.component.state.deltaXY.y,
     });
   }
 
