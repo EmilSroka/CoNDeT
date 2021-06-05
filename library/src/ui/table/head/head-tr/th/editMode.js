@@ -3,7 +3,8 @@ window.CoNDeT.ui.THEditMode = (function () {
 
   constructor.prototype = Object.create(window.CoNDeT.ui.StrategyCommon);
 
-  constructor.prototype.onDbClick = function () {
+  constructor.prototype.onDbClick = function (event) {
+    event.stopPropagation();
     this.component.setStrategy(new window.CoNDeT.ui.THEditState())
   }
 

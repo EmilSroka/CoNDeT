@@ -11,6 +11,7 @@ window.CoNDeT = function (configs) {
     setMode: setMode,
     icons: window.CoNDeT.core.getIcons(icons),
   };
+  common.addTable = window.CoNDeT.core.addTable(common);
 
   display.init(common, selector, { selector: selector, state: state.state });
 

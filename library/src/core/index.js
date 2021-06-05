@@ -176,14 +176,17 @@ window.CoNDeT.core.copy = function (toClone) {
 };
 
 window.CoNDeT.core.addTable = function (common) {
-  var retAddTable = function () {
+  var retAddTable = function (coordinates = { x: 0, y: 0 }) {
     if (common.mode === window.CoNDeT.ui.DisplayMode) return;
 
     var tableObj = {};
     var rowTab = [];
     var id = prompt("Enter Table ID:");
+    if (id == null) return;
     var name = prompt("Enter Table Name:");
+    if (name ==  null) return;
     var classType = prompt("Enter Table Class:");
+    if (classType == null) return;
 
     for (var i = 0; i < 3; i++) {
       rowTab.push({
@@ -198,11 +201,10 @@ window.CoNDeT.core.addTable = function (common) {
     tableObj.name = name;
     tableObj.class = classType;
     tableObj.coordinates = {};
-    tableObj.coordinates.x = 0;
-    tableObj.coordinates.y = 0;
+    tableObj.coordinates = coordinates;
     tableObj.columns = {};
-    tableObj.columns.conditions = ["defaultCon", ""];
-    tableObj.columns.decisions = ["defaultDet", ""];
+    tableObj.columns.conditions = ["defaultCon1", "defaultCon2"];
+    tableObj.columns.decisions = ["defaultDet1", "defaultDet2"];
     tableObj.rows = rowTab;
 
     common.stateModifier.createTable(tableObj);
