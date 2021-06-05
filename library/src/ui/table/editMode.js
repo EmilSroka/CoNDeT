@@ -38,7 +38,7 @@ window.CoNDeT.ui.TableComponentEditMode = (function () {
     this.resetState();
   };
   constructor.prototype.onDestroy = function () {
-    this.component.ref.style.cursor = "auto";
+    this.component.ref.style.cursor = "inherit";
   };
 
   constructor.prototype.resetState = function () {

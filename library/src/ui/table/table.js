@@ -43,6 +43,11 @@ window.CoNDeT.ui.TableComponent = (function () {
     var deleteRow = function (rowId) {
       self.common.stateModifier.removeRow(self.props.id, rowId);
     }
+    var startAddingConnection = function (rowId) {
+      self.common.setMode("add connection");
+      self.common.mode.setFrom(self.props.id);
+      self.common.mode.setRow(rowId);
+    }
 
     return [
       { type: window.CoNDeT.ui.CaptionComponent, id: this.props.id + "_caption",
@@ -54,7 +59,7 @@ window.CoNDeT.ui.TableComponent = (function () {
       }},
       { type: window.CoNDeT.ui.BodyComponent, id: this.props.id + "_body", props: {
           rows: this.props.rows, numberOfConditions: this.props.conditions.length,
-          editCell: editCell, addRow: addRow, deleteRow: deleteRow,
+          editCell: editCell, addRow: addRow, deleteRow: deleteRow, startAddingConnection: startAddingConnection,
       }},
     ]
   }

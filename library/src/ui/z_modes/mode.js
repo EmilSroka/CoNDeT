@@ -57,10 +57,63 @@ window.CoNDeT.ui.componentToEditModeEntryStrategy = {
   BodyComponent: window.CoNDeT.ui.BodyComponentEditMode,
 };
 
-window.CoNDeT.ui.DisplayMode = new window.CoNDeT.ui.Mode(
-  window.CoNDeT.ui.componentToDisplayModeEntryStrategy
-);
+window.CoNDeT.ui.componentToAddConnectionModeEntryStrategy = {
+  DisplayComponent: window.CoNDeT.ui.DisplayAddConnectionMode,
+  TableComponent: window.CoNDeT.ui.TableComponentAddConnectionMode,
+  CellComponent: window.CoNDeT.ui.CellDisplayMode,
+  TextComponent: window.CoNDeT.ui.TextDisplayMode,
+  InputComponent: window.CoNDeT.ui.InputDisplayMode,
+  CaptionComponent: window.CoNDeT.ui.CaptionDisplayMode,
+  HeadComponent: window.CoNDeT.ui.HeadDisplayMode,
+  ConnectionComponent: window.CoNDeT.ui.ConnectionDisplayMode,
+  RowComponent: window.CoNDeT.ui.RowDisplayMode,
+  HeadTrComponent: window.CoNDeT.ui.HeadTrDisplayMode,
+  IconBtnComponent: window.CoNDeT.ui.IconBtnDisplayMode,
+  THComponent: window.CoNDeT.ui.THDisplayMode,
+  BodyComponent: window.CoNDeT.ui.BodyComponentDisplayMode,
+};
 
-window.CoNDeT.ui.EditMode = new window.CoNDeT.ui.Mode(
-  window.CoNDeT.ui.componentToEditModeEntryStrategy
-);
+window.CoNDeT.ui.DisplayModeConstructor = (function () {
+  function constructor() {
+    this.mapper = window.CoNDeT.ui.componentToDisplayModeEntryStrategy;
+  }
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseMode);
+
+  return constructor;
+})();
+
+window.CoNDeT.ui.EditModeConstructor = (function () {
+  function constructor() {
+    this.mapper = window.CoNDeT.ui.componentToEditModeEntryStrategy;
+  }
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseMode);
+
+  return constructor;
+})();
+
+window.CoNDeT.ui.AddConnectionModeConstructor = (function () {
+  function constructor() {
+    this.mapper = window.CoNDeT.ui.componentToAddConnectionModeEntryStrategy;
+    this.state = {
+      from: "",
+      to: "",
+      row: "",
+    }
+  }
+
+  constructor.prototype = Object.create(window.CoNDeT.ui.BaseMode);
+
+  constructor.prototype.setFrom = function (from) {
+    this.state.from = from;
+  }
+  constructor.prototype.setTo = function (to) {
+    this.state.to = to;
+  }
+  constructor.prototype.setRow = function (row) {
+    this.state.row = row;
+  }
+
+  return constructor;
+})();

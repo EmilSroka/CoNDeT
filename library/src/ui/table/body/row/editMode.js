@@ -8,6 +8,9 @@ window.CoNDeT.ui.RowEditMode = (function () {
     var deleteRow = function () {
       self.component.props.deleteRow(self.component.props.id)
     }
+    var startAddingConnection = function () {
+      self.component.props.startAddingConnection(self.component.props.id);
+    }
 
     var children = [];
 
@@ -57,14 +60,9 @@ window.CoNDeT.ui.RowEditMode = (function () {
     }
 
     children.push({
-      type: window.CoNDeT.ui.CellComponent,
-      id: "sep-2",
-      props: {
-        value: "",
-        type: "td",
-        changeValue: function () {},
-        disabled: true,
-      },
+      type: window.CoNDeT.ui.AddConnectionCellComponent,
+      id: "add-connection",
+      props: { startAddingConnection: startAddingConnection },
     });
 
     return children;

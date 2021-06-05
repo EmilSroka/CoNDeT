@@ -8,6 +8,7 @@ window.CoNDeT = function (configs) {
   var common = {
     stateModifier: new window.CoNDeT.data.StateModifier(state),
     mode: getMode(modeName),
+    setMode: setMode,
     icons: window.CoNDeT.core.getIcons(icons),
   };
 
@@ -32,23 +33,29 @@ window.CoNDeT = function (configs) {
     saveToFile: function () {
       window.CoNDeT.data.FileReaderWriter.saveToFile(state.state);
     },
-    changeMode: function (modeName) {
-      common.mode = getMode(modeName);
-      common.mode.setToAllComponents(display);
-    },
+    changeMode: setMode,
     addTable: window.CoNDeT.core.addTable(common),
   };
 
   function getMode(modeName) {
     if (modeName === "edit") {
-      return window.CoNDeT.ui.EditMode;
+      return new window.CoNDeT.ui.EditModeConstructor();
     }
 
     if (modeName === "display") {
-      return window.CoNDeT.ui.DisplayMode;
+      return new window.CoNDeT.ui.DisplayModeConstructor();
+    }
+
+    if (modeName === "add connection") {
+      return new window.CoNDeT.ui.AddConnectionModeConstructor();
     }
 
     return new window.CoNDeT.ui.Mode({});
+  }
+
+  function setMode (modeName) {
+    common.mode = getMode(modeName);
+    common.mode.setToAllComponents(display);
   }
 };
 
