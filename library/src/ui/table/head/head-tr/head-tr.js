@@ -1,9 +1,3 @@
-/*
- * props:
- * * conditions -> list of conditions (strings)
- * * decisions -> list of decisions (strings)
- * * tableId
- */
 window.CoNDeT.ui.HeadTrComponent = (function () {
   function constructor() {}
 

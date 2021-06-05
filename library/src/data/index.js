@@ -236,50 +236,6 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
-    constructor.prototype.changeRowsOrder = function (tableId, rowId, index) {
-      var newState = window.CoNDeT.core.clone(this.state);
-      var editTable = getTableWithId(newState, tableId);
-      for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i] !== rowId) continue;
-        var row = editTable.rows[i];
-        editTable.rows.splice(i, 1);
-        editTable.rows.splice(index, 0, row);
-      }
-      this.stateManager.setState(newState);
-    };
-
-    constructor.prototype.changeOrder = function (tableId, type, colId, index) {
-      var newState = window.CoNDeT.core.clone(this.state);
-      var editTable = getTableWithId(newState, tableId);
-
-      for (var i = 0; i < editTable.columns[type].length; i++) {
-        if (editTable.columns[type][i] !== colId) continue;
-        var col = editTable.column[type][i];
-        editTable.column[type].splice(i, 1);
-        editTable.column[type].splice(index, 0, col);
-      }
-
-      for (var i = 0; i < editTable.rows.length; i++) {
-        for (var j = 0; j < editTable.rows[i][type].length; j++) {
-          if (editTable.rows[i][type][j][0] === colId) {
-            editTable.rows[i][type][j][0] = index;
-            continue;
-          }
-          if (colId > index) {
-            if (editTable.rows[i][type][j][0] > index) {
-              editTable.rows[i][type][j][0] += 1;
-            }
-          } else {
-            if (editTable.rows[i][type][j][0] < index) {
-              editTable.rows[i][type][j][0] -= 1;
-            }
-          }
-        }
-      }
-
-      this.stateManager.setState(newState);
-    };
-
     constructor.prototype.addConnection = function (
       tableId,
       rowId,
@@ -319,7 +275,7 @@ window.CoNDeT.data = {
           for (var j = 0; j < rows[i][type].length; j++) {
             if (rows[i][type][j][0] > id) {
               rows[i][type][j][0] -= 1;
-            } else if (rows[i][type][j][0] == id) {
+            } else if (rows[i][type][j][0] === id) {
               rows[i][type].splice(j, 1);
             }
           }
@@ -329,7 +285,7 @@ window.CoNDeT.data = {
 
     function getTableWithId(table, tableId) {
       for (var i = 0; i < table.length; i++) {
-        if (table[i].id != tableId) continue;
+        if (table[i].id !== tableId) continue;
         return table[i];
       }
     }

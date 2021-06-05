@@ -1,14 +1,4 @@
-/*
-* BaseComponent API
-* createRef -> method that should return new dom element that corresponds to this component
-* [optional] getChildren -> method that returns array of objects that represents children: {type, id, props}
-*   order of elements in returned array will be reflected in dom
-* [optional] onInit -> method for additional functionality during initialization
-* [optional] onUpdate -> method for additional functionality during update
-* [optional] onDestroy -> method for additional functionality during destroy
-* */
 window.CoNDeT.ui.BaseComponent = {
-  /* component life cycle */
   init: function (common, id, props) {
     this.id = id;
     this.state = {};
@@ -41,7 +31,6 @@ window.CoNDeT.ui.BaseComponent = {
     this.updateChildren(this.getChildren());
     this.onUpdate();
   },
-  /* state management */
   setState: function (updated) {
     var newState = {};
     for (var prop in this.state) {
@@ -53,7 +42,6 @@ window.CoNDeT.ui.BaseComponent = {
     this.state = newState;
     this.render();
   },
-  /* children update */
   updateChildren: function (newChildren) {
     this.unmark(this.children);
     this.unmark(newChildren);
@@ -143,7 +131,6 @@ window.CoNDeT.ui.BaseComponent = {
       this.children[i].destroy(this.common);
     }
   },
-  /* dimensions */
   getPosition: function () {
     return {
       x: this.ref.offsetLeft,
@@ -156,15 +143,6 @@ window.CoNDeT.ui.BaseComponent = {
       height: this.ref.clientHeight,
     };
   },
-  containsPoint: function (x, y) {
-    return (
-      x >= this.ref.offsetLeft &&
-      x <= this.ref.offsetLeft + this.ref.clientWidth &&
-      y >= this.ref.offsetTop &&
-      y <= this.ref.offsetTop + this.ref.clientHeight
-    );
-  },
-  /* strategy */
   setStrategy: function (strategy) {
     if (this.strategy != null) this.strategy.onDestroy();
     this.strategy = strategy;
@@ -199,7 +177,6 @@ window.CoNDeT.ui.BaseComponent = {
       self.strategy.onDbClick(event);
     });
   },
-  /* child management */
   appendChild: function (child, position = 0) {
     if (this.children == null || position > this.children.length) return;
     if (position === this.children.length) {
@@ -222,10 +199,5 @@ window.CoNDeT.ui.BaseComponent = {
         this.children.splice(i, 1);
       }
     }
-  },
-  removeChildAtPosition: function (position) {
-    if (position <= -1 || position >= this.children.length) return;
-    var childToRemove = this.children[position];
-    this.removeChild(childToRemove);
   },
 };

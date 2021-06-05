@@ -1,9 +1,3 @@
-/*
- * props:
- * * content -> list of values in row
- * * editCell
- */
-
 window.CoNDeT.ui.RowComponent = (function () {
   function constructor() {}
 

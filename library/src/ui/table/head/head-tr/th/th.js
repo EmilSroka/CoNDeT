@@ -1,11 +1,3 @@
-/*
- * props:
- * * type -> th | td
- * * [optional] className
- * * value
- * * changeValue
- * * disabled -> flag
- */
 window.CoNDeT.ui.THComponent = (function () {
   function constructor() {}
 

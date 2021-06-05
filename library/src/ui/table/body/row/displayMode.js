@@ -4,8 +4,6 @@ window.CoNDeT.ui.RowDisplayMode = (function () {
   constructor.prototype = Object.create(window.CoNDeT.ui.StrategyCommon);
 
   constructor.prototype.getChildren = function () {
-    var self = this;
-
     var children = [];
     for (var i = 0; i < this.component.props.content.length; i++) {
       children.push({

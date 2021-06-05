@@ -1,9 +1,3 @@
-/*
- * props:
- * * getConnections -> callback that return list of paths
- * * width
- * * height
- */
 window.CoNDeT.ui.ConnectionsComponent = (function () {
   var constructor = function () {};
 

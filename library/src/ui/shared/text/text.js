@@ -1,8 +1,3 @@
-/*
- * props:
- * * isSmall
- * * value
- */
 window.CoNDeT.ui.TextComponent = (function () {
   function constructor() {}
 

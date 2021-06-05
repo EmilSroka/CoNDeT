@@ -1,8 +1,3 @@
-/*
- * props:
- * * value
- * * onSubmit
- */
 window.CoNDeT.ui.InputComponent = (function () {
   function constructor() {}
 
