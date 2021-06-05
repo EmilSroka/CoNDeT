@@ -1,9 +1,3 @@
-/*
-* props:
-* * className
-* * label
-* * icon
-*/
 window.CoNDeT.ui.IconBtnComponent = (function () {
   function constructor() {}
 

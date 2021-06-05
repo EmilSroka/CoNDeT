@@ -1,9 +1,3 @@
-/*
- * props:
- * * name -> table name
- * * class -> table CoNDeT class
- * * id -> table id
- */
 window.CoNDeT.ui.CaptionComponent = (function () {
   function constructor() {}
 

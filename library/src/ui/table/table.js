@@ -1,13 +1,3 @@
-/*
- * props:
- * * id
- * * name
- * * coordinates
- * * class -> name of CoNDeT class
- * * conditions -> list of conditions (strings)
- * * decisions -> list of decisions (strings)
- * * rows -> content of table
- */
 window.CoNDeT.ui.TableComponent = (function () {
   function constructor() {}
 
@@ -73,7 +63,6 @@ window.CoNDeT.ui.TableComponent = (function () {
     this.ref.style.transform = "translate(" + this.props.coordinates.x + "px," + this.props.coordinates.y + "px)"
   }
 
-  // note(es): do we need to refactor this ???
   constructor.prototype.getRowXY = function (rowNumber) {
     var body = this.findChild(window.CoNDeT.ui.BodyComponent, this.props.id + "_body");
     var relative = body.children[rowNumber].getConnectionXY();
