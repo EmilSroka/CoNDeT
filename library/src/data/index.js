@@ -285,10 +285,10 @@ window.CoNDeT.data = {
       rowId,
       secondTableId
     ) {
-      var newState = clone(this.state);
+      var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);
       for (var i = 0; i < editTable.rows.length; i++) {
-        if (editTable.rows[i].id === rowId) {
+        if (editTable.rows[i].row_id === rowId) {
           editTable.rows[i].connections.push(secondTableId);
         }
       }

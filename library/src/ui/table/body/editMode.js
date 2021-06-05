@@ -15,6 +15,7 @@ window.CoNDeT.ui.BodyComponentEditMode = (function () {
           id: this.component.props.rows[i].id,
           editCell: this.component.props.editCell,
           deleteRow: this.component.props.deleteRow,
+          startAddingConnection: this.component.props.startAddingConnection,
         },
       });
     }

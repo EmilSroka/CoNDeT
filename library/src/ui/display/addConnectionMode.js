@@ -1,4 +1,4 @@
-window.CoNDeT.ui.DisplayDisplayMode = (function () {
+window.CoNDeT.ui.DisplayAddConnectionMode = (function () {
   function constructor() {}
 
   constructor.prototype = Object.create(window.CoNDeT.ui.StrategyCommon);
@@ -49,7 +49,6 @@ window.CoNDeT.ui.DisplayDisplayMode = (function () {
   };
 
   constructor.prototype.getChildren = function () {
-    var self = this;
     var children = [];
 
     var tablesProps = window.CoNDeT.core.toTableProps(this.component.props.state, this.component.state.deltaXY);
@@ -59,9 +58,6 @@ window.CoNDeT.ui.DisplayDisplayMode = (function () {
       }
       children.push({ type: window.CoNDeT.ui.TableComponent, id: tablesProps[i].id, props: tablesProps[i] });
     }
-    var size = this.component.getDimensions();
-    children.push({ type: window.CoNDeT.ui.ConnectionsComponent, id: "connections",
-      props: { getConnections: function () { return window.CoNDeT.core.toConnectionsProps(self.component, self.component.props.state) }, width: size.width, height: size.height }});
 
     return children;
   }

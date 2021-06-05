@@ -100,3 +100,10 @@ path + path {
 .condet-class-minor .condet-caption{
   border-color: #0063B2;
 }
+
+/* add connection */
+
+.condet-table-selected.condet-table,
+.condet-table-selected.condet-table .condet-caption {
+  border-color: #50C878;
+}

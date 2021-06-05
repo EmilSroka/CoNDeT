@@ -16,8 +16,8 @@ window.CoNDeT.ui.BaseComponent = {
     this.common = common;
     this.props = props;
     this.ref = this.createRef();
-    this.onInit();
     this.setStrategy(common.mode.getEntryStrategy(this));
+    this.onInit();
     this.render();
     this.setupEventListeners();
   },
