@@ -5,52 +5,19 @@ window.CoNDeT.ui.RowEditMode = (function () {
 
   constructor.prototype.getChildren = function () {
     var self = this;
+    var deleteRow = function () {
+      self.component.props.deleteRow(self.component.props.id)
+    }
 
     var children = [];
 
-    if (this.component.props.id.substring(0, 4) === "add-") {
-      children.push({
-        type: window.CoNDeT.ui.IconBtnComponent,
-        id: "add-row",
-        props: {
-          action: function () {
-            self.component.common.stateModifier.addRow(
-              self.component.props.tableID,
-              {
-                row_id:
-                  "rowid" +
-                  (self.component.props.id
-                    ? +self.component.props.id.substring(9) + 1
-                    : "1"),
-                conditions: [],
-                decisions: [],
-                connections: [],
-              }
-            );
-          },
-          icon: this.component.common.icons.add,
-          className: "add-column-btn",
-          label: "Add row",
-        },
-      });
-    } else {
-      children.push({
-        type: window.CoNDeT.ui.IconBtnComponent,
-        id: "delete-row",
-        props: {
-          action: function () {
-            self.component.common.stateModifier.removeRow(
-              self.component.props.tableID,
-              self.component.props.id
-            );
-          },
-          icon: this.component.common.icons.delete,
-          className: "delete-column-btn",
-          label: "Delete row",
-        },
-      });
-      this.lastRowId = +self.component.props.id.slice(-1);
-    }
+    children.push({
+      type: window.CoNDeT.ui.DeleteRowCellComponent,
+      id: "delete-btn",
+      props: {
+        deleteRow: deleteRow,
+      }
+    })
 
     for (var i = 0; i < this.component.props.content.length; i++) {
       if (i === this.component.props.numberOfConditions) {

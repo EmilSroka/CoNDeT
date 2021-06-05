@@ -166,6 +166,16 @@ window.CoNDeT.data = {
       this.stateManager.setState(newState);
     };
 
+    constructor.prototype.addEmptyRow = function (tableId) {
+      var row = {
+        row_id: window.CoNDeT.core.getUniqueId(),
+        conditions: [],
+        decisions: [],
+        connections: [],
+      }
+      this.addRow(tableId, row);
+    }
+
     constructor.prototype.addRow = function (tableId, newRow) {
       var newState = window.CoNDeT.core.clone(this.state);
       var editTable = getTableWithId(newState, tableId);

@@ -211,31 +211,18 @@ window.CoNDeT.core.addTable = function (common) {
   return retAddTable;
 };
 
-window.CoNDeT.core.addColumn = function (self) {
-  var type = prompt("Add 'con' or 'det'?");
-  if (type == "con") {
-    var value = prompt("Add condition column:");
-    self.common.stateModifier.addConditionColumn(self.props.id, value);
-  } else if (type == "det") {
-    var value = prompt("Add decision column:");
-    self.common.stateModifier.addDecisionColumn(self.props.id, value);
-  }
-};
-
-window.CoNDeT.core.deleteColumn = function (self) {
-  var type = prompt("Delete 'con' or 'det'?");
-  if (type == "con") {
-    var value = prompt("Enter condition column id:");
-    self.common.stateModifier.removeConditionColumn(self.props.id, value);
-  } else if (type == "det") {
-    var value = prompt("Enter decision column id:");
-    self.common.stateModifier.removeDecisionColumn(self.props.id, value);
-  }
-};
-
 window.CoNDeT.core.getIcons = function (custom) {
   return {
     delete: custom.delete || "❌",
     add: custom.add || "➕",
   }
 };
+
+window.CoNDeT.core.getUniqueId = (function () {
+  var i = 0;
+  return function () {
+    i++;
+    return "CoNDeT-id-" + (Math.random() * 1000000000000000 >>> 0) + "-" + i;
+  }
+})();
+
