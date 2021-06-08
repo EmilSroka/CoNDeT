@@ -35,5 +35,31 @@ Library is fully functional with ways to improve. During development we were abl
 #### 4 Usage
 
 
-#### 5 Contributions
+User have ability to move frely  
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/Displa1.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/Displa2.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/EditMode1.jpg?raw=true)
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editmode2.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editmode3rcolumn.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editmode4rrow.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editmode5modifycell1.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editmode6modiffcell2.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editmode7modiffytableproperties.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editmode8addconnection.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editMode9deleteTable.jpg?raw=true )
+![Alt text](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/editMode10addTable.jpg?raw=true )
+
+#### 5 Contributors
+
+* Emil Sroka
+    * Architecture
+    * Module UI
+    * Managment
+* Hubet Miziołek
+    * Module Data
+    * Documentation
+* Miłosz Wrzesień
+    * Module UI
+    * Module Data
+    * Default styles
 
