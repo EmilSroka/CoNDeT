@@ -273,10 +273,13 @@ window.CoNDeT.data = {
         columns.splice(id, 1);
         for (var i = 0; i < rows.length; i++) {
           for (var j = 0; j < rows[i][type].length; j++) {
+            if (rows[i][type][j][0] === id) {
+              rows[i][type].splice(j, 1);
+            }
+          }
+          for (var j = 0; j < rows[i][type].length; j++) {
             if (rows[i][type][j][0] > id) {
               rows[i][type][j][0] -= 1;
-            } else if (rows[i][type][j][0] === id) {
-              rows[i][type].splice(j, 1);
             }
           }
         }
