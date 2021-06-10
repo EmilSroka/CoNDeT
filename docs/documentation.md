@@ -1,4 +1,6 @@
-#CoNDeT 
+
+#CoNDeT  
+
 ###_Contextual Networked Decision Tables_
 
 #### 1 Requirements
