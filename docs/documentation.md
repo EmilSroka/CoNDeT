@@ -85,10 +85,12 @@ Every table contains set of class added conditionally based on state:
 #### Display mode
 Display mode provide ability to move ConDeT table freely on a window:
   
-State before moving:
+State before moving:  
+
 ![](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/Display1.jpg?raw=true )
 
-State after moving:
+State after moving:  
+
 ![](https://github.com/EmilSroka/CoNDeT/blob/main/docs/Pictures/Displa2.jpg?raw=true )
 
 As we can see tables moved in our window, but relative position didn't change
